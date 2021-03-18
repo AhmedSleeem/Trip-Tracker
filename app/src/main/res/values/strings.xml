@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">TripTracker</string>
+    <string name="LBL_TRIP_NAME">Trip Name</string>
+    <string name="LBL_START">Start Point</string>
+    <string name="LBL_END">End Point</string>
+    <string name="LBL_NOTES">Notes</string>
+    <string name="LBL_TYPE">Trip Type</string>
+    <string name="HINT_TRIP_NAME">Enter Your Trip Name</string>
+    <string name="HINT_START_POINT">Enter Your Start Point</string>
+    <string name="HINT_END_POINT">Enter Your End Point</string>
+    <string name="HINT_NOTES">Notes</string>
+    <string name="RBTN_ONE_WAY">One Way</string>
+    <string name="RBTN_ROUND_TRIP">Round Trip</string>
 </resources>
