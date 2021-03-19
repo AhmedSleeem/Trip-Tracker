@@ -13,4 +13,14 @@
     <string name="RBTN_ROUND_TRIP">Round Trip</string>
     <string name="CANCEL">Cancel</string>
     <string name="DONE">Done</string>
+    <string name="login">LOGIN</string>
+    <string name="newuser">New user ?</string>
+    <string name="register">Register Now</string>
+    <string name="Email">Email</string>
+    <string name="password">Password</string>
+    <string name="registerbtn">REGISTER</string>
+    <string name="alreadyhaveaccount">Already have an account ?</string>
+    <string name="loginTxtBtn">Login</string>
+    <string name="othermethods">Other Methods</string>
+    <string name="logout">Logout</string>
 </resources>
