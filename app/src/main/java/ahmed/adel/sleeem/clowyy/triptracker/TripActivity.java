@@ -1,17 +1,28 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
-public class TripActivity extends AppCompatActivity {
+import ahmed.adel.sleeem.clowyy.triptracker.fragments.DatePickerFragment;
+import ahmed.adel.sleeem.clowyy.triptracker.fragments.TimePickerFragment;
+
+public class TripActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
     EditText txtTripName, txtStartPoint, txtEndPoint, txtNotes;
     RadioButton rbOneWay, rbRoundTrip;
+
+    Button timeBtn,dateBtn;
 
     Dialog roundTripDialog;
 
@@ -23,6 +34,18 @@ public class TripActivity extends AppCompatActivity {
         initView();
 
         roundTripDialog = new Dialog(this);
+
+
+       timeBtn.setOnClickListener(v->{
+
+            DialogFragment timePickerFragment = new TimePickerFragment();
+            timePickerFragment.show(getSupportFragmentManager(),"time Packer");
+        });
+
+        dateBtn.setOnClickListener(v->{
+            DialogFragment datePickerFragment = new DatePickerFragment();
+            datePickerFragment.show(getSupportFragmentManager(),"date Picker");
+        });
 
         rbRoundTrip.setOnClickListener(v->{
             showTripDialog();
@@ -62,5 +85,22 @@ public class TripActivity extends AppCompatActivity {
 
         rbOneWay = findViewById(R.id.rbOneWay);
         rbRoundTrip = findViewById(R.id.rbRoundTrip);
+
+        timeBtn= findViewById(R.id.timerBtn);
+        dateBtn= findViewById(R.id.dateBtn);
+    }
+
+
+
+    //handle time setting
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Toast.makeText(getBaseContext(),"hour : "+hourOfDay +" minute = "+minute,Toast.LENGTH_LONG).show();
+    }
+
+    //handle date setting
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Toast.makeText(getBaseContext(),"year = "+year+" month = "+month+" day = "+dayOfMonth,Toast.LENGTH_LONG).show();
     }
 }

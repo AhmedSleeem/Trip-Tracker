@@ -118,6 +118,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView4" />
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -141,5 +142,27 @@
             android:layout_height="wrap_content"
             android:text="@string/RBTN_ROUND_TRIP" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/timerBtn"
+        android:layout_width="71dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="69dp"
+        android:layout_marginEnd="146dp"
+        android:layout_marginRight="146dp"
+        android:background="@drawable/ic_timer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <Button
+        android:id="@+id/dateBtn"
+        android:layout_width="66dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="54dp"
+        android:layout_marginEnd="136dp"
+        android:layout_marginRight="136dp"
+        android:background="@drawable/ic_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timerBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
