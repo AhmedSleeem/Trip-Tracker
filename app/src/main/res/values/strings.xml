@@ -11,4 +11,6 @@
     <string name="HINT_NOTES">Notes</string>
     <string name="RBTN_ONE_WAY">One Way</string>
     <string name="RBTN_ROUND_TRIP">Round Trip</string>
+    <string name="CANCEL">Cancel</string>
+    <string name="DONE">Done</string>
 </resources>
