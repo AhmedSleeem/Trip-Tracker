@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.badge.BadgeUtils;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
 
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         // Session class instance
         session = new SessionManager(getApplicationContext());
         Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+
+
 
         /**
          * Call this function whenever you want to check user login

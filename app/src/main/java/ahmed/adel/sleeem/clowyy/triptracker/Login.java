@@ -44,12 +44,20 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAuth = FirebaseAuth.getInstance();
+
+
+
         // Session Manager
         session = new SessionManager(getApplicationContext());
         Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-        if(session.isLoggedIn() == true){
-            Intent intent = new Intent(Login.this,MainActivity.class);
-            startActivity(intent);
+        if(session.isLoggedIn()){
+            // check firebase user-email is exists or not --> this happend in state of deleting user from firebase
+
+
+                Intent intent = new Intent(Login.this,MainActivity.class);
+                startActivity(intent);
+
         }
 
         emailTxt = findViewById(R.id.emailEditTxt);
@@ -59,7 +67,9 @@ public class Login extends AppCompatActivity {
         googleBtn = findViewById(R.id.googleBtn);
 
 
-        mAuth = FirebaseAuth.getInstance();
+
+
+
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override

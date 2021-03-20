@@ -158,11 +158,20 @@
         android:id="@+id/dateBtn"
         android:layout_width="66dp"
         android:layout_height="75dp"
-        android:layout_marginTop="54dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginRight="136dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="264dp"
+        android:layout_marginRight="264dp"
         android:background="@drawable/ic_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timerBtn" />
+
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
+        android:name="com.google.android.libraries.places.compat.ui.PlaceAutocompleteFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
