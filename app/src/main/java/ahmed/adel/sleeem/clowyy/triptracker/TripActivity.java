@@ -1,18 +1,31 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+
+import java.util.Arrays;
+import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.DatePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.TimePickerFragment;
@@ -25,6 +38,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     Button timeBtn,dateBtn;
 
     Dialog roundTripDialog;
+    private static final String API_KEY = "AIzaSyDVh2YvCYg-Mcjn-pfEIxeth4Ey9il9vFA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +63,25 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         rbRoundTrip.setOnClickListener(v->{
             showTripDialog();
+        });
+
+
+        txtStartPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,fieldList).build(TripActivity.this);
+                startActivityForResult(intent,100);
+            }
+        });
+
+        txtEndPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,fieldList).build(TripActivity.this);
+                startActivityForResult(intent,110);
+            }
         });
 
     }
@@ -88,6 +121,10 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         timeBtn= findViewById(R.id.timerBtn);
         dateBtn= findViewById(R.id.dateBtn);
+
+        Places.initialize(getApplicationContext(),API_KEY);
+        txtStartPoint.setFocusable(false);
+        txtEndPoint.setFocusable(false);
     }
 
 
@@ -102,5 +139,25 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Toast.makeText(getBaseContext(),"year = "+year+" month = "+month+" day = "+dayOfMonth,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK)
+        {
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            txtStartPoint.setText(place.getAddress());
+        }
+        else if(requestCode == 110 && resultCode == RESULT_OK)
+        {
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            txtEndPoint.setText(place.getAddress());
+        }
+        else if(resultCode == AutocompleteActivity.RESULT_ERROR)
+        {
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

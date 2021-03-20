@@ -50,4 +50,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
+    //places autocomplete
+    implementation 'com.google.android.libraries.places:places:2.2.0'
+
 }
