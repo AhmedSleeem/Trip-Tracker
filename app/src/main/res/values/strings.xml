@@ -23,5 +23,6 @@
     <string name="loginTxtBtn">Login</string>
     <string name="othermethods">Other Methods</string>
     <string name="logout">Logout</string>
-    <string name="google_maps_key">AIzaSyChkd1O_wezit51e8lLIHNdv2NoOtC_duI</string>
+    <string name="google_maps_key">AIzaSyDVh2YvCYg-Mcjn-pfEIxeth4Ey9il9vFA</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
