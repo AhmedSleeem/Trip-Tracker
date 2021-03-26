@@ -14,6 +14,17 @@ public class Trip {
     String tripSource;
 
     @ColumnInfo
+    String tripTitle;
+
+    public String getTripTitle() {
+        return tripTitle;
+    }
+
+    public void setTripTitle(String tripTitle) {
+        this.tripTitle = tripTitle;
+    }
+
+    @ColumnInfo
     String tripDestination;
 
     @ColumnInfo
@@ -21,18 +32,33 @@ public class Trip {
 
     @ColumnInfo
     char tripRepeatingType;//not repeating , daily , weekly , monthly ,.....
-   @ColumnInfo
+
+    @ColumnInfo
     String tripNotes;
-   @ColumnInfo
+
+    @ColumnInfo
     String tripMaker;// firebaseUserId who is create the trip
+
     @ColumnInfo
     String tripDate;
+
     @ColumnInfo
     String tripTime;
 
-    public Trip(int tripId, String tripSource, String tripDestination, boolean tripType, char tripRepeatingType, String tripNotes, String tripMaker, String tripDate, String tripTime) {
-        this.tripId = tripId;
+    @ColumnInfo
+    String tripImage;
+
+    public String getTripImage() {
+        return tripImage;
+    }
+
+    public void setTripImage(String tripImage) {
+        this.tripImage = tripImage;
+    }
+
+    public Trip(String tripSource, String tripTitle, String tripDestination, boolean tripType, char tripRepeatingType, String tripNotes, String tripMaker, String tripDate, String tripTime, String tripImage) {
         this.tripSource = tripSource;
+        this.tripTitle = tripTitle;
         this.tripDestination = tripDestination;
         this.tripType = tripType;
         this.tripRepeatingType = tripRepeatingType;
@@ -40,7 +66,9 @@ public class Trip {
         this.tripMaker = tripMaker;
         this.tripDate = tripDate;
         this.tripTime = tripTime;
+        this.tripImage = tripImage;
     }
+
 
     public Trip() {
     }

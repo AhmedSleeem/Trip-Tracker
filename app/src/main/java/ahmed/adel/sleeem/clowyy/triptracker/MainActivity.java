@@ -2,6 +2,11 @@ package ahmed.adel.sleeem.clowyy.triptracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +16,8 @@ import com.google.android.material.badge.BadgeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
+
+import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +38,16 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
 
 
+
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(getApplicationContext(), DialogAlert.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(),1,intent,0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,10000,pendingIntent);
+            
+        }
 
         /**
          * Call this function whenever you want to check user login
