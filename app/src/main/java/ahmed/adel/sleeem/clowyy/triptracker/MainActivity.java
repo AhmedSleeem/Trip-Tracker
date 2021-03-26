@@ -16,7 +16,11 @@ import com.google.android.material.badge.BadgeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
+import java.util.UUID;
 
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +65,17 @@ public class MainActivity extends AppCompatActivity {
 
         // email
         String email = user.get(SessionManager.KEY_EMAIL);
+
+//        TripDatabase tripDatabase = TripDatabase.getInstance(getApplicationContext());
+//        TripDao tripDao = tripDatabase.getTripDao();
+//
+//        Trip trip = new Trip("A","new trip","B",true,
+//                'D',"eat drink  swim",email,"2021-3-26","10:48",
+//                UUID.nameUUIDFromBytes("ahmed.png".getBytes()).toString(),false);
+//
+//
+//
+//        tripDao.insertTrip(trip);
         Toast.makeText(getApplicationContext(),"Email : " + email, Toast.LENGTH_SHORT).show();
 
         logout.setOnClickListener(new View.OnClickListener() {

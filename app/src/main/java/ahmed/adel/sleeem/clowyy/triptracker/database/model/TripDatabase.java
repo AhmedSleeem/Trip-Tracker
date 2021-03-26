@@ -7,7 +7,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Trip.class},version = 1)
+@Database(entities = {Trip.class},version = 1,exportSchema = false)
 public abstract class TripDatabase extends RoomDatabase {
 
     public  abstract TripDao getTripDao();
@@ -15,7 +15,7 @@ public abstract class TripDatabase extends RoomDatabase {
     private static final String DB_NAME = "tripDatabase.db";
     private static volatile TripDatabase instance;
 
-    static synchronized TripDatabase getInstance(Context context) {
+    public static synchronized TripDatabase getInstance(Context context) {
         if (instance == null) {
             instance = create(context);
         }
@@ -23,12 +23,12 @@ public abstract class TripDatabase extends RoomDatabase {
     }
 
 
-    private TripDatabase() {};
+
 
     private static TripDatabase create(final Context context) {
         return Room.databaseBuilder(
                 context,
                 TripDatabase.class,
-                DB_NAME).build();
+                DB_NAME).allowMainThreadQueries().build();
     }
 }

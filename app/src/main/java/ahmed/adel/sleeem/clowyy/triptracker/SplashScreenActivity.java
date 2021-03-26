@@ -1,6 +1,5 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
@@ -21,7 +20,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     ImageView logoImage;
     TextView sloganTxt;
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
