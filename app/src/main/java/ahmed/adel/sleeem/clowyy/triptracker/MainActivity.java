@@ -15,6 +15,9 @@ import android.widget.Toast;
 import com.google.android.material.badge.BadgeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(),1,intent,0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP,10000,pendingIntent);
-            
+
         }
 
         /**
@@ -88,5 +91,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void saveImage(Bitmap bitmap, String fileName){
+        try {
+            FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

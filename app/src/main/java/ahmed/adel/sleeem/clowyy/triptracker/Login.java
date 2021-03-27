@@ -24,6 +24,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 
 public class Login extends AppCompatActivity {
 
@@ -179,13 +185,38 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            String userID = mAuth.getCurrentUser().getUid();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(Login.this, "login with google succeeded", Toast.LENGTH_SHORT).show();
+
+
+                            FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Toast.makeText(Login.this, "login with google succeeded", Toast.LENGTH_SHORT).show();
+                                    session.createLoginSession(user.getEmail());
+
+                                    if (!snapshot.hasChild(userID)) {
+                                        User user = new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail());
+                                        FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
+                                    }
+
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    finish();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                            /*
+                            // Toast.makeText(Login.this, "login with google succeeded", Toast.LENGTH_SHORT).show();
                             session.createLoginSession(user.getEmail());
                             Intent intent = new Intent(Login.this, MainActivity.class);
                             startActivity(intent);
                             finish();
+                            */
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(Login.this, "signInWithCredential:failure", Toast.LENGTH_SHORT).show();

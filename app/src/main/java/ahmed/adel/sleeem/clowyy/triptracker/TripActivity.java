@@ -38,7 +38,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     Button timeBtn,dateBtn;
 
     Dialog roundTripDialog;
-    private static final String API_KEY = "AIzaSyDVh2YvCYg-Mcjn-pfEIxeth4Ey9il9vFA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +121,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         timeBtn= findViewById(R.id.timerBtn);
         dateBtn= findViewById(R.id.dateBtn);
 
-        Places.initialize(getApplicationContext(),API_KEY);
+        Places.initialize(getApplicationContext(),getString(R.string.google_maps_key));
         txtStartPoint.setFocusable(false);
         txtEndPoint.setFocusable(false);
     }
