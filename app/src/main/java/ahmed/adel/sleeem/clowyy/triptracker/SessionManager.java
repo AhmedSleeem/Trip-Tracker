@@ -28,6 +28,13 @@ public class SessionManager {
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
+    // User Name (make variable public to access from outside)
+    public static final String KEY_NAME = "name";
+
+    // ImageUrl (make variable public to access from outside)
+    public static final String KEY_ImageURL = "imageUrl";
+
+
     // Constructor
     public SessionManager(Context context){
         this._context = context;
@@ -38,12 +45,18 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String email){
+    public void createLoginSession(String email,String name,String imageurl){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
+
+        // Storing name in pref
+        editor.putString(KEY_NAME, name);
+
+        // Storing imageurl in pref
+        editor.putString(KEY_ImageURL, imageurl);
 
         // commit changes
         editor.commit();
@@ -81,6 +94,10 @@ public class SessionManager {
 
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+        // user name id
+        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
+        // user image id
+        user.put(KEY_ImageURL, pref.getString(KEY_ImageURL, null));
 
         // return user
         return user;

@@ -123,7 +123,13 @@ public class Login extends AppCompatActivity {
                                     Toast.makeText(Login.this, "Authentication succeeded.",
                                             Toast.LENGTH_SHORT).show();
 
-                                    session.createLoginSession(email);
+                                    int index = email.indexOf('@');
+                                    String username = email.substring(0,index);
+                                    username = username.substring(0, 1).toUpperCase() + username.substring(1);
+                                    Log.i("tag",username);
+
+                                    session.createLoginSession(email,username,"");
+
 
                                     Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
@@ -182,7 +188,11 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(Login.this, "login with google succeeded", Toast.LENGTH_SHORT).show();
-                            session.createLoginSession(user.getEmail());
+                            Toast.makeText(Login.this, user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                            Log.i("tag",""+user.getPhotoUrl());
+                            Log.i("tag",""+user.getDisplayName());
+
+                            session.createLoginSession(user.getEmail(),user.getDisplayName(),user.getPhotoUrl().toString());
                             Intent intent = new Intent(Login.this, MainActivity.class);
                             startActivity(intent);
                             finish();
