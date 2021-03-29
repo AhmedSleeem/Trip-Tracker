@@ -198,6 +198,9 @@ public class Login extends AppCompatActivity {
                                     if (!snapshot.hasChild(userID)) {
                                         User user = new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail());
                                         FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
+
+                                        //sync
+
                                     }
 
                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));

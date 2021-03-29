@@ -7,7 +7,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Trip.class},version = 1,exportSchema = false)
+@Database(entities = {Trip.class},version = 2,exportSchema = false)
 public abstract class TripDatabase extends RoomDatabase {
 
     public  abstract TripDao getTripDao();
@@ -29,6 +29,6 @@ public abstract class TripDatabase extends RoomDatabase {
         return Room.databaseBuilder(
                 context,
                 TripDatabase.class,
-                DB_NAME).allowMainThreadQueries().build();
+                DB_NAME).allowMainThreadQueries().fallbackToDestructiveMigration().build();
     }
 }

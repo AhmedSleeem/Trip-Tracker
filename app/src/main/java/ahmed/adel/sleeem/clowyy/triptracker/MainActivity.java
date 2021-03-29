@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -69,16 +70,20 @@ public class MainActivity extends AppCompatActivity {
         // email
         String email = user.get(SessionManager.KEY_EMAIL);
 
-//        TripDatabase tripDatabase = TripDatabase.getInstance(getApplicationContext());
-//        TripDao tripDao = tripDatabase.getTripDao();
-//
-//        Trip trip = new Trip("A","new trip","B",true,
-//                'D',"eat drink  swim",email,"2021-3-26","10:48",
-//                UUID.nameUUIDFromBytes("ahmed.png".getBytes()).toString(),false);
-//
-//
-//
-//        tripDao.insertTrip(trip);
+        TripDatabase tripDatabase = TripDatabase.getInstance(getApplicationContext());
+        TripDao tripDao = tripDatabase.getTripDao();
+
+        Trip trip = new Trip("A","new trip","B",true,
+                "Daily","eat drink  swim",email,"2021-3-26","10:48",
+                UUID.nameUUIDFromBytes("ahmed.png".getBytes()).toString(),false);
+
+
+
+        tripDao.insertTrip(trip);
+        tripDao.insertTrip(trip);
+        tripDao.insertTrip(trip);
+        tripDao.insertTrip(trip);
+        tripDao.insertTrip(trip);
         Toast.makeText(getApplicationContext(),"Email : " + email, Toast.LENGTH_SHORT).show();
 
         logout.setOnClickListener(new View.OnClickListener() {

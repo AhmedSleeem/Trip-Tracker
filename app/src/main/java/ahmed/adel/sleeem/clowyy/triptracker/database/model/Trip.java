@@ -35,7 +35,7 @@ public class Trip {
 
 
     @ColumnInfo
-    char tripRepeatingType;//not repeating , daily , weekly , monthly ,.....
+    String tripRepeatingType;//not repeating , daily , weekly , monthly ,.....
 
 
     @ColumnInfo
@@ -74,7 +74,7 @@ public class Trip {
         this.tripImage = tripImage;
     }
 
-    public Trip(String tripSource, String tripTitle, String tripDestination, boolean tripType, char tripRepeatingType, String tripNotes, String tripMaker, String tripDate, String tripTime, String tripImage, boolean tripStatus) {
+    public Trip(String tripSource, String tripTitle, String tripDestination, boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker, String tripDate, String tripTime, String tripImage, boolean tripStatus) {
         this.tripSource = tripSource;
         this.tripTitle = tripTitle;
         this.tripDestination = tripDestination;
@@ -123,11 +123,11 @@ public class Trip {
         this.tripType = tripType;
     }
 
-    public char getTripRepeatingType() {
+    public String getTripRepeatingType() {
         return tripRepeatingType;
     }
 
-    public void setTripRepeatingType(char tripRepeatingType) {
+    public void setTripRepeatingType(String tripRepeatingType) {
         this.tripRepeatingType = tripRepeatingType;
     }
 

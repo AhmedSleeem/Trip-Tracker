@@ -3,9 +3,18 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="6dp"
+    card_view:cardElevation="25dp"
+    card_view:cardCornerRadius="10dp"
+    card_view:shapeAppearance="@color/purple_200"
+    card_view:strokeColor="@color/colorPrimary"
+
+    android:theme="@style/Theme.MaterialComponents.Light"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +25,7 @@
         <ImageView
             android:id="@+id/destinationImage"
             android:layout_width="match_parent"
-            android:layout_height="194dp"
+            android:layout_height="120dp"
             android:contentDescription="@string/content_description_media"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/trip" />
@@ -25,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="6dp">
 
             <!-- Title, secondary and supporting text -->
             <TextView
@@ -39,8 +48,8 @@
                 android:id="@+id/secondaryTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="secondary_text"
+                android:layout_marginTop="4dp"
+                android:text="source"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary" />
 
@@ -48,8 +57,8 @@
                 android:id="@+id/supportingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="supporting_text"
+                android:layout_marginTop="6dp"
+                android:text="destination"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary" />
 
@@ -57,26 +66,29 @@
 
         <!-- Buttons -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="2dp"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/actionDetails"
-                style="?attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="action_1"
+
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="20dp"
+
+                android:background="@drawable/ic_details"
                 tools:ignore="RtlCompat" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/actionDelete"
-                style="?attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="action_2" />
+
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+
+                android:background="@drawable/ic_delete"
+                />
         </LinearLayout>
 
     </LinearLayout>

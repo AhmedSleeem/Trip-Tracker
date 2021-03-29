@@ -67,7 +67,7 @@ public class DialogAlert extends BroadcastReceiver {
                 .addAction(cancelAction)
                 .setColor(Color.BLUE)
                 .setOngoing(true)
-                .setFullScreenIntent(clickPendingIntent, true);
+                .setFullScreenIntent(clickPendingIntent, true).setCustomHeadsUpContentView(expandedView);
 
 
         Log.i("huiy", UUID.nameUUIDFromBytes("ahmedpng".getBytes()).toString());

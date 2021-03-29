@@ -23,20 +23,30 @@
 
         <activity android:name=".TripsMapActivity">
 
+
         </activity>
         <activity android:name=".Dialog"
             android:theme="@android:style/Theme.Translucent"
             ></activity>
         <activity android:name=".SplashScreenActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
 
         </activity>
-        <activity android:name=".HistoryActivity" />
+        <activity android:name=".HistoryActivity" >
+
+
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+        </activity>
         <activity android:name=".Register" />
         <activity android:name=".Login"></activity>
         <activity android:name=".TripActivity">
@@ -50,12 +60,12 @@
         </activity>
         <activity android:name=".MainActivity">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
 
 
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
 
         <meta-data
