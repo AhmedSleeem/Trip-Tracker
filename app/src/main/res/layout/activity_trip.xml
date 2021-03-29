@@ -7,7 +7,7 @@
     tools:context=".TripActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/userEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -26,7 +26,7 @@
         android:layout_marginTop="50dp"
         android:text="@string/LBL_START"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/userEmail" />
 
     <TextView
         android:id="@+id/textView3"
@@ -71,9 +71,9 @@
         android:hint="@string/HINT_TRIP_NAME"
         android:inputType="textPersonName"
         android:text="Going to ITI"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintBottom_toBottomOf="@+id/userEmail"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="@+id/userEmail" />
 
     <EditText
         android:id="@+id/txtBackStartPoint"

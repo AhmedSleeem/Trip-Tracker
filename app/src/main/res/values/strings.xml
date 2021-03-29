@@ -25,4 +25,15 @@
     <string name="logout">Logout</string>
     <string name="google_maps_key">AIzaSyChkd1O_wezit51e8lLIHNdv2NoOtC_duI</string>
     <string name="content_description_media">Trip Image</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Trip Tracker</string>
+    <string name="nav_header_subtitle">user email</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_upcomingTrips">Upcoming Trips</string>
+    <string name="menu_history">History</string>
+    <string name="menu_sync">Sync</string>
+    <string name="menu_logout">Logout</string>
 </resources>
