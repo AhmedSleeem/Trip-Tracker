@@ -20,17 +20,21 @@ public class Trip {
     boolean tripType;//single or round
 
     @ColumnInfo
-    char tripRepeatingType;//not repeating , daily , weekly , monthly ,.....
-   @ColumnInfo
+    String tripRepeatingType;//not repeating , daily , weekly , monthly ,.....
+
+    @ColumnInfo
     String tripNotes;
-   @ColumnInfo
+
+    @ColumnInfo
     String tripMaker;// firebaseUserId who is create the trip
+
     @ColumnInfo
     String tripDate;
+
     @ColumnInfo
     String tripTime;
 
-    public Trip(int tripId, String tripSource, String tripDestination, boolean tripType, char tripRepeatingType, String tripNotes, String tripMaker, String tripDate, String tripTime) {
+    public Trip(int tripId, String tripSource, String tripDestination, boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker, String tripDate, String tripTime) {
         this.tripId = tripId;
         this.tripSource = tripSource;
         this.tripDestination = tripDestination;
@@ -77,11 +81,11 @@ public class Trip {
         this.tripType = tripType;
     }
 
-    public char getTripRepeatingType() {
+    public String getTripRepeatingType() {
         return tripRepeatingType;
     }
 
-    public void setTripRepeatingType(char tripRepeatingType) {
+    public void setTripRepeatingType(String tripRepeatingType) {
         this.tripRepeatingType = tripRepeatingType;
     }
 

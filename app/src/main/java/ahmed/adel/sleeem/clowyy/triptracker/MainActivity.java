@@ -1,20 +1,34 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
+import androidx.annotation.LongDef;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.badge.BadgeUtils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         // Session class instance
         session = new SessionManager(getApplicationContext());
         Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+        String userID = //FirebaseAuth.getInstance().getCurrentUser().getUid();
+                "uYUjhir14BaF4VZTRU5VskSRSon2";
+
+        getUserTrips(userID);
 
 
 
@@ -57,6 +75,27 @@ public class MainActivity extends AppCompatActivity {
                 // This will clear all session data and
                 // redirect user to LoginActivity
                 session.logoutUser();
+            }
+        });
+
+    }
+
+    private void getUserTrips(String userID){
+        List<Trip> userTrips = new ArrayList<>();
+        DatabaseReference userTripsRef = FirebaseDatabase.getInstance().getReference("trips").child(userID);
+        userTripsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    userTrips.add(dataSnapshot.getValue(Trip.class));
+                }
+              //  userTripsRef.addListenerForSingleValueEvent(null);
+                // Change UI
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 

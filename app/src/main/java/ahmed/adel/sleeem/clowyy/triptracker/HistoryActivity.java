@@ -15,7 +15,5 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         historyRecyclerView = findViewById(R.id.historyRecyclerView);
-
-
     }
 }

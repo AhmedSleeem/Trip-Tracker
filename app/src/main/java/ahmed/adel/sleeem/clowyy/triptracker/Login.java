@@ -16,14 +16,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,13 +37,13 @@ import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 
 public class Login extends AppCompatActivity {
 
-    EditText emailTxt,passwordTxt;
-    Button login;
+    EditText emailTxt, passwordTxt;
+    Button login, btnTwitter;
     TextView register;
 
     private static final int RC_SIGN_IN = 1000;
     private FirebaseAuth mAuth;
-    com.google.android.gms.common.SignInButton googleBtn;
+    SignInButton googleBtn;
     GoogleSignInClient mGoogleSignInClient;
 
     // Session Manager Class
@@ -53,28 +57,24 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-
         // Session Manager
         session = new SessionManager(getApplicationContext());
         Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-        if(session.isLoggedIn()){
+        if (session.isLoggedIn()) {
             // check firebase user-email is exists or not --> this happend in state of deleting user from firebase
 
 
-                Intent intent = new Intent(Login.this,MainActivity.class);
-                startActivity(intent);
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
 
         }
 
         emailTxt = findViewById(R.id.emailEditTxt);
         passwordTxt = findViewById(R.id.passwordEditTxt);
         login = findViewById(R.id.loginBtn);
+        btnTwitter = findViewById(R.id.btnTwitter);
         register = findViewById(R.id.registerTxt);
         googleBtn = findViewById(R.id.googleBtn);
-
-
-
-
 
 
         register.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +92,7 @@ public class Login extends AppCompatActivity {
                 String email = emailTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
 
-                loginAuthentication(email,password);
+                loginAuthentication(email, password);
 
             }
         });
@@ -112,13 +112,44 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        btnTwitter.setOnClickListener(v->{
+            OAuthProvider.Builder provider = OAuthProvider.newBuilder("twitter.com");
+            mAuth.startActivityForSignInWithProvider(/* activity= */ this, provider.build())
+                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            String email = authResult.getAdditionalUserInfo().getUsername();
+                            session.createLoginSession(email);
+
+                            Toast.makeText(Login.this, "Authentication succeeded with " + email,
+                                    Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(Login.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                            // User is signed in.
+                            // IdP data available in
+                            // authResult.getAdditionalUserInfo().getProfile().
+                            // The OAuth access token can also be retrieved:
+                            // authResult.getCredential().getAccessToken().
+                            // The OAuth secret can be retrieved by calling:
+                            // authResult.getCredential().getSecret().
+                        }
+                    }).addOnFailureListener(
+                    new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle failure.
+                        }
+                    });
+        });
     }
 
     private void loginAuthentication(String email, String password) {
 
-        if(!email.isEmpty() )
-        {
-            if(!password.isEmpty()) {
+        if (!email.isEmpty()) {
+            if (!password.isEmpty()) {
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
 
@@ -143,14 +174,10 @@ public class Login extends AppCompatActivity {
                                 }
                             }
                         });
-            }
-            else
-            {
+            } else {
                 passwordTxt.setError("Please enter password!");
             }
-        }
-        else
-        {
+        } else {
             emailTxt.setError("Please enter email!");
         }
     }
@@ -176,6 +203,7 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
