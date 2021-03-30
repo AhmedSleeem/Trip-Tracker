@@ -103,20 +103,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView3" />
 
-    <EditText
-        android:id="@+id/txtBackNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:ems="10"
-        android:hint="@string/HINT_NOTES"
-        android:inputType="textPersonName"
-        android:text="Note 1"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
-
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
@@ -126,7 +112,6 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txtBackNotes"
         app:layout_constraintTop_toTopOf="@+id/textView5">
 
         <RadioButton
@@ -147,23 +132,43 @@
         android:id="@+id/timerBtn"
         android:layout_width="71dp"
         android:layout_height="75dp"
-        android:layout_marginTop="69dp"
-        android:layout_marginEnd="146dp"
-        android:layout_marginRight="146dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/ic_timer"
+        app:layout_constraintBottom_toBottomOf="@+id/dateBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toTopOf="@+id/dateBtn" />
 
     <Button
         android:id="@+id/dateBtn"
         android:layout_width="66dp"
         android:layout_height="75dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="264dp"
-        android:layout_marginRight="264dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/ic_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <Button
+        android:id="@+id/btnAddTrip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Add"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timerBtn" />
+
+    <Button
+        android:id="@+id/btnAddNotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AddNotes"
+        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="@+id/txtBackEndPoint"
+        app:layout_constraintStart_toStartOf="@+id/txtBackEndPoint"
+        app:layout_constraintTop_toTopOf="@+id/textView4" />
 
     <!--
     <fragment

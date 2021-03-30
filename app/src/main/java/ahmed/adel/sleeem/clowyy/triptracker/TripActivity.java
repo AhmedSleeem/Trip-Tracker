@@ -14,9 +14,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,8 +30,8 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
-import java.text.BreakIterator;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -41,12 +43,12 @@ import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 
 public class TripActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
-    EditText txtTripName, txtStartPoint, txtEndPoint, txtNotes;
+    EditText txtTripName, txtStartPoint, txtEndPoint;
     RadioButton rbOneWay, rbRoundTrip;
 
     Button timeBtn,dateBtn;
 
-    Dialog roundTripDialog;
+    Dialog roundTripDialog, notesDialog;
 
     private Calendar calendar;
     private String calDate;
@@ -58,6 +60,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     int hourOfDay;
     private String timeTxt;
 
+    List<String> tripNotes, roundTripNotes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +70,16 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         initView();
 
         roundTripDialog = new Dialog(this);
+        notesDialog = new Dialog(this);
+
+        roundTripDialog.setContentView(R.layout.round_trip);
+        notesDialog.setContentView(R.layout.notes_dialog);
+
+        tripNotes = new ArrayList<>();
+        roundTripNotes = new ArrayList<>();
+
+
+        calendar = Calendar.getInstance();
 
 
        timeBtn.setOnClickListener(v->{
@@ -102,17 +116,55 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             }
         });
 
+        findViewById(R.id.btnAddTrip).setOnClickListener(v->{
+
+        });
+
+        findViewById(R.id.btnAddNotes).setOnClickListener(v->{
+            showNotesDialog(tripNotes);
+        });
+    }
+
+    private void showNotesDialog(List<String> notes) {
+        ListView lvNotes = notesDialog.findViewById(R.id.lvNotes);
+        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notes);
+
+        lvNotes.setAdapter(stringArrayAdapter);
+
+        lvNotes.setOnItemLongClickListener((parent, view, position, id) -> {
+            Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
+            return true;
+        });
+
+        EditText txtNote = notesDialog.findViewById(R.id.txtNote);
+        notesDialog.findViewById(R.id.btnAddNote).setOnClickListener(v->{
+            if(txtNote.getText().toString().length() > 1) {
+                notes.add(txtNote.getText().toString());
+                stringArrayAdapter.notifyDataSetChanged();
+                txtNote.setText("");
+            }
+        });
+
+        notesDialog.findViewById(R.id.btnNotesDone).setOnClickListener(v->{
+            if(txtNote.getText().toString().length() > 1) {
+                notes.add(txtNote.getText().toString());
+                txtNote.setText("");
+            }
+            notesDialog.dismiss();
+        });
+
+        notesDialog.show();
+
     }
 
     private void showTripDialog(){
-        roundTripDialog.setContentView(R.layout.round_trip);
-
-        EditText txtBackTripName, txtBackStartPoint, txtBackEndPoint, txtBackNotes;
+        EditText txtBackTripName, txtBackStartPoint, txtBackEndPoint;
+        Button btnAddRoundNotes;
 
         txtBackTripName = roundTripDialog.findViewById(R.id.txtBackTripName);
         txtBackStartPoint = roundTripDialog.findViewById(R.id.txtBackStartPoint);
         txtBackEndPoint = roundTripDialog.findViewById(R.id.txtBackEndPoint);
-        txtBackNotes = roundTripDialog.findViewById(R.id.txtBackNotes);
+
 
         txtBackTripName.setText("Back from " + txtEndPoint.getText().toString());
         txtBackStartPoint.setText(txtEndPoint.getText().toString());
@@ -122,8 +174,22 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         });
 
+        roundTripDialog.findViewById(R.id.btnAddRoundNotes).setOnClickListener(v -> {
+            showNotesDialog(roundTripNotes);
+        });
+
         roundTripDialog.findViewById(R.id.btnCancel).setOnClickListener(v->{ roundTripDialog.dismiss(); });
 
+
+        roundTripDialog.findViewById(R.id.timerBtnRound).setOnClickListener(v->{
+            DialogFragment timePickerFragment = new TimePickerFragment();
+            timePickerFragment.show(getSupportFragmentManager(),"time Packer");
+        });
+
+        roundTripDialog.findViewById(R.id.dateBtnRound).setOnClickListener(v->{
+            DialogFragment datePickerFragment = new DatePickerFragment();
+            datePickerFragment.show(getSupportFragmentManager(),"date Picker");
+        });
 
         roundTripDialog.show();
     }
@@ -132,7 +198,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         txtTripName = findViewById(R.id.txtBackTripName);
         txtStartPoint = findViewById(R.id.txtBackStartPoint);
         txtEndPoint = findViewById(R.id.txtBackEndPoint);
-        txtNotes = findViewById(R.id.txtBackNotes);
+       // txtTripNote = findViewById(R.id.txtBackNotes);
 
         rbOneWay = findViewById(R.id.rbOneWay);
         rbRoundTrip = findViewById(R.id.rbRoundTrip);
