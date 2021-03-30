@@ -74,7 +74,9 @@ public class Trip {
         this.tripImage = tripImage;
     }
 
-    public Trip(String tripSource, String tripTitle, String tripDestination, boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker, String tripDate, String tripTime, String tripImage, boolean tripStatus) {
+    public Trip(String tripSource, String tripTitle, String tripDestination,
+                boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker,
+                String tripDate, String tripTime, String tripImage, boolean tripStatus) {
         this.tripSource = tripSource;
         this.tripTitle = tripTitle;
         this.tripDestination = tripDestination;

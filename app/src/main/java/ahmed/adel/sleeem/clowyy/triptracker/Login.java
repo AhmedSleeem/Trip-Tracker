@@ -120,7 +120,9 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             String email = authResult.getAdditionalUserInfo().getUsername();
-                            session.createLoginSession(email);
+
+
+                            session.createLoginSession(email,null,null);
 
                             Toast.makeText(Login.this, "Authentication succeeded with " + email,
                                     Toast.LENGTH_SHORT).show();
@@ -161,7 +163,7 @@ public class Login extends AppCompatActivity {
                                     Toast.makeText(Login.this, "Authentication succeeded.",
                                             Toast.LENGTH_SHORT).show();
 
-                                    session.createLoginSession(email);
+                                    session.createLoginSession(email,null,null);
 
                                     Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
@@ -222,7 +224,7 @@ public class Login extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     Toast.makeText(Login.this, "login with google succeeded", Toast.LENGTH_SHORT).show();
-                                    session.createLoginSession(user.getEmail());
+                                    session.createLoginSession(user.getEmail(),null,null);
 
                                     if (!snapshot.hasChild(userID)) {
                                         User user = new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail());
