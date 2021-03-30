@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -29,47 +29,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.UUID;
-
-import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
-import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
-import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
-import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     // Session Manager Class
     SessionManager session;
-    Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        logout = findViewById(R.id.logoutBtn);
-
         //check shared preferences and user login status
 
         // Session class instance
         session = new SessionManager(getApplicationContext());
         Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
 
-
-
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent intent = new Intent(getApplicationContext(), DialogAlert.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(),1,intent,0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,10000,pendingIntent);
-            
-        }
 
         /**
          * Call this function whenever you want to check user login
@@ -108,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
         String imageUrl = user.get(SessionManager.KEY_ImageURL);
+        Log.i("TAG", "onCreate: "+imageUrl);
         switch(imageUrl){
             case "":
                 break;
@@ -123,17 +101,6 @@ public class MainActivity extends AppCompatActivity {
         TextView userEmail = headerView.findViewById(R.id.userEmail);
         userEmail.setText(email);
 
-//        TripDatabase tripDatabase = TripDatabase.getInstance(getApplicationContext());
-//        TripDao tripDao = tripDatabase.getTripDao();
-//
-//        Trip trip = new Trip("A","new trip","B",true,
-//                'D',"eat drink  swim",email,"2021-3-26","10:48",
-//                UUID.nameUUIDFromBytes("ahmed.png".getBytes()).toString(),false);
-//
-//
-//
-//        tripDao.insertTrip(trip);
-        Toast.makeText(getApplicationContext(),"Email : " + email, Toast.LENGTH_SHORT).show();
 
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override

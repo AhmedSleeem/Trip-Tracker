@@ -93,11 +93,11 @@ public class SessionManager {
         HashMap<String, String> user = new HashMap<String, String>();
 
         // user email id
-        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, "null"));
         // user name id
-        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
+        user.put(KEY_NAME, pref.getString(KEY_NAME, "null"));
         // user image id
-        user.put(KEY_ImageURL, pref.getString(KEY_ImageURL, null));
+        user.put(KEY_ImageURL, pref.getString(KEY_ImageURL, ""));
 
         // return user
         return user;

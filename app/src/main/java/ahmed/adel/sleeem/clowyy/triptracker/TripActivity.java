@@ -4,11 +4,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,11 +28,16 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import java.text.BreakIterator;
+import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.DatePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.TimePickerFragment;
+import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 
 public class TripActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
@@ -38,6 +47,16 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     Button timeBtn,dateBtn;
 
     Dialog roundTripDialog;
+
+    private Calendar calendar;
+    private String calDate;
+
+    int year;
+    int month;
+    int dayOfMonth;
+    int minute;
+    int hourOfDay;
+    private String timeTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,13 +150,25 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     //handle time setting
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Toast.makeText(getBaseContext(),"hour : "+hourOfDay +" minute = "+minute,Toast.LENGTH_LONG).show();
+        TripActivity.this.hourOfDay=hourOfDay;
+        TripActivity.this.minute=minute;
+        calendar.set(Calendar.MINUTE , minute);
+        calendar.set(Calendar.HOUR_OF_DAY , hourOfDay);
+        calendar.set(Calendar.SECOND , 0);
+        timeTxt = String.valueOf(hourOfDay)+ " : " + String.valueOf(minute);
     }
 
     //handle date setting
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Toast.makeText(getBaseContext(),"year = "+year+" month = "+month+" day = "+dayOfMonth,Toast.LENGTH_LONG).show();
+        TripActivity.this.year=year;
+        TripActivity.this.month=month;
+        TripActivity.this.dayOfMonth=dayOfMonth;
+        calendar.set(Calendar.YEAR , year);
+        calendar.set(Calendar.MONTH , month);
+        calendar.set(Calendar.DAY_OF_MONTH , dayOfMonth);
+        String date = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        calDate = date;
     }
 
     @Override
@@ -158,5 +189,31 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             Status status = Autocomplete.getStatusFromIntent(data);
             Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    private void startAlarm(Calendar c, Trip curTrip) {
+
+        AlarmManager alarmang = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), DialogAlert.class);
+//        intent.putExtra("id",curTrip.getTripId());
+//        intent.putExtra("reqCode",curTrip.getRequestCode()+"");
+//        intent.putExtra("endPoint",curTrip.getEndPlaceName());
+//        intent.putExtra("lati",curTrip.getEndLatitude()+"");
+//        intent.putExtra("long",curTrip.getEndLongtude()+"");
+//        intent.putExtra("notes",curTrip.getNotes());
+
+        c.set(Calendar.YEAR , year);
+        c.set(Calendar.MONTH , month);
+        c.set(Calendar.DAY_OF_MONTH , dayOfMonth);
+        c.set(Calendar.MINUTE , minute);
+        Log.i("nasor",minute+"");
+//        Log.i("nasor",curTrip.getMinute()+"");
+        c.set(Calendar.HOUR_OF_DAY , hourOfDay);
+        c.set(Calendar.SECOND , 0);
+
+        PendingIntent pi =  PendingIntent.getBroadcast(this , PendingIntent.FLAG_CANCEL_CURRENT, intent , 0);
+        alarmang.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pi);
+
     }
 }

@@ -27,7 +27,8 @@
         <activity
             android:name=".Dialog"
             android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".SplashScreenActivity">
+        <activity android:name=".SplashScreenActivity"
+            android:theme="@style/Theme.TripTracker.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

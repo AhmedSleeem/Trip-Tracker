@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.R;
@@ -20,31 +22,23 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
 
 private Context context;
 private List<Trip>tripList;
-private OnItemClickListener onItemClickListener;
+private OnRecyclerViewItemClickLister onItemClickListener;
 
-public  interface OnItemClickListener{
-    void onDetailIconClicked(int position);
-    void onDeleteIconClicked(int position);
-}
 
-    public OnItemClickListener getOnItemClickListener() {
-        return onItemClickListener;
-    }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
 
-    public HistoryAdapter(Context context, List<Trip> tripList) {
+
+    public HistoryAdapter(Context context, List<Trip> tripList,OnRecyclerViewItemClickLister onItemClickListener) {
         this.context = context;
         this.tripList = tripList;
+        this.onItemClickListener=onItemClickListener;
     }
 
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(context).inflate(R.layout.history_cell_row, parent, false);
-        return new Holder(inflate,onItemClickListener);
+        return new Holder(inflate);
     }
 
     @Override
@@ -73,8 +67,8 @@ public  interface OnItemClickListener{
         ImageView destinationImage;
 
         TextView title,secondary_title,supplementary_Text;
-        Button actionDelete,actionDetails;
-        public Holder(@NonNull View itemView,final OnItemClickListener onItemClickListener) {
+        MaterialButton actionDelete,actionDetails;
+        public Holder(@NonNull View itemView) {
             super(itemView);
 
             destinationImage=itemView.findViewById(R.id.destinationImage);
@@ -83,6 +77,20 @@ public  interface OnItemClickListener{
             supplementary_Text=itemView.findViewById(R.id.supportingText);
             actionDelete=itemView.findViewById(R.id.actionDelete);
             actionDetails=itemView.findViewById(R.id.actionDetails);
+
+            itemView.setOnClickListener((view)->{
+                onItemClickListener.onDetailsIconClicked(getAdapterPosition());
+            });
+
+
+            actionDetails.setOnClickListener((view)->{
+                onItemClickListener.onDetailsIconClicked(getAdapterPosition());
+            });
+
+
+            actionDelete.setOnClickListener((view)->{
+                onItemClickListener.onDeleteIconClicked(getAdapterPosition());
+            });
         }
     }
 }
