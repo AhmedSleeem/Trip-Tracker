@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,6 +34,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 
@@ -56,18 +62,11 @@ public class Login extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-
-
-        // Session Manager
         session = new SessionManager(getApplicationContext());
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-        if (session.isLoggedIn()) {
-            // check firebase user-email is exists or not --> this happend in state of deleting user from firebase
 
-
+        if (session.isLoggedIn() && FirebaseAuth.getInstance().getCurrentUser() != null) {
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
-
         }
 
         emailTxt = findViewById(R.id.emailEditTxt);
@@ -76,7 +75,6 @@ public class Login extends AppCompatActivity {
         btnTwitter = findViewById(R.id.btnTwitter);
         register = findViewById(R.id.registerTxt);
         googleBtn = findViewById(R.id.googleBtn);
-
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,16 +87,12 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String email = emailTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
-
                 loginAuthentication(email, password);
-
             }
         });
 
-        // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -150,30 +144,24 @@ public class Login extends AppCompatActivity {
     }
 
     private void loginAuthentication(String email, String password) {
-
         if (!email.isEmpty()) {
             if (!password.isEmpty()) {
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(Login.this, "Authentication succeeded.",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "Login succeeded.", Toast.LENGTH_SHORT).show();
+
+                                    saveUserIntoFirebase();
 
                                     session.createLoginSession(email,null,null);
 
                                     Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
-//
                                 } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(Login.this, "Wrong email or password !",
-                                            Toast.LENGTH_SHORT).show();
-//
+                                    Toast.makeText(Login.this, "Wrong email or password !", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -216,44 +204,40 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            String userID = mAuth.getCurrentUser().getUid();
+                            Toast.makeText(Login.this, "Login succeeded.", Toast.LENGTH_SHORT).show();
+                            saveUserIntoFirebase();
+
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            session.createLoginSession(user.getEmail(), user.getDisplayName(), user.getPhotoUrl().toString());
 
-                            FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Toast.makeText(Login.this, "login with google succeeded", Toast.LENGTH_SHORT).show();
-                                    session.createLoginSession(user.getEmail(),null,null);
-
-                                    if (!snapshot.hasChild(userID)) {
-                                        User user = new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail());
-                                        FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
-                                    }
-
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                    finish();
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
-                            /*
-                            // Toast.makeText(Login.this, "login with google succeeded", Toast.LENGTH_SHORT).show();
-                            session.createLoginSession(user.getEmail());
-                            Intent intent = new Intent(Login.this, MainActivity.class);
-                            startActivity(intent);
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
-                            */
+
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(Login.this, "signInWithCredential:failure", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Failed to signIn", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private void saveUserIntoFirebase() {
+        String userID = mAuth.getCurrentUser().getUid();
+
+        FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.hasChild(userID)) {
+                    User user = new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail());
+                    FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 }

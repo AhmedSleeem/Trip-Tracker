@@ -10,6 +10,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     ImageView logoImage;
@@ -27,9 +29,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         logoImage.setAnimation(AnimationUtils.loadAnimation(getBaseContext(),R.anim.side_anim));
         sloganTxt.setAnimation(AnimationUtils.loadAnimation(getBaseContext(),R.anim.bottom_anim));
 
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseAuth.getInstance().getCurrentUser().reload();
+        }
 
         new Handler().postDelayed(()->{
             startActivity(new Intent(getBaseContext(),Login.class));
+
+
         },5005);
     }
 }

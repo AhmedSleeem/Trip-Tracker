@@ -61,6 +61,7 @@ public class Register extends AppCompatActivity {
         {
             if(!password.isEmpty()) {
                 if(password.length()>=6) {
+                    //
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
                                 @Override

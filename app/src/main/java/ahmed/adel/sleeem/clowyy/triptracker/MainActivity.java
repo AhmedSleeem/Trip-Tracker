@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public static void logout(final Activity activity) {
+    public void logout(final Activity activity) {
 
 
         //initialize alert dialog
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //call method logout in session class
-                //session.logoutUser();
+                session.logoutUser();
             }
         });
         //negative no button
@@ -227,16 +227,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void saveImage(Bitmap bitmap, String fileName){
-        try {
-            FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 }
