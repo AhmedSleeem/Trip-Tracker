@@ -1,5 +1,11 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
+import androidx.annotation.LongDef;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
@@ -28,24 +34,47 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.badge.BadgeUtils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     // Session Manager Class
     SessionManager session;
+    Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        logout = findViewById(R.id.logoutBtn);
+
         //check shared preferences and user login status
 
         // Session class instance
         session = new SessionManager(getApplicationContext());
         Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+        String userID = //FirebaseAuth.getInstance().getCurrentUser().getUid();
+                "uYUjhir14BaF4VZTRU5VskSRSon2";
+
+        getUserTrips(userID);
+
 
 
         /**
@@ -94,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
+        // email
         String email = user.get(SessionManager.KEY_EMAIL);
         String username = user.get(SessionManager.KEY_NAME);
         TextView userName = headerView.findViewById(R.id.userName);
@@ -175,6 +205,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    private void getUserTrips(String userID){
+        List<Trip> userTrips = new ArrayList<>();
+        DatabaseReference userTripsRef = FirebaseDatabase.getInstance().getReference("trips").child(userID);
+        userTripsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    userTrips.add(dataSnapshot.getValue(Trip.class));
+                }
+              //  userTripsRef.addListenerForSingleValueEvent(null);
+                // Change UI
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void saveImage(Bitmap bitmap, String fileName){
+        try {
+            FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
