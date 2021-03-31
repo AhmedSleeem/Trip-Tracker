@@ -1,10 +1,10 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -12,8 +12,8 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +33,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -41,9 +42,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.DatePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.TimePickerFragment;
-import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class TripActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -51,28 +53,35 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     EditText txtTripName, txtStartPoint, txtEndPoint, txtRepeatingNumber;
     RadioButton rbOneWay, rbRoundTrip;
 
-    Button timeBtn,dateBtn;
+    Button timeBtn, dateBtn;
 
     Dialog roundTripDialog, notesDialog;
 
     private Calendar calendar;
-    private String calDate;
+    private String calDate = "";
     Spinner repeatingSpinner;
     Switch swtchRepeat;
-    String repeatingType, repeatingTypeRound;
+    String repeatingType = "", repeatingTypeRound = "";
 
-    int year;
-    int month;
-    int dayOfMonth;
+    private TripDao tripDao;
+
+
+    Trip tripRounded;
+
     int minute;
     int hourOfDay;
-    private String timeTxt;
+    private String timeTxt = "";
 
     Button btnAddTrip;
 
     List<String> tripNotes, roundTripNotes;
     ArrayAdapter<CharSequence> repeatingAdapter;
 
+    private String calDaterounded = "";
+    private String timeTxtrounded = "";
+    private int type;
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,52 +95,109 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         roundTripDialog.setContentView(R.layout.round_trip);
         notesDialog.setContentView(R.layout.notes_dialog);
 
+        tripDao = TripDatabase.getInstance(getBaseContext()).getTripDao();
+
         tripNotes = new ArrayList<>();
         roundTripNotes = new ArrayList<>();
 
 
         calendar = Calendar.getInstance();
 
+        findViewById(R.id.btnTripAdding).setOnClickListener(v -> {
 
-        btnAddTrip.setOnClickListener(v -> {
+            if (calDate.length() > 0 && timeTxt.length() > 0 && txtStartPoint.getText().length() > 0 && txtEndPoint.getText().length() > 0
+                    && txtTripName.getText().length() > 0) {
 
-            if(calDate.length()>0 && timeTxt.length()>0 &&  txtStartPoint.getText().length()>0 && txtEndPoint.getText().length()>0
-            && txtTripName.getText().length()>0){
-                StringBuilder oneWaysNote=new StringBuilder("");
-                StringBuilder roundNote=new StringBuilder("");
+                Toast.makeText(getBaseContext(), "clicked", Toast.LENGTH_SHORT).show();
+                StringBuilder oneWaysNote = new StringBuilder("");
+                StringBuilder roundNote = new StringBuilder("");
 
-                for(String note:tripNotes)oneWaysNote.append("0"+note+",");
-                for(String note:roundTripNotes)roundNote.append("0"+note+",");
-
-                //adding to room
+                for (String note : tripNotes) oneWaysNote.append("0" + note + ",");
 
 
-//                Intent intent = new Intent(this, MyService.class);
-//                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
-//                AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//                alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 30*1000, pintent);
-//
+                Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
+                        rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        calDate, timeTxt, "", false);
+                tripDao.insertTrip(trip);
 
-            }else {
-                Toast.makeText(getBaseContext(), "please complete all feilds", Toast.LENGTH_LONG).show();
-            }
+                Intent intent = new Intent(this, MyService.class);
+                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
+
+                long rrr = 0;
+                switch (repeatingType) {
+                    case "day":
+                        rrr = AlarmManager.INTERVAL_DAY;
+                        break;
+                    case "week":
+                        rrr = AlarmManager.INTERVAL_DAY * 7;
+                        break;
+                    case "hour":
+                        rrr = AlarmManager.INTERVAL_HOUR;
+                        break;
+                    case "month":
+                        rrr = AlarmManager.INTERVAL_DAY * 30;
+                        break;
+                    default:
+                        rrr = 0;
+                }
+                if (rrr == 0) {
+                    alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
+                } else
+                    alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), rrr, pintent);
+
+
+                if (tripRounded != null) {
+                    tripDao.insertTrip(tripRounded);
+                    long rrr2 = 0;
+                    switch (repeatingTypeRound) {
+                        case "day":
+                            rrr2 = AlarmManager.INTERVAL_DAY;
+                            break;
+                        case "week":
+                            rrr2 = AlarmManager.INTERVAL_DAY * 7;
+                            break;
+                        case "hour":
+                            rrr2 = AlarmManager.INTERVAL_HOUR;
+                            break;
+                        case "month":
+                            rrr2 = AlarmManager.INTERVAL_DAY * 30;
+                            break;
+                        default:
+                            rrr2 = 0;
+                    }
+                    if (rrr2 == 0) {
+                        alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
+                    } else
+                        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), rrr2, pintent);
+
+
+                }
+
+
+                finish();
+
+            } else
+                Toast.makeText(getBaseContext(), "please complete all fields", Toast.LENGTH_LONG).show();
 
 
         });
 
 
-       timeBtn.setOnClickListener(v->{
+        timeBtn.setOnClickListener(v -> {
 
             DialogFragment timePickerFragment = new TimePickerFragment();
-            timePickerFragment.show(getSupportFragmentManager(),"time Packer");
+            timePickerFragment.show(getSupportFragmentManager(), "time Packer");
         });
 
-        dateBtn.setOnClickListener(v->{
+        dateBtn.setOnClickListener(v -> {
             DialogFragment datePickerFragment = new DatePickerFragment();
-            datePickerFragment.show(getSupportFragmentManager(),"date Picker");
+            datePickerFragment.show(getSupportFragmentManager(), "date Picker");
         });
 
-        rbRoundTrip.setOnClickListener(v->{
+        rbRoundTrip.setOnClickListener(v -> {
+            type=5;
             showTripDialog();
         });
 
@@ -140,8 +206,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             @Override
             public void onClick(View v) {
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS);
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,fieldList).build(TripActivity.this);
-                startActivityForResult(intent,100);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(TripActivity.this);
+                startActivityForResult(intent, 100);
             }
         });
 
@@ -149,16 +215,13 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             @Override
             public void onClick(View v) {
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS);
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,fieldList).build(TripActivity.this);
-                startActivityForResult(intent,110);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(TripActivity.this);
+                startActivityForResult(intent, 110);
             }
         });
 
-        findViewById(R.id.btnAddTrip).setOnClickListener(v->{
 
-        });
-
-        findViewById(R.id.btnAddNotes).setOnClickListener(v->{
+        findViewById(R.id.btnAddNotes).setOnClickListener(v -> {
             showNotesDialog(tripNotes);
         });
     }
@@ -175,16 +238,16 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         });
 
         EditText txtNote = notesDialog.findViewById(R.id.txtNote);
-        notesDialog.findViewById(R.id.btnAddNote).setOnClickListener(v->{
-            if(txtNote.getText().toString().length() > 1) {
+        notesDialog.findViewById(R.id.btnAddNote).setOnClickListener(v -> {
+            if (txtNote.getText().toString().length() > 1) {
                 notes.add(txtNote.getText().toString());
                 stringArrayAdapter.notifyDataSetChanged();
                 txtNote.setText("");
             }
         });
 
-        notesDialog.findViewById(R.id.btnNotesDone).setOnClickListener(v->{
-            if(txtNote.getText().toString().length() > 1) {
+        notesDialog.findViewById(R.id.btnNotesDone).setOnClickListener(v -> {
+            if (txtNote.getText().toString().length() > 1) {
                 notes.add(txtNote.getText().toString());
                 txtNote.setText("");
             }
@@ -195,7 +258,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
     }
 
-    private void showTripDialog(){
+    private void showTripDialog() {
         EditText txtBackTripName, txtBackStartPoint, txtBackEndPoint, txtRepeatingNumberRound;
         Switch swtchRepeatingRound;
         Spinner repeatingSpinnerRound;
@@ -208,9 +271,23 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         swtchRepeatingRound = roundTripDialog.findViewById(R.id.swtchRepeatingRound);
         repeatingSpinnerRound = roundTripDialog.findViewById(R.id.repeatingSpinnerRound);
 
-        txtBackTripName.setText("Back from " + txtEndPoint.getText().toString());
+        txtBackTripName.setText(txtEndPoint.getText().toString());
         txtBackStartPoint.setText(txtEndPoint.getText().toString());
         txtBackEndPoint.setText(txtStartPoint.getText().toString());
+        Button dateBtnrounded = roundTripDialog.findViewById(R.id.dateBtnRound);
+        Button timeBtnRounded = roundTripDialog.findViewById(R.id.timerBtnRound);
+
+        timeBtnRounded.setOnClickListener(v -> {
+
+            DialogFragment timePickerFragment = new TimePickerFragment();
+            timePickerFragment.show(getSupportFragmentManager(), "time Packer");
+        });
+
+        dateBtnrounded.setOnClickListener(v -> {
+            DialogFragment datePickerFragment = new DatePickerFragment();
+            datePickerFragment.show(getSupportFragmentManager(), "date Picker");
+        });
+
 
         repeatingSpinnerRound.setAdapter(repeatingAdapter);
 
@@ -228,16 +305,32 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         });
 
         swtchRepeatingRound.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked){
+            if (isChecked) {
                 txtRepeatingNumberRound.setVisibility(View.VISIBLE);
                 repeatingSpinnerRound.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 txtRepeatingNumberRound.setVisibility(View.INVISIBLE);
                 repeatingSpinnerRound.setVisibility(View.INVISIBLE);
             }
         });
 
-        roundTripDialog.findViewById(R.id.btnDone).setOnClickListener(v->{
+        roundTripDialog.findViewById(R.id.btnDone).setOnClickListener(v -> {
+            Toast.makeText(getBaseContext(), "done clicked", Toast.LENGTH_SHORT).show();
+
+            if (calDaterounded.length() > 0 && timeTxtrounded.length() > 0 && txtBackTripName.getText().length() > 0 && txtBackStartPoint.getText().length() > 0
+                    && txtBackEndPoint.getText().length() > 0) {
+
+                Toast.makeText(getBaseContext(), "done clicked inside if", Toast.LENGTH_SHORT).show();
+                StringBuilder roundNote = new StringBuilder("");
+                for (String note : roundTripNotes) roundNote.append("0" + note + ",");
+
+                tripRounded = new Trip(txtBackStartPoint.getText().toString(), txtBackTripName.getText().toString(), txtBackEndPoint.getText().toString(),
+                        false, swtchRepeatingRound.isChecked() ? repeatingTypeRound : "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        calDaterounded, timeTxtrounded, "", false);
+                type=3;
+                roundTripDialog.dismiss();
+            }
+
 
         });
 
@@ -245,30 +338,32 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             showNotesDialog(roundTripNotes);
         });
 
-        roundTripDialog.findViewById(R.id.btnCancel).setOnClickListener(v->{
+        roundTripDialog.findViewById(R.id.btnCancel).setOnClickListener(v -> {
             rbOneWay.setChecked(true);
+            type = 3;
             roundTripDialog.dismiss();
         });
 
 
-        roundTripDialog.findViewById(R.id.timerBtnRound).setOnClickListener(v->{
+        roundTripDialog.findViewById(R.id.timerBtnRound).setOnClickListener(v -> {
             DialogFragment timePickerFragment = new TimePickerFragment();
-            timePickerFragment.show(getSupportFragmentManager(),"time Packer");
+            timePickerFragment.show(getSupportFragmentManager(), "time Packer");
         });
 
-        roundTripDialog.findViewById(R.id.dateBtnRound).setOnClickListener(v->{
+        roundTripDialog.findViewById(R.id.dateBtnRound).setOnClickListener(v -> {
             DialogFragment datePickerFragment = new DatePickerFragment();
-            datePickerFragment.show(getSupportFragmentManager(),"date Picker");
+            datePickerFragment.show(getSupportFragmentManager(), "date Picker");
         });
 
         roundTripDialog.setOnCancelListener(dialog -> {
+            type = 3;
             rbOneWay.setChecked(true);
         });
 
         roundTripDialog.show();
     }
 
-    private void initView(){
+    private void initView() {
         txtTripName = findViewById(R.id.txtBackTripName);
         txtStartPoint = findViewById(R.id.txtBackStartPoint);
         txtEndPoint = findViewById(R.id.txtBackEndPoint);
@@ -293,94 +388,70 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         });
 
         swtchRepeat.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked){
+
+            if (isChecked) {
+                //type = 5;
                 txtRepeatingNumber.setVisibility(View.VISIBLE);
                 repeatingSpinner.setVisibility(View.VISIBLE);
-            }else{
+            } else {
+                //type = 3;
                 txtRepeatingNumber.setVisibility(View.INVISIBLE);
                 repeatingSpinner.setVisibility(View.INVISIBLE);
             }
         });
 
-        btnAddTrip = findViewById(R.id.btnAddTrip);
+        btnAddTrip = findViewById(R.id.btnTripAdding);
 
         rbOneWay = findViewById(R.id.rbOneWay);
         rbRoundTrip = findViewById(R.id.rbRoundTrip);
 
-        timeBtn= findViewById(R.id.timerBtn);
-        dateBtn= findViewById(R.id.dateBtn);
+        timeBtn = findViewById(R.id.timerBtn);
+        dateBtn = findViewById(R.id.dateBtn);
 
-        Places.initialize(getApplicationContext(),getString(R.string.google_maps_key));
+        Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
         txtStartPoint.setFocusable(false);
         txtEndPoint.setFocusable(false);
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-       this.hourOfDay=hourOfDay;
-        this.minute=minute;
-        calendar.set(Calendar.MINUTE , minute);
-        calendar.set(Calendar.HOUR_OF_DAY , hourOfDay);
-        calendar.set(Calendar.SECOND , 0);
-        timeTxt = String.valueOf(hourOfDay)+ " : " + String.valueOf(minute);
+        this.hourOfDay = hourOfDay;
+        this.minute = minute;
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.SECOND, 0);
+        if (type != 5) timeTxt = String.valueOf(hourOfDay) + " : " + String.valueOf(minute);
+        else timeTxtrounded = String.valueOf(hourOfDay) + " : " + String.valueOf(minute);
+
     }
 
     //handle date setting
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        TripActivity.this.year=year;
-        TripActivity.this.month=month;
-        TripActivity.this.dayOfMonth=dayOfMonth;
-        calendar.set(Calendar.YEAR , year);
-        calendar.set(Calendar.MONTH , month);
-        calendar.set(Calendar.DAY_OF_MONTH , dayOfMonth);
+
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String date = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-        calDate = date;
+
+        if (type != 5) calDate = date;
+        else calDaterounded = date;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == RESULT_OK)
-        {
+        if (requestCode == 100 && resultCode == RESULT_OK) {
             Place place = Autocomplete.getPlaceFromIntent(data);
             txtStartPoint.setText(place.getAddress());
-        }
-        else if(requestCode == 110 && resultCode == RESULT_OK)
-        {
+        } else if (requestCode == 110 && resultCode == RESULT_OK) {
             Place place = Autocomplete.getPlaceFromIntent(data);
             txtEndPoint.setText(place.getAddress());
-        }
-        else if(resultCode == AutocompleteActivity.RESULT_ERROR)
-        {
+        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
             Status status = Autocomplete.getStatusFromIntent(data);
             Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    private void startAlarm(Calendar c, Trip curTrip) {
-
-        AlarmManager alarmang = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), DialogAlert.class);
-//        intent.putExtra("id",curTrip.getTripId());
-//        intent.putExtra("reqCode",curTrip.getRequestCode()+"");
-//        intent.putExtra("endPoint",curTrip.getEndPlaceName());
-//        intent.putExtra("lati",curTrip.getEndLatitude()+"");
-//        intent.putExtra("long",curTrip.getEndLongtude()+"");
-//        intent.putExtra("notes",curTrip.getNotes());
-
-        c.set(Calendar.YEAR , year);
-        c.set(Calendar.MONTH , month);
-        c.set(Calendar.DAY_OF_MONTH , dayOfMonth);
-        c.set(Calendar.MINUTE , minute);
-        Log.i("nasor",minute+"");
-//        Log.i("nasor",curTrip.getMinute()+"");
-        c.set(Calendar.HOUR_OF_DAY , hourOfDay);
-        c.set(Calendar.SECOND , 0);
-
-        PendingIntent pi =  PendingIntent.getBroadcast(this , PendingIntent.FLAG_CANCEL_CURRENT, intent , 0);
-        alarmang.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pi);
-
-    }
 }

@@ -263,4 +263,19 @@ public class MainActivity extends AppCompatActivity {
             return uuid.toString();
     }
 
+    void syncDataWithFirebaseDatabase(final List<Trip> tripList) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference reference = firebaseDatabase.getReference();
+
+        reference.child("trips").removeValue();
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        for (int indx = 0; indx < tripList.size(); ++indx) {
+            Trip trip = tripList.get(indx);
+            reference.child("trips").child(uid).push().setValue(trip).addOnCompleteListener(task -> {
+                Toast.makeText(getBaseContext(), "done", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
 }
