@@ -65,6 +65,8 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/login"
+            android:background="@drawable/btn_design"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/registerTxt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.513"
@@ -76,7 +78,7 @@
             android:layout_height="23dp"
             android:layout_marginBottom="20dp"
             android:text="@string/register"
-            android:textColor="#673AB7"
+            android:textColor="@color/purple_500"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="@+id/loginBtn" />

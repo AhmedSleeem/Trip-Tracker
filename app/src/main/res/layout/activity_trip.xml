@@ -161,15 +161,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Add"
+        android:background="@drawable/btn_design3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timerBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/timerBtn"
+        android:textColor="@color/white"/>
 
     <Button
         android:id="@+id/btnAddNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AddNotes"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/purple_700"
         app:layout_constraintBottom_toBottomOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="@+id/txtBackEndPoint"
         app:layout_constraintStart_toStartOf="@+id/txtBackEndPoint"
