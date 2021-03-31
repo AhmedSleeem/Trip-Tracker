@@ -150,8 +150,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     //handle time setting
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        TripActivity.this.hourOfDay=hourOfDay;
-        TripActivity.this.minute=minute;
+       this.hourOfDay=hourOfDay;
+        this.minute=minute;
         calendar.set(Calendar.MINUTE , minute);
         calendar.set(Calendar.HOUR_OF_DAY , hourOfDay);
         calendar.set(Calendar.SECOND , 0);

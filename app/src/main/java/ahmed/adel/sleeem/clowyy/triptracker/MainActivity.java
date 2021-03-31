@@ -2,14 +2,18 @@ package ahmed.adel.sleeem.clowyy.triptracker;
 
 import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,11 +51,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
+import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
+import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     SessionManager session;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +93,17 @@ public class MainActivity extends AppCompatActivity {
          * logged in
          * */
         session.checkLogin();
+
+
+
+
+        Intent intent = new Intent(this, MyService.class);
+        PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 30*1000, pintent);
+
+
+
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -179,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+
     public static void logout(final Activity activity) {
 
 
@@ -228,6 +250,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveImage(Bitmap bitmap, String fileName){
+
+
         try {
             FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -237,6 +261,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    String decodeImage(String imageName){
+        UUID uuid = UUID.nameUUIDFromBytes(imageName.getBytes());
+            return uuid.toString();
     }
 
 }

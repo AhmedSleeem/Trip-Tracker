@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TripTracker</string>
+    <string name="LBL_TRIP_NAME">"عنوان الرحلة "</string>
+    <string name="LBL_START" translatable="false">نقطة التحرك</string>
+    <string name="LBL_END" translatable="false">المقصد</string>
+    <string name="LBL_NOTES" translatable="false">الملاحظات</string>
+    <string name="LBL_TYPE" translatable="false">"نوع الرحلة "</string>
+    <string name="HINT_TRIP_NAME" translatable="false">اسم الرحلة</string>
+    <string name="HINT_START_POINT" translatable="false">نقطة التحرك</string>
+    <string name="HINT_END_POINT" translatable="false">نقطة الوصول</string>
+    <string name="HINT_NOTES" translatable="false">الملاحظات</string>
+    <string name="RBTN_ONE_WAY" translatable="false">اتجاه واحد</string>
+    <string name="RBTN_ROUND_TRIP" translatable="false">ذهاب وعودة</string>
+    <string name="CANCEL" translatable="false">إلغاء</string>
+    <string name="DONE" translatable="false">تم</string>
+    <string name="login" translatable="false">تسجيل الدخول</string>
+    <string name="newuser" translatable="false">مستخدم جديد</string>
+    <string name="register" translatable="false">سجل الأن</string>
+    <string name="Email" translatable="false">البريد الإلكتروني</string>
+    <string name="password" translatable="false">كلمة المرور</string>
+    <string name="registerbtn" translatable="false">سجل الأن</string>
+    <string name="alreadyhaveaccount" translatable="false">هل تمتلك حساب بالفعل</string>
+    <string name="loginTxtBtn" translatable="false">تسجيل الدخول</string>
+    <string name="othermethods" translatable="false">طرق تسجيل أخرى</string>
+    <string name="logout" translatable="false">تسجيل الخروج</string>
+    <string name="title_activity_main" translatable="false">الواجهة الرئيسية</string>
+    <string name="navigation_drawer_open" translatable="false">افتح التنقل المرسوم</string>
+    <string name="navigation_drawer_close" translatable="false">اغلق التنقل المرسوم</string>
+    <string name="nav_header_title" translatable="false">سفاري</string>
+    <string name="nav_header_subtitle" translatable="false">البريد الالكتروني للمستخدم</string>
+    <string name="nav_header_desc" translatable="false">رأس المتنقل</string>
+    <string name="menu_upcomingTrips" translatable="false">"الرحلات الحالية "</string>
+    <string name="menu_history" translatable="false">الرحلات السابقة</string>
+    <string name="menu_sync" translatable="false">مزامنة</string>
+    <string name="menu_logout" translatable="false">تسجيل الخروج</string>
+    <string name="GoToMaps" translatable="false">اذهب إلى الخريطة</string>
+    <string name="tripTitle" translatable="false">"عنوان الرحلة "</string>
+    <string name="startTrip" translatable="false">ابدأ</string>
+    <string name="Snooze" translatable="false">غفوة</string>
+    <string name="tripDestination" translatable="false">المقصد</string>
+    <string name="tripSource" translatable="false">نقطة التحرك</string>
+    <string name="tripDate" translatable="false">تاريخ الرحلة</string>
+    <string name="tripTime" translatable="false">وقت الرحلة</string>
+    <string name="content_description_media" translatable="false">وصف الصورة</string>
+</resources>
