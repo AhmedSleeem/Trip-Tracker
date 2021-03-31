@@ -14,6 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -26,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -38,8 +45,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 
 public class Login extends AppCompatActivity {
 
@@ -47,6 +58,7 @@ public class Login extends AppCompatActivity {
     Button login, btnTwitter;
     TextView register;
 
+    private static final String EMAIL = "email";
     private static final int RC_SIGN_IN = 1000;
     private FirebaseAuth mAuth;
     SignInButton googleBtn;
@@ -54,6 +66,9 @@ public class Login extends AppCompatActivity {
 
     // Session Manager Class
     SessionManager session;
+    CallbackManager callbackManager;
+
+    LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +82,33 @@ public class Login extends AppCompatActivity {
         if (session.isLoggedIn() && FirebaseAuth.getInstance().getCurrentUser() != null) {
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
+
+        // LoginManager.getInstance().logOut();
+        callbackManager = CallbackManager.Factory.create();
+       // loginButton.setReadPermissions("email", "public_profile");
+
+        loginButton = findViewById(R.id.btnFacebook);
+
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                handelFacebookToken(loginResult.getAccessToken().getToken());
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
 
         emailTxt = findViewById(R.id.emailEditTxt);
         passwordTxt = findViewById(R.id.passwordEditTxt);
@@ -143,6 +184,29 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void handelFacebookToken(String token){
+        AuthCredential credential = FacebookAuthProvider.getCredential(token);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(Login.this, "Login succeeded.", Toast.LENGTH_SHORT).show();
+                    saveUserIntoFirebase();
+
+                    FirebaseUser user = mAuth.getCurrentUser();
+
+                    session.createLoginSession(user.getEmail(), user.getDisplayName(), user.getPhotoUrl().toString());
+
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+
+                } else {
+                    Toast.makeText(Login.this, "Failed to signIn", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void loginAuthentication(String email, String password) {
         if (!email.isEmpty()) {
             if (!password.isEmpty()) {
@@ -181,6 +245,8 @@ public class Login extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
