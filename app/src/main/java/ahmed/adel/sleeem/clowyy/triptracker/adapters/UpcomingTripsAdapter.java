@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -14,12 +15,15 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+
 import org.w3c.dom.Text;
 
 import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips.OnUpcomingAdapterItemClicked;
 import ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips.TripsModel;
 
 public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdapter.ViewHandler> {
@@ -30,9 +34,13 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
     private List<Trip> trips;
     //private List<ImageView> imageArr;
 
-    public UpcomingTripsAdapter(Context context , List<Trip> myTrips) {
+    OnUpcomingAdapterItemClicked onUpcomingAdapterItemClicked;
+
+    public UpcomingTripsAdapter(Context context , List<Trip> myTrips,OnUpcomingAdapterItemClicked onUpcomingAdapterItemClicked) {
         this.context = context;
         trips = myTrips;
+
+        this.onUpcomingAdapterItemClicked = onUpcomingAdapterItemClicked;
     }
 
     @NonNull
@@ -53,7 +61,11 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
         holder.date.setText(trips.get(position).getTripDate());
         holder.time.setText(trips.get(position).getTripTime());
         //holder.tripImage.setImageBitmap(trips.get(position).getImage());
+        Trip trip = trips.get(position);
 
+        if (trip.isTripType()){
+            holder.tripTypeBtn.setBackgroundResource(R.drawable.ic_rounded);
+        }
     }
 
     @Override
@@ -63,28 +75,62 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
 
     public class ViewHandler extends RecyclerView.ViewHolder {
 
-        public TextView tripTitle;
-        public TextView start;
-        //        public ImageView tripImage;
-//        public ImageView editIcon;
-//        public ImageView deleteIcon;
-        public TextView end;
-        public TextView date;
-        public TextView time;
-        public View layout;
+
+
+        ImageView tripImage;
+        TextView tripTitle,start,end,date,time,distance,duration,avgSpeed;
+        MaterialButton deleteBtn,editBtn,viewBtn,tripTypeBtn;
+        Button startBtn;
+
+
 
 
         public ViewHandler(@NonNull View itemView) {
             super(itemView);
-            layout = itemView;
+
+
+
+            tripImage = itemView.findViewById(R.id.tripImage);
             tripTitle = itemView.findViewById(R.id.tripTitle);
             start = itemView.findViewById(R.id.startTxt);
-//            tripImage = itemView.findViewById(R.id.tripImage);
-//            editIcon = itemView.findViewById(R.id.editIconBtn);
-//            deleteIcon = itemView.findViewById(R.id.deleteIconBtn);
             end = itemView.findViewById(R.id.endTxt);
             date = itemView.findViewById(R.id.dateTxt);
             time = itemView.findViewById(R.id.timeTxt);
+            distance = itemView.findViewById(R.id.distanceTxt);
+            duration = itemView.findViewById(R.id.durationTxt);
+            avgSpeed = itemView.findViewById(R.id.averageSpeedTxt);
+
+
+
+            editBtn = itemView.findViewById(R.id.editIconBtn);
+            deleteBtn = itemView.findViewById(R.id.deleteIconBtn);
+            viewBtn = itemView.findViewById(R.id.viewIconBtn);
+            tripTypeBtn = itemView.findViewById(R.id.tripType);
+
+            editBtn.setOnClickListener(v->{
+                onUpcomingAdapterItemClicked.onEditIconClicked(getAdapterPosition());
+            });
+
+            deleteBtn.setOnClickListener(v->{
+                onUpcomingAdapterItemClicked.onDeleteIconClicked(getAdapterPosition());
+            });
+
+            viewBtn.setOnClickListener(v->{
+                onUpcomingAdapterItemClicked.onDetailsIconClicked(getAdapterPosition());
+            });
+
+            start.setOnClickListener(v->{
+                onUpcomingAdapterItemClicked.onStartButtonClicked(getAdapterPosition());
+            });
+
+
+
+
+
+
+
+
+            startBtn = itemView.findViewById(R.id.startBtn);
         }
     }
 }

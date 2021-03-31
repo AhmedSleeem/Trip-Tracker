@@ -18,7 +18,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 
-public class UpcomingTripsFragment extends Fragment {
+public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapterItemClicked {
 
     //private UpcomingTripsViewModel upcomingTripsViewModel;
     private RecyclerView rv;
@@ -43,9 +43,29 @@ public class UpcomingTripsFragment extends Fragment {
         trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
         rv = root.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips));
+        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
 
 
         return root;
+    }
+
+    @Override
+    public void onDetailsIconClicked(int position) {
+
+    }
+
+    @Override
+    public void onDeleteIconClicked(int position) {
+
+    }
+
+    @Override
+    public void onEditIconClicked(int position) {
+
+    }
+
+    @Override
+    public void onStartButtonClicked(int position) {
+
     }
 }
