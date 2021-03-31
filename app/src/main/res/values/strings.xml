@@ -51,5 +51,6 @@
     <string name="fb_login_protocol_scheme">fb239282907878281</string>
     <string name="hint_email">Please Enter Your Email Here</string>
     <string name="hint_password">Please Enter Your Password Here</string>
+    <string name="Add">Add</string>
 
 </resources>

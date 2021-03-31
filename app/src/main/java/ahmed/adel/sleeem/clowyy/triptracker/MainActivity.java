@@ -97,10 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Intent intent = new Intent(this, MyService.class);
-        PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
-        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 30*1000, pintent);
+
 
 
 

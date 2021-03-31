@@ -40,6 +40,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.DatePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.TimePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
+import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class TripActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
@@ -59,6 +60,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     int minute;
     int hourOfDay;
     private String timeTxt;
+
+    Button btnAddTrip;
 
     List<String> tripNotes, roundTripNotes;
 
@@ -80,6 +83,33 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
 
         calendar = Calendar.getInstance();
+
+
+        btnAddTrip.setOnClickListener(v -> {
+
+            if(calDate.length()>0 && timeTxt.length()>0 &&  txtStartPoint.getText().length()>0 && txtEndPoint.getText().length()>0
+            && txtTripName.getText().length()>0){
+                StringBuilder oneWaysNote=new StringBuilder("");
+                StringBuilder roundNote=new StringBuilder("");
+
+                for(String note:tripNotes)oneWaysNote.append("0"+note+",");
+                for(String note:roundTripNotes)roundNote.append("0"+note+",");
+
+                //adding to room
+
+
+//                Intent intent = new Intent(this, MyService.class);
+//                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+//                AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//                alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 30*1000, pintent);
+//
+
+            }else {
+                Toast.makeText(getBaseContext(), "please complete all feilds", Toast.LENGTH_LONG).show();
+            }
+
+
+        });
 
 
        timeBtn.setOnClickListener(v->{
@@ -199,6 +229,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         txtStartPoint = findViewById(R.id.txtBackStartPoint);
         txtEndPoint = findViewById(R.id.txtBackEndPoint);
        // txtTripNote = findViewById(R.id.txtBackNotes);
+
+        btnAddTrip = findViewById(R.id.btnAddTrip);
 
         rbOneWay = findViewById(R.id.rbOneWay);
         rbRoundTrip = findViewById(R.id.rbRoundTrip);
