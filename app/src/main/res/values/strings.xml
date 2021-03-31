@@ -43,5 +43,14 @@
     <string name="fb_login_protocol_scheme">fb239282907878281</string>
     <string name="hint_email">Please Enter Your Email Here</string>
     <string name="hint_password">Please Enter Your Password Here</string>
+    <string name="LBL_REPEAT">Repeat?</string>
+
+    <string-array name="repeating_array">
+        <item>Hour</item>
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+    </string-array>
+
 
 </resources>
