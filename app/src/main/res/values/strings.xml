@@ -32,10 +32,18 @@
     <string name="nav_header_subtitle">user email</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <string name="menu_upcomingTrips">Upcoming Trips</string>
+    <string name="menu_upcomingTrips" translatable="false">Upcoming Trips</string>
     <string name="menu_history">History</string>
     <string name="menu_sync">Sync</string>
     <string name="menu_logout">Logout</string>
+    <string name="GoToMaps">Go To Maps</string>
+    <string name="tripTitle">trip title</string>
+    <string name="startTrip">Start</string>
+    <string name="Snooze">Snooze</string>
+    <string name="tripDestination">tripDestination</string>
+    <string name="tripSource">source</string>
+    <string name="tripDate">tripDate</string>
+    <string name="tripTime">tripTime</string>
     <string name="start">Start</string>
     <string name="username">UserName</string>
 
