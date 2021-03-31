@@ -73,13 +73,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.github.jd-alexander:library:1.1.0'
 
-
-    //facebook
-
-
+    // Facebook SDK
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
 
-
-
+    // Circle Image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 }

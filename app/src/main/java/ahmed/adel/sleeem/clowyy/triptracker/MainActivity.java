@@ -199,9 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-
-
-    public static void logout(final Activity activity) {
+    public void logout(final Activity activity) {
 
 
         //initialize alert dialog
@@ -215,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //call method logout in session class
-                //session.logoutUser();
+                session.logoutUser();
             }
         });
         //negative no button

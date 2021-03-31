@@ -23,7 +23,7 @@
     <string name="loginTxtBtn">Login</string>
     <string name="othermethods">Other Methods</string>
     <string name="logout">Logout</string>
-    <string name="google_maps_key" translatable="false">AIzaSyChkd1O_wezit51e8lLIHNdv2NoOtC_duI</string>
+    <string name="google_maps_key">AIzaSyDVh2YvCYg-Mcjn-pfEIxeth4Ey9il9vFA</string>
     <string name="content_description_media">Trip Image</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -44,4 +44,12 @@
     <string name="tripSource">source</string>
     <string name="tripDate">tripDate</string>
     <string name="tripTime">tripTime</string>
+    <string name="start">Start</string>
+    <string name="username">UserName</string>
+
+    <string name="facebook_app_id">239282907878281</string>
+    <string name="fb_login_protocol_scheme">fb239282907878281</string>
+    <string name="hint_email">Please Enter Your Email Here</string>
+    <string name="hint_password">Please Enter Your Password Here</string>
+
 </resources>
