@@ -65,10 +65,33 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/login"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+            android:background="@drawable/btn_design"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/registerTxt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.513"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/registerTxt"
+            android:layout_width="109dp"
+            android:layout_height="23dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/register"
+            android:textColor="@color/purple_500"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="@+id/loginBtn" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="96dp"
+            android:layout_height="24dp"
+            android:text="@string/newuser"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@+id/registerTxt"
+            app:layout_constraintEnd_toStartOf="@+id/registerTxt"
+            app:layout_constraintTop_toTopOf="@+id/registerTxt" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
