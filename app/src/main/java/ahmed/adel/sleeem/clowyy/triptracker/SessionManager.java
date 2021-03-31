@@ -97,7 +97,7 @@ public class SessionManager {
         // user name id
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
         // user image id
-        user.put(KEY_ImageURL, pref.getString(KEY_ImageURL, null));
+        user.put(KEY_ImageURL, pref.getString(KEY_ImageURL, ""));
 
         // return user
         return user;

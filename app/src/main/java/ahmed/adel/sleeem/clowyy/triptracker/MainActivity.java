@@ -146,10 +146,8 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public static void logout(final Activity activity)
+    public void logout(final Activity activity)
     {
-
-
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         //set title
@@ -161,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //call method logout in session class
-                //session.logoutUser();
+                session.logoutUser();
             }
         });
         //negative no button
@@ -174,5 +172,4 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
-
 }
