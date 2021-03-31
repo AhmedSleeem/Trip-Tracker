@@ -15,12 +15,14 @@ import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 
 public class UpcomingTripsFragment extends Fragment {
 
     //private UpcomingTripsViewModel upcomingTripsViewModel;
     private RecyclerView rv;
-    private List<TripsModel> trips;
+    private List<Trip> trips;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class UpcomingTripsFragment extends Fragment {
         TripsModel trip2= new TripsModel("Trip 2","damietta","alex","22/3/2022","2:30 pm","");
         TripsModel trip3= new TripsModel("Trip 3","kafr el shiekh","cairo","1/3/2022","1:30 pm","");
 
-        trips = Arrays.asList(trip1,trip2,trip3);
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
         rv = root.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips));

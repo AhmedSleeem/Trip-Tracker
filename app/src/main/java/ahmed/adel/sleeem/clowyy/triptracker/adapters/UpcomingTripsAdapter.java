@@ -19,6 +19,7 @@ import org.w3c.dom.Text;
 import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.R;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips.TripsModel;
 
 public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdapter.ViewHandler> {
@@ -26,10 +27,10 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
     private final Context context;
     private static final String TAG= "RecyclerView";
     //private String [] texts;
-    private List<TripsModel> trips;
+    private List<Trip> trips;
     //private List<ImageView> imageArr;
 
-    public UpcomingTripsAdapter(Context context , List<TripsModel> myTrips) {
+    public UpcomingTripsAdapter(Context context , List<Trip> myTrips) {
         this.context = context;
         trips = myTrips;
     }
@@ -47,10 +48,10 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
     public void onBindViewHolder(@NonNull UpcomingTripsAdapter.ViewHandler holder, int position) {
 
         holder.tripTitle.setText(trips.get(position).getTripTitle());
-        holder.start.setText(trips.get(position).getStart());
-        holder.end.setText(trips.get(position).getEnd());
-        holder.date.setText(trips.get(position).getDate());
-        holder.time.setText(trips.get(position).getTime());
+        holder.start.setText(trips.get(position).getTripSource());
+        holder.end.setText(trips.get(position).getTripDestination());
+        holder.date.setText(trips.get(position).getTripDate());
+        holder.time.setText(trips.get(position).getTripTime());
         //holder.tripImage.setImageBitmap(trips.get(position).getImage());
 
     }
