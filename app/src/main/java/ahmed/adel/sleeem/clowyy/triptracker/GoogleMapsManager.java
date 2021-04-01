@@ -190,6 +190,77 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
         return null;
     }
 
+    public Bitmap getLocationImage(String location) {
+        // https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Kafr%20El-Shaikh,%20Qism%20Kafr%20El-Shaikh,%20Kafr%20Al%20Sheikh&inputtype=textquery&fields=photos&key=AIzaSyDVh2YvCYg-Mcjn-pfEIxeth4Ey9il9vFA
+        String response = "";
+        Bitmap imageResult = null;
+
+        InputStream inputStream = null;
+        HttpsURLConnection urlConnection = null;
+
+        // String location = "Kafr%20El-Shaikh,%20Qism%20Kafr%20El-Shaikh,%20Kafr%20Al%20Sheikh";
+        String parameters = "input=" + location + "&inputtype=textquery&fields=photos&key=" + API_KEY;
+        String strUrl = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?" + parameters;
+        try {
+            URL url = new URL(strUrl);
+
+            urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.connect();
+
+            if (urlConnection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+                inputStream = urlConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                StringBuffer stringBuffer = new StringBuffer();
+
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuffer.append(line);
+                }
+
+                response = stringBuffer.toString();
+
+
+                JSONObject jsonObject = new JSONObject(response);
+                String photoReference = jsonObject.getJSONArray("candidates").getJSONObject(0).getJSONArray("photos").getJSONObject(0).getString("photo_reference");
+                bufferedReader.close();
+                inputStream.close();
+                urlConnection.disconnect();
+
+                strUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + photoReference + "&key=" + API_KEY;
+
+                URL myImageURL = new URL(strUrl);
+                HttpsURLConnection httpsURLConnection = (HttpsURLConnection) myImageURL.openConnection();
+                httpsURLConnection.connect();
+
+                if (httpsURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpsURLConnection.getInputStream();
+                    imageResult = BitmapFactory.decodeStream(inputStream);
+                    inputStream.close();
+                } else {
+                    return null;
+                }
+            } else {
+                Toast.makeText(context, "Unable to get photo", Toast.LENGTH_LONG).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            urlConnection.disconnect();
+        }
+
+        return imageResult;
+    }
+
     public Bitmap getLocationPhoto(String location) {
         // https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Kafr%20El-Shaikh,%20Qism%20Kafr%20El-Shaikh,%20Kafr%20Al%20Sheikh&inputtype=textquery&fields=photos&key=AIzaSyDVh2YvCYg-Mcjn-pfEIxeth4Ey9il9vFA
         String response = "";

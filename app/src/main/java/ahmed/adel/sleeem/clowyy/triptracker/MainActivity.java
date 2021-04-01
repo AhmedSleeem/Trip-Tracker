@@ -96,15 +96,6 @@ public class MainActivity extends AppCompatActivity {
          * */
         session.checkLogin();
 
-
-
-
-
-
-
-
-
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);

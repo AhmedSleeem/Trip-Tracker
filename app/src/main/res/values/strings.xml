@@ -47,8 +47,8 @@
     <string name="start">Start</string>
     <string name="username">UserName</string>
 
-    <string name="facebook_app_id">239282907878281</string>
-    <string name="fb_login_protocol_scheme">fb239282907878281</string>
+    <string name="facebook_app_id">1417290768615341</string>
+    <string name="fb_login_protocol_scheme">fb1417290768615341</string>
     <string name="hint_email">Please Enter Your Email Here</string>
     <string name="hint_password">Please Enter Your Password Here</string>
     <string name="LBL_REPEAT">Repeat?</string>
