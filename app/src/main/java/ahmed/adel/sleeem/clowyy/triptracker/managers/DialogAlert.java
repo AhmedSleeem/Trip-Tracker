@@ -17,11 +17,17 @@ import java.util.UUID;
 
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
+import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class DialogAlert extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Intent intent1 = new Intent(context, MyService.class);
+        context.stopService(intent1);
+
+
 
 //
 //        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -87,6 +87,7 @@ public class Trip {
     @ColumnInfo
     String tripImage;
 
+
     @ColumnInfo
     boolean tripStatus;
 

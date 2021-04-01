@@ -26,6 +26,9 @@ public class TripExtraInfo {
         if(distance.equals("N/A"))
             return "N/A";
 
+        if(distance.equals("N/A"))
+            return "N/A";
+
         double dis = Double.parseDouble(distance.replace(",", "").split(" ")[0]);
         double dur = 1;
         List<String> values = Arrays.asList(duration.split(" "));

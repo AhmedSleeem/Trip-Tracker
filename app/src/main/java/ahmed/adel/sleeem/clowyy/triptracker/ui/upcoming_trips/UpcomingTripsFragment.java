@@ -1,5 +1,6 @@
 package ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.Arrays;
 import java.util.List;
 
+import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
+import ahmed.adel.sleeem.clowyy.triptracker.TripActivity;
+import ahmed.adel.sleeem.clowyy.triptracker.TripDetailsActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 
 public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapterItemClicked {
 
-    //private UpcomingTripsViewModel upcomingTripsViewModel;
     private RecyclerView rv;
     private List<Trip> trips;
+
+    TripDao tripDao;
 
     @Override
     public void onStart() {
@@ -49,28 +55,46 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 //        });
 
 
+            tripDao = TripDatabase.getInstance(getContext()).getTripDao();
+
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
         rv = root.findViewById(R.id.recyclerView);
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
+
 
         return root;
     }
 
     @Override
     public void onDetailsIconClicked(int position) {
-
+        Intent details = new Intent(getContext(), TripDetailsActivity.class);
+        startActivity(details);
     }
 
     @Override
     public void onDeleteIconClicked(int position) {
 
+
+        tripDao.deleteTrip(trips.get(position));
+
+
     }
 
     @Override
     public void onEditIconClicked(int position) {
+        Intent details = new Intent(getContext(), TripActivity.class);
+        startActivity(details);
 
     }
 
     @Override
     public void onStartButtonClicked(int position) {
+        GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(getContext());
+        googleMapsManager.requestPermission();
+        if(googleMapsManager.locationPermission){
+            GoogleMapsManager.getInstance(getContext()).launchGoogleMaps(trips.get(position).getTripDestination());
+        }
 
     }
 }
