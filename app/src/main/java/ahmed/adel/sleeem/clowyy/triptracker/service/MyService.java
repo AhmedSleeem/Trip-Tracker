@@ -13,7 +13,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -31,7 +30,7 @@ public class MyService extends Service {
     }
 
 
-    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private MediaPlayer player = new MediaPlayer();
 
     @Override
     public void onCreate() {
@@ -39,9 +38,9 @@ public class MyService extends Service {
 
         AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.y_sabah_el_ro3b);
         try {
-            mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-            mediaPlayer.prepareAsync();
-            mediaPlayer.start();
+            player.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
+            player.prepareAsync();
+            player.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,7 +68,7 @@ public class MyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer!=null)mediaPlayer.stop();
+        if (player !=null) player.stop();
     }
 
     @Override
