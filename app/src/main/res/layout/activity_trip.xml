@@ -18,8 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:text="@string/LBL_TRIP_NAME"
+            android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
+            android:textColor="@color/teal_200"
             android:text="@string/LBL_START"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userEmail" />
@@ -40,8 +42,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:text="@string/LBL_END"
+            android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -53,6 +56,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="50dp"
             android:text="@string/LBL_NOTES"
+            android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -64,6 +68,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="50dp"
             android:text="@string/LBL_TYPE"
+            android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -140,13 +145,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/RBTN_ONE_WAY" />
+                android:textColor="@color/purple_200"
+                android:text="@string/RBTN_ONE_WAY"
+                />
 
             <RadioButton
                 android:id="@+id/rbRoundTrip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/RBTN_ROUND_TRIP" />
+                android:text="@string/RBTN_ROUND_TRIP"
+                android:textColor="@color/purple_200"/>
         </RadioGroup>
 
         <Button
@@ -175,12 +183,13 @@
 
         <LinearLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/txtBackEndPoint"
-            app:layout_constraintStart_toStartOf="@+id/txtBackEndPoint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtRepeatingNumber">
 
             <Button
@@ -220,6 +229,7 @@
             android:inputType="number"
             android:maxLength="3"
             android:text="3"
+            android:textColor="@color/purple_200"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/swtchRepeating"
             app:layout_constraintStart_toStartOf="@+id/radioGroup"
@@ -233,6 +243,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="50dp"
             android:text="@string/LBL_REPEAT"
+            android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 

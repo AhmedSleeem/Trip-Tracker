@@ -66,10 +66,10 @@ public class TripsMapActivity extends AppCompatActivity  {
 //        boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker,
 //                String tripDate, String tripTime, String tripImage, boolean tripStatus)
 //
-        Trip trip1 = new Trip( "Kafr El-Shaikh, Qism Kafr El-Shaikh, Kafr Al Sheikh","new trip", "Alexandria", false, "A", "No Notes", "13", "", "","",false);
-        Trip trip2 = new Trip( "Alexandria","new ", "Cairo", false, "D", "No Notes", "13", "", "","",false);
-        Trip trip3 = new Trip( "Cairo","", "Marsa Matruh, Mersa Matruh", false, "D", "No Notes", "13", "", "","",false);
-        Trip trip4 = new Trip( "Kafr El-Shaikh, Qism Kafr El-Shaikh, Kafr Al Sheikh","", "Military Area, Sidi Barrani", false, "A", "No Notes", "13", "", "","",false);
+        Trip trip1 = new Trip( "Kafr El-Shaikh, Qism Kafr El-Shaikh, Kafr Al Sheikh","new trip", "Alexandria", false, "A", "No Notes", "13", "", "","",false, "", "", "");
+        Trip trip2 = new Trip( "Alexandria","new ", "Cairo", false, "D", "No Notes", "13", "", "","",false, "", "", "");
+        Trip trip3 = new Trip( "Cairo","", "Marsa Matruh, Mersa Matruh", false, "D", "No Notes", "13", "", "","",false, "", "", "");
+        Trip trip4 = new Trip( "Kafr El-Shaikh, Qism Kafr El-Shaikh, Kafr Al Sheikh","", "Military Area, Sidi Barrani", false, "A", "No Notes", "13", "", "","",false, "", "", "");
 
         TripPoints tripPoints1 = googleMapsManager.getTripPoints(trip1.getTripSource(), trip1.getTripDestination());
         TripPoints tripPoints2 = googleMapsManager.getTripPoints(trip2.getTripSource(), trip2.getTripDestination());

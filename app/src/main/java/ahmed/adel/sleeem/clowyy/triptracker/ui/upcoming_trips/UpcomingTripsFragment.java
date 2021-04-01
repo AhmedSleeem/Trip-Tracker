@@ -1,5 +1,6 @@
 package ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Arrays;
 import java.util.List;
 
+import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
+import ahmed.adel.sleeem.clowyy.triptracker.TripActivity;
+import ahmed.adel.sleeem.clowyy.triptracker.TripDetailsActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
@@ -21,11 +25,19 @@ import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 
 public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapterItemClicked {
 
-    //private UpcomingTripsViewModel upcomingTripsViewModel;
     private RecyclerView rv;
     private List<Trip> trips;
 
     TripDao tripDao;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
+
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,17 +64,9 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
-
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
-    }
-
-    @Override
     public void onDetailsIconClicked(int position) {
-
+        Intent details = new Intent(getContext(), TripDetailsActivity.class);
+        startActivity(details);
     }
 
     @Override
@@ -76,11 +80,18 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
     @Override
     public void onEditIconClicked(int position) {
+        Intent details = new Intent(getContext(), TripActivity.class);
+        startActivity(details);
 
     }
 
     @Override
     public void onStartButtonClicked(int position) {
+        GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(getContext());
+        googleMapsManager.requestPermission();
+        if(googleMapsManager.locationPermission){
+            GoogleMapsManager.getInstance(getContext()).launchGoogleMaps(trips.get(position).getTripDestination());
+        }
 
     }
 }

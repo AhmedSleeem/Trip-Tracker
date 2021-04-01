@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -23,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -56,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
@@ -64,9 +68,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    // Session Manager Class
     SessionManager session;
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -79,29 +81,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Session class instance
         session = new SessionManager(getApplicationContext());
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
         String userID = //FirebaseAuth.getInstance().getCurrentUser().getUid();
                 "uYUjhir14BaF4VZTRU5VskSRSon2";
 
         getUserTrips(userID);
 
 
-
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
         session.checkLogin();
-
-
-
-
-
-
-
-
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_upcomingTrips, R.id.nav_history)
+                R.id.nav_upcomingTrips, R.id.nav_history,R.id.nav_maps)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -159,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_history:
                         fab.hide();
                         break;
+                    case R.id.nav_maps:
+                        fab.hide();
+                        break;
                     default:
                         fab.show();
                         break;
@@ -167,15 +157,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
-            Toast.makeText(MainActivity.this, "logout is clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "logout is clicked", Toast.LENGTH_SHORT).show();
             logout(MainActivity.this);
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
 
         navigationView.getMenu().findItem(R.id.nav_sync).setOnMenuItemClickListener(menuItem -> {
-            Toast.makeText(MainActivity.this, "Sync is clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "Sync is clicked", Toast.LENGTH_SHORT).show();
             //add sync function
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        });
+
+        navigationView.getMenu().findItem(R.id.nav_language).setOnMenuItemClickListener(menuItem -> {
+            //add change lang function
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        });
+
+        navigationView.getMenu().findItem(R.id.nav_deleteAccount).setOnMenuItemClickListener(menuItem -> {
+
+            deleteAccount(MainActivity.this);
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -202,19 +205,22 @@ public class MainActivity extends AppCompatActivity {
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         //set title
-        builder.setTitle("Logout");
+        builder.setTitle(getString(R.string.logoutMSGtitle));
         //set message
-        builder.setMessage("Are you sure you want to logout ?");
+        builder.setMessage(getString(R.string.logoutMSG));
         //positive yes button
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //call method logout in session class
                 session.logoutUser();
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                finish();
             }
         });
         //negative no button
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //dismiss dialog
@@ -242,6 +248,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(this);
+        switch (requestCode) {
+            case GoogleMapsManager.LOCATION_REQUEST_CODE: {
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    googleMapsManager.locationPermission = true;
+                }
+            }break;
+        }
     }
 
     private void saveImage(Bitmap bitmap, String fileName){
@@ -273,9 +291,37 @@ public class MainActivity extends AppCompatActivity {
         for (int indx = 0; indx < tripList.size(); ++indx) {
             Trip trip = tripList.get(indx);
             reference.child("trips").child(uid).push().setValue(trip).addOnCompleteListener(task -> {
-                Toast.makeText(getBaseContext(), "done", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), getString(R.string.dataSynced), Toast.LENGTH_SHORT).show();
             });
         }
+    }
+
+    private void deleteAccount(final Activity activity)
+    {
+        //initialize alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        //set title
+        builder.setTitle(getString(R.string.deleteMSGtitle));
+        //set message
+        builder.setMessage(getString(R.string.deleteMSG));
+        //positive yes button
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FirebaseAuth.getInstance().getCurrentUser().delete();
+                session.logoutUser();
+                finish();
+            }
+        });
+        //negative no button
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //dismiss dialog
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
 }

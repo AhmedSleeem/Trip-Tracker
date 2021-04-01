@@ -172,7 +172,7 @@
                 android:layout_width="109dp"
                 android:layout_height="23dp"
                 android:text="@string/register"
-                android:textColor="#673AB7"
+                android:textColor="@color/purple_200"
                 android:textSize="17sp" />
         </LinearLayout>
 

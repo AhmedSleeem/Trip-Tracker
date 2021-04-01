@@ -2,6 +2,7 @@ package ahmed.adel.sleeem.clowyy.triptracker;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.work.Data;
@@ -16,6 +17,7 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,11 +50,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.DatePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.TimePickerFragment;
+import ahmed.adel.sleeem.clowyy.triptracker.helpers.TripExtraInfo;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyWorker;
 
@@ -116,17 +120,38 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             if (calDate.length() > 0 && timeTxt.length() > 0 && txtStartPoint.getText().length() > 0 && txtEndPoint.getText().length() > 0
                     && txtTripName.getText().length() > 0) {
 
-                Toast.makeText(getBaseContext(), "done : your trip is added succefully", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getBaseContext(), "clicked", Toast.LENGTH_SHORT).show();
                 StringBuilder oneWaysNote = new StringBuilder("");
                 StringBuilder roundNote = new StringBuilder("");
 
                 for (String note : tripNotes) oneWaysNote.append("0" + note + ",");
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(getApplicationContext());
+
+                        String imgURL = googleMapsManager.getLocationImageURL(txtEndPoint.getText().toString());
+                        TripExtraInfo tripExtraInfo = googleMapsManager.getTripExtraInfo(txtStartPoint.getText().toString(), txtEndPoint.getText().toString());
+
+                        if(tripExtraInfo == null){
+                            tripExtraInfo = new TripExtraInfo("N/A", "N/A");
+                        }
 
 
                 Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
                         rbRoundTrip.isChecked(), swtchRepeat.isActivated() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
                         calDate, timeTxt, "", false);
                 tripDao.insertTrip(trip);
+                        Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
+                                rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                calDate, timeTxt, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(), tripExtraInfo.getAvgSpeed());
+
+                        tripDao.insertTrip(trip);
+                        finish();
+                    }
+                }).start();
 
 //                Intent intent = new Intent(this, MyService.class);
 //                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
@@ -272,8 +297,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 finish();
 
             }
-            else
-                Toast.makeText(getBaseContext(), "please complete all fields", Toast.LENGTH_LONG).show();
+          else
+                Toast.makeText(getBaseContext(), getString(R.string.completeFieldsMSG), Toast.LENGTH_LONG).show();
 
 
         });
@@ -327,7 +352,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         lvNotes.setAdapter(stringArrayAdapter);
 
         lvNotes.setOnItemLongClickListener((parent, view, position, id) -> {
-            Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
+            showDeleteDialog();
             return true;
         });
 
@@ -350,6 +375,31 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         notesDialog.show();
 
+    }
+
+    private void showDeleteDialog(){
+        //initialize alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        //set title
+        builder.setTitle(getString(R.string.deleteMSGtitle));
+        //set message
+        builder.setMessage(getString(R.string.deleteMSG));
+        //positive yes button
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //action
+            }
+        });
+        //negative no button
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //dismiss dialog
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     private void showTripDialog() {

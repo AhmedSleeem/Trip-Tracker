@@ -36,22 +36,25 @@
     <string name="menu_history">History</string>
     <string name="menu_sync">Sync</string>
     <string name="menu_logout">Logout</string>
+    <string name="menu_maps">Maps</string>
+    <string name="menu_language">عربي</string>
+    <string name="menu_deleteAccount">Delete Account</string>
     <string name="GoToMaps">Go To Maps</string>
     <string name="tripTitle">trip title</string>
     <string name="startTrip">Start</string>
     <string name="Snooze">Snooze</string>
     <string name="tripDestination">tripDestination</string>
     <string name="tripSource">source</string>
-    <string name="tripDate">tripDate</string>
-    <string name="tripTime">tripTime</string>
+    <string name="tripDate">Date</string>
+    <string name="tripTime">Time</string>
     <string name="start">Start</string>
     <string name="username">UserName</string>
 
-    <string name="facebook_app_id">239282907878281</string>
-    <string name="fb_login_protocol_scheme">fb239282907878281</string>
+    <string name="facebook_app_id">1417290768615341</string>
+    <string name="fb_login_protocol_scheme">fb1417290768615341</string>
     <string name="hint_email">Please Enter Your Email Here</string>
     <string name="hint_password">Please Enter Your Password Here</string>
-    <string name="LBL_REPEAT">Repeat?</string>
+    <string name="LBL_REPEAT">Repeat</string>
 
     <string-array name="repeating_array">
         <item>Hour</item>
@@ -60,7 +63,36 @@
         <item>Month</item>
     </string-array>
 
-    <string name="hint_username">Please Enter Your UserName Here</string>
+    <string name="hint_username">Please Enter Your Username Here</string>
     <string name="Add">Add</string>
+    <string name="deleteMSGtitle">Delete</string>
+    <string name="deleteMSG">Are you sure you want to Delete ?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="mapsErrorMSG">Unable to get location</string>
+    <string name="imageErrorMSG">Unable to get photo</string>
+    <string name="source">Source</string>
+    <string name="destination">Destination</string>
+    <string name="signinfailed">Failed to signIn</string>
+    <string name="authenticationSucceded">Authentication succeeded</string>
+    <string name="loginSucceded">Login succeeded.</string>
+    <string name="wrongData">Wrong email or password !</string>
+    <string name="enterpasswordMSG">Please enter password!</string>
+    <string name="enteremailMSG">Please enter email!</string>
+    <string name="logoutMSGtitle">Logout</string>
+    <string name="logoutMSG">Are you sure you want to logout ?</string>
+    <string name="dataSynced">"Data is synced</string>
+    <string name="authenticationFailed">Authentication failed.</string>
+    <string name="passwordErrorConditions">Less than 6 characters!</string>
+    <string name="enterusernameMSG">Please enter username!</string>
+    <string name="completeFieldsMSG">Please complete all fields</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="duration">Duration</string>
+    <string name="distance">Distance</string>
+    <string name="avgSpeed">Avg Speed</string>
+    <string name="shownotes">Show Notes</string>
+    <string name="okbtn">Ok</string>
+
 
 </resources>
