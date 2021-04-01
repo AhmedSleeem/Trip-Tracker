@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -43,6 +44,7 @@ private OnRecyclerViewItemClickLister onItemClickListener;
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
+        Trip trip = tripList.get(position);
 
         holder.destinationImage.setImageResource(R.drawable.trip);
         holder.title.setText(tripList.get(position).getTripTitle());
@@ -50,8 +52,15 @@ private OnRecyclerViewItemClickLister onItemClickListener;
         holder.secondary_title.setText(tripList.get(position).getTripSource());
         holder.supplementary_Text.setText(tripList.get(position).getTripDestination());
 
-        //implement aCtion Buttons
+        if(trip.getTripImage() != null && !trip.getTripImage().equals("")) {
+            Glide.with(context).load(trip.getTripImage()).into(holder.destinationImage);
+        }
 
+        if (trip.isTripType()){
+            holder.tripType.setBackgroundResource(R.drawable.ic_rounded);
+        }
+
+        //implement action Buttons
 
 
 
@@ -67,7 +76,7 @@ private OnRecyclerViewItemClickLister onItemClickListener;
         ImageView destinationImage;
 
         TextView title,secondary_title,supplementary_Text;
-        MaterialButton actionDelete,actionDetails;
+        MaterialButton actionDelete,actionDetails,tripType;
         public Holder(@NonNull View itemView) {
             super(itemView);
 
@@ -77,10 +86,7 @@ private OnRecyclerViewItemClickLister onItemClickListener;
             supplementary_Text=itemView.findViewById(R.id.supportingText);
             actionDelete=itemView.findViewById(R.id.actionDelete);
             actionDetails=itemView.findViewById(R.id.actionDetails);
-
-            itemView.setOnClickListener((view)->{
-                onItemClickListener.onDetailsIconClicked(getAdapterPosition());
-            });
+            tripType=itemView.findViewById(R.id.tripType);
 
 
             actionDetails.setOnClickListener((view)->{

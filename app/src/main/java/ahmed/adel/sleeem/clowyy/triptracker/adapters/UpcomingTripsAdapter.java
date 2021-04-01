@@ -84,9 +84,6 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
         MaterialButton deleteBtn,editBtn,viewBtn,tripTypeBtn;
         Button startBtn;
 
-
-
-
         public ViewHandler(@NonNull View itemView) {
             super(itemView);
 
@@ -120,7 +117,7 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
                 onUpcomingAdapterItemClicked.onDetailsIconClicked(getAdapterPosition());
             });
 
-            start.setOnClickListener(v->{
+            startBtn.setOnClickListener(v->{
                 onUpcomingAdapterItemClicked.onStartButtonClicked(getAdapterPosition());
             });
         }

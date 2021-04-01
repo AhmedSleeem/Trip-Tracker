@@ -1,5 +1,7 @@
 package ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,10 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,10 +44,42 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     @Override
     public void onStart() {
         super.onStart();
-        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips(userID);
+
+        if(trips.size()==0){
+            getUserTrips(userID);
+        }
 
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
+    }
+
+    private void getUserTrips(String userID){
+        List<Trip> userTrips = new ArrayList<>();
+        DatabaseReference userTripsRef = FirebaseDatabase.getInstance().getReference("trips").child(userID);
+        userTripsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+                    userTrips.add(trip);
+                    tripDao.insertTrip(trip);
+                }
+
+                if(userTrips != null && userTrips.size() > 0) {
+                    trips = userTrips;
+                    rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,UpcomingTripsFragment.this));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -51,8 +94,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 //            }
 //        });
 
-
-            tripDao = TripDatabase.getInstance(getContext()).getTripDao();
+        tripDao = TripDatabase.getInstance(getContext()).getTripDao();
 
         trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
         rv = root.findViewById(R.id.recyclerView);
@@ -66,16 +108,34 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     @Override
     public void onDetailsIconClicked(int position) {
         Intent details = new Intent(getContext(), TripDetailsActivity.class);
+        details.putExtra("TripID", trips.get(position).getTripId());
         startActivity(details);
     }
 
     @Override
     public void onDeleteIconClicked(int position) {
-
-
-        tripDao.deleteTrip(trips.get(position));
-
-
+        //initialize alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        //set title
+        builder.setTitle(getString(R.string.deleteMSGtitle));
+        //set message
+        builder.setMessage(getString(R.string.deleteMSG));
+        //positive yes button
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tripDao.deleteTrip(trips.get(position));
+            }
+        });
+        //negative no button
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //dismiss dialog
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -97,4 +157,5 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         }
 
     }
+
 }

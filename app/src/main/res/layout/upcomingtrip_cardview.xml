@@ -10,12 +10,10 @@
     android:layout_columnWeight="1"
     android:layout_rowWeight="1"
     android:backgroundTint="@color/white"
-
     android:theme="@style/Theme.MaterialComponents.Light"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     >
 
     <LinearLayout
@@ -162,7 +160,7 @@
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary"
                     card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintHorizontal_bias="0.5"
+                    card_view:layout_constraintHorizontal_bias="0.45"
                     card_view:layout_constraintStart_toStartOf="parent"
                     card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -222,11 +220,9 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/viewIconBtn"
-
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
-
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/ic_details"
@@ -238,10 +234,11 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/purple_200"
                 android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="17dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="13dp"
                 android:layout_marginRight="13dp"
-
                 android:text="@string/start" />
         </LinearLayout>
 

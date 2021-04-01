@@ -12,6 +12,7 @@ import java.util.List;
 @Dao
 public interface TripDao {
 
+
     @Insert
     void insertTrip(Trip ... trip);
 
