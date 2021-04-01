@@ -140,16 +140,39 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         }
 
 
-                Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
-                        rbRoundTrip.isChecked(), swtchRepeat.isActivated() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                        calDate, timeTxt, "", false);
-                tripDao.insertTrip(trip);
+//                Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
+//                        rbRoundTrip.isChecked(), swtchRepeat.isActivated() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+//                        calDate, timeTxt, "", false);
+//                tripDao.insertTrip(trip);
+
                         Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
-                                rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                                calDate, timeTxt, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(), tripExtraInfo.getAvgSpeed());
+                                rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(),
+                                FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                calDate, timeTxt, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(),
+                                tripExtraInfo.getAvgSpeed());
 
                         tripDao.insertTrip(trip);
-                        finish();
+
+                        Data inputData = new Data.Builder()
+                                .putString("data", trip.getTripDate())
+                                .build();
+
+
+
+                        Calendar calendarmsd = Calendar.getInstance();
+                        long nowMillis = calendarmsd.getTimeInMillis();
+                        long diff = calendar.getTimeInMillis() - nowMillis;
+
+
+                        WorkRequest uploadWorkRequest =
+                                new OneTimeWorkRequest.Builder(MyWorker.class)
+                                        .setInputData(inputData)
+                                        .setInitialDelay(diff, TimeUnit.SECONDS)
+                                        .build();
+                        WorkManager.getInstance(getApplication()).enqueue(uploadWorkRequest);
+
+
+                        //finish();
                     }
                 }).start();
 
@@ -184,32 +207,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 /*
  */
 //                SystemClock.elapsedRealtime() + mCalendar.getTimeInMillis();
-                Data inputData = new Data.Builder()
-                        .putString("data", trip.getTripDate())
-                        .build();
-
-
-
-                    Calendar calendarmsd = Calendar.getInstance();
-                    long nowMillis = calendarmsd.getTimeInMillis();
-                    long diff = calendar.getTimeInMillis() - nowMillis;
-
-
-               /* Log.i("TAGUU", "onCreate: pp "+rrr);
-                if(!swtchRepeat.isActivated()) {
-                    Log.i("TAGUU", "onCreate: pp33 "+rrr);*/
-
-
-                    calendarmsd = Calendar.getInstance();
-                    nowMillis = calendarmsd.getTimeInMillis();
-                    diff = calendar.getTimeInMillis() - nowMillis;
-
-                WorkRequest uploadWorkRequest =
-                            new OneTimeWorkRequest.Builder(MyWorker.class)
-                                    .setInputData(inputData)
-                                    .setInitialDelay(diff, TimeUnit.SECONDS)
-                                    .build();
-                    WorkManager.getInstance(getApplication()).enqueue(uploadWorkRequest);
 
 
              /*
@@ -469,9 +466,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 StringBuilder roundNote = new StringBuilder("");
                 for (String note : roundTripNotes) roundNote.append("0" + note + ",");
 
-                tripRounded = new Trip(txtBackStartPoint.getText().toString(), txtBackTripName.getText().toString(), txtBackEndPoint.getText().toString(),
-                        false, swtchRepeatingRound.isChecked() ? repeatingTypeRound : "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                        calDaterounded, timeTxtrounded, "", false);
+//                tripRounded = new Trip(txtBackStartPoint.getText().toString(), txtBackTripName.getText().toString(), txtBackEndPoint.getText().toString(),
+//                        false, swtchRepeatingRound.isChecked() ? repeatingTypeRound : "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+//                        calDaterounded, timeTxtrounded, "", false);
                 type=3;
                 roundTripDialog.dismiss();
             }
