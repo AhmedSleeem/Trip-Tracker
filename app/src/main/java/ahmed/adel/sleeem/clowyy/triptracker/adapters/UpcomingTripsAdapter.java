@@ -22,6 +22,7 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
+import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips.OnUpcomingAdapterItemClicked;
@@ -73,6 +74,14 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
         if (trip.isTripType()){
             holder.tripTypeBtn.setBackgroundResource(R.drawable.ic_rounded);
         }
+
+        holder.startBtn.setOnClickListener(v -> {
+            GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(context);
+            googleMapsManager.requestPermission();
+            if(googleMapsManager.locationPermission){
+                GoogleMapsManager.getInstance(context).launchGoogleMaps(trip.getTripDestination());
+            }
+        });
     }
 
     @Override
@@ -105,12 +114,11 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
             duration = itemView.findViewById(R.id.durationTxt);
             avgSpeed = itemView.findViewById(R.id.averageSpeedTxt);
 
-
-
             editBtn = itemView.findViewById(R.id.editIconBtn);
             deleteBtn = itemView.findViewById(R.id.deleteIconBtn);
             viewBtn = itemView.findViewById(R.id.viewIconBtn);
             tripTypeBtn = itemView.findViewById(R.id.tripType);
+            startBtn = itemView.findViewById(R.id.startBtn);
 
             editBtn.setOnClickListener(v->{
                 onUpcomingAdapterItemClicked.onEditIconClicked(getAdapterPosition());
@@ -127,15 +135,6 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
             start.setOnClickListener(v->{
                 onUpcomingAdapterItemClicked.onStartButtonClicked(getAdapterPosition());
             });
-
-
-
-
-
-
-
-
-            startBtn = itemView.findViewById(R.id.startBtn);
         }
     }
 }

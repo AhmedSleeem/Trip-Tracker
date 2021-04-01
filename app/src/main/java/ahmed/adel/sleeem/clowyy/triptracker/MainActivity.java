@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -230,6 +231,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(this);
+        switch (requestCode) {
+            case GoogleMapsManager.LOCATION_REQUEST_CODE: {
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    googleMapsManager.locationPermission = true;
+                }
+            }break;
+        }
     }
 
     private void saveImage(Bitmap bitmap, String fileName){

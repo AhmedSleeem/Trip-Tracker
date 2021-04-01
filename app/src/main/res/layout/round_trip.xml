@@ -34,7 +34,6 @@
             android:gravity="center"
             android:inputType="number"
             android:maxLength="3"
-            android:text="3"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/swtchRepeatingRound"
             app:layout_constraintStart_toStartOf="@+id/btnAddRoundNotes"
@@ -69,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:text="@string/LBL_START"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userEmail" />
@@ -80,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:text="@string/LBL_END"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -194,19 +193,23 @@
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="@+id/txtBackEndPoint"
-            app:layout_constraintStart_toStartOf="@+id/txtBackEndPoint"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtRepeatingNumberRound">
 
             <Button
                 android:id="@+id/dateBtnRound"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/ic_date" />
 
             <Button
                 android:id="@+id/timerBtnRound"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/ic_timer" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

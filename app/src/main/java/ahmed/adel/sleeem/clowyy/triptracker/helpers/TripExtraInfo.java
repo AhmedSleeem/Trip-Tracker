@@ -23,7 +23,8 @@ public class TripExtraInfo {
     }
 
     public String getAvgSpeed(){
-        double dis = Double.parseDouble(distance.split(" ")[0]);
+
+        double dis = Double.parseDouble(distance.replace(",", "").split(" ")[0]);
         double dur = 1;
         List<String> values = Arrays.asList(duration.split(" "));
 
@@ -31,6 +32,9 @@ public class TripExtraInfo {
             dur = Integer.parseInt(values.get(0)) * 24 * 60;
             dur += Integer.parseInt(values.get(2)) * 60;
             dur += Integer.parseInt(values.get(4));
+        } else if(duration.contains("day") && duration.contains("hour")){
+            dur = Integer.parseInt(values.get(0)) * 24 * 60;
+            dur += Integer.parseInt(values.get(2)) * 60;
         }else if(duration.contains("hour") && duration.contains("min")){
             dur = Integer.parseInt(values.get(0)) * 60;
             dur += Integer.parseInt(values.get(2));
