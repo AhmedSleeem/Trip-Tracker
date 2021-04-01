@@ -61,6 +61,8 @@ import java.util.UUID;
 
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
@@ -164,8 +166,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationView.getMenu().findItem(R.id.nav_sync).setOnMenuItemClickListener(menuItem -> {
-            //Toast.makeText(MainActivity.this, "Sync is clicked", Toast.LENGTH_SHORT).show();
-            //add sync function
+            List<Trip> tripsList = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            syncDataWithFirebaseDatabase(tripsList);
+
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -285,9 +288,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference reference = firebaseDatabase.getReference();
 
-        reference.child("trips").removeValue();
-
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        reference.child("trips").child(uid).removeValue();
+
         for (int indx = 0; indx < tripList.size(); ++indx) {
             Trip trip = tripList.get(indx);
             reference.child("trips").child(uid).push().setValue(trip).addOnCompleteListener(task -> {

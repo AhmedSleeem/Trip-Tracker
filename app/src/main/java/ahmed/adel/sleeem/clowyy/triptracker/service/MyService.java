@@ -77,8 +77,7 @@ public class MyService extends Service {
                 notification.setOngoing(true);
                 notification.setCategory(NotificationCompat.CATEGORY_CALL);
                 notification.setPriority(NotificationCompat.PRIORITY_HIGH);
-                NotificationCompat.Action hangupAction =new NotificationCompat.Action.Builder(android.R.drawable.sym_action_chat, "HANG UP", hungupPendingIntent)
-                        .build();
+                NotificationCompat.Action hangupAction =new NotificationCompat.Action.Builder(android.R.drawable.sym_action_chat, "HANG UP", hungupPendingIntent).build();
                 notification.addAction(hangupAction);
                 startForeground(1124, notification.build());
             }

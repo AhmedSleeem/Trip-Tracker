@@ -85,7 +85,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     private String timeTxtrounded = "";
     private int type;
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +98,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         roundTripDialog.setContentView(R.layout.round_trip);
         notesDialog.setContentView(R.layout.notes_dialog);
+        roundTripDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner_view));
+        notesDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner_view));
 
         tripDao = TripDatabase.getInstance(getBaseContext()).getTripDao();
 
@@ -136,10 +138,11 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                                 calDate, timeTxt, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(), tripExtraInfo.getAvgSpeed());
 
                         tripDao.insertTrip(trip);
-                        finish();
+
                     }
                 }).start();
 
+                finish();
                 Intent intent = new Intent(this, MyService.class);
                 PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
                 AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
