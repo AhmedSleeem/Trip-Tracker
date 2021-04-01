@@ -118,7 +118,7 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
                 onUpcomingAdapterItemClicked.onDetailsIconClicked(getAdapterPosition());
             });
 
-            start.setOnClickListener(v->{
+            startBtn.setOnClickListener(v->{
                 onUpcomingAdapterItemClicked.onStartButtonClicked(getAdapterPosition());
             });
         }
