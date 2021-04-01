@@ -34,9 +34,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         new Handler().postDelayed(()->{
-            startActivity(new Intent(getBaseContext(),Login.class));
+            if (new SessionManager(getApplicationContext()).isLoggedIn() && FirebaseAuth.getInstance().getCurrentUser() != null) {
+                startActivity(new Intent(this, MainActivity.class));
+            }else {
+                startActivity(new Intent(this, Login.class));
+            }
 
+            finish();
 
-        },2005);
+        },3000);
     }
 }

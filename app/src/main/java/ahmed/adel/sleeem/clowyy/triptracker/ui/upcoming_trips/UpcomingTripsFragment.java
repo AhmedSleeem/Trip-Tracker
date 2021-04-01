@@ -24,6 +24,15 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     private RecyclerView rv;
     private List<Trip> trips;
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
+
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //upcomingTripsViewModel = new ViewModelProvider(this).get(UpcomingTripsViewModel.class);
@@ -40,11 +49,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         TripsModel trip2= new TripsModel("Trip 2","damietta","alex","22/3/2022","2:30 pm","");
         TripsModel trip3= new TripsModel("Trip 3","kafr el shiekh","cairo","1/3/2022","1:30 pm","");
 
-        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
         rv = root.findViewById(R.id.recyclerView);
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
-
 
         return root;
     }
