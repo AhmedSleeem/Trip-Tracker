@@ -10,12 +10,10 @@
     android:layout_columnWeight="1"
     android:layout_rowWeight="1"
     android:backgroundTint="@color/white"
-
     android:theme="@style/Theme.MaterialComponents.Light"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     >
 
     <LinearLayout

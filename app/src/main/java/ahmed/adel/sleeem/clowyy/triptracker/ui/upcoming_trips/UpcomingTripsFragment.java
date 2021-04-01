@@ -1,5 +1,7 @@
 package ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,8 +57,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 //            }
 //        });
 
-
-            tripDao = TripDatabase.getInstance(getContext()).getTripDao();
+        tripDao = TripDatabase.getInstance(getContext()).getTripDao();
 
         trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
         rv = root.findViewById(R.id.recyclerView);
@@ -74,11 +76,28 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
     @Override
     public void onDeleteIconClicked(int position) {
-
-
-        tripDao.deleteTrip(trips.get(position));
-
-
+        //initialize alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        //set title
+        builder.setTitle(getString(R.string.deleteMSGtitle));
+        //set message
+        builder.setMessage(getString(R.string.deleteMSG));
+        //positive yes button
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tripDao.deleteTrip(trips.get(position));
+            }
+        });
+        //negative no button
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //dismiss dialog
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -97,4 +116,5 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         }
 
     }
+
 }
