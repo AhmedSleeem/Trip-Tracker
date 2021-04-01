@@ -75,7 +75,7 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
 
             Trip trip = tripList.get(indx);
             reference.child("trips").child(uid).push().setValue(trip).addOnCompleteListener(task -> {
-                Toast.makeText(getContext(), "done", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.DONE), Toast.LENGTH_SHORT).show();
             });
         }
     }
@@ -100,11 +100,11 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //set title
-        builder.setTitle("Delete");
+        builder.setTitle(getString(R.string.deleteMSGtitle));
         //set message
-        builder.setMessage("Are you sure you want to Delete ?");
+        builder.setMessage(getString(R.string.deleteMSG));
         //positive yes button
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //call method logout in session class
@@ -122,7 +122,7 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
             }
         });
         //negative no button
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //dismiss dialog

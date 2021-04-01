@@ -59,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Session class instance
         session = new SessionManager(getApplicationContext());
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
         String userID = //FirebaseAuth.getInstance().getCurrentUser().getUid();
                 "uYUjhir14BaF4VZTRU5VskSRSon2";
 
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_upcomingTrips, R.id.nav_history)
+                R.id.nav_upcomingTrips, R.id.nav_history,R.id.nav_maps)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -145,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_history:
                         fab.hide();
                         break;
+                    case R.id.nav_maps:
+                        fab.hide();
+                        break;
                     default:
                         fab.show();
                         break;
@@ -153,15 +157,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
-            Toast.makeText(MainActivity.this, "logout is clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "logout is clicked", Toast.LENGTH_SHORT).show();
             logout(MainActivity.this);
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
 
         navigationView.getMenu().findItem(R.id.nav_sync).setOnMenuItemClickListener(menuItem -> {
-            Toast.makeText(MainActivity.this, "Sync is clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "Sync is clicked", Toast.LENGTH_SHORT).show();
             //add sync function
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        });
+
+        navigationView.getMenu().findItem(R.id.nav_language).setOnMenuItemClickListener(menuItem -> {
+            //add change lang function
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        });
+
+        navigationView.getMenu().findItem(R.id.nav_deleteAccount).setOnMenuItemClickListener(menuItem -> {
+
+            deleteAccount(MainActivity.this);
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -188,11 +205,11 @@ public class MainActivity extends AppCompatActivity {
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         //set title
-        builder.setTitle("Logout");
+        builder.setTitle(getString(R.string.logoutMSGtitle));
         //set message
         builder.setMessage(getString(R.string.logoutMSG));
         //positive yes button
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //call method logout in session class
@@ -203,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //negative no button
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //dismiss dialog
@@ -274,9 +291,37 @@ public class MainActivity extends AppCompatActivity {
         for (int indx = 0; indx < tripList.size(); ++indx) {
             Trip trip = tripList.get(indx);
             reference.child("trips").child(uid).push().setValue(trip).addOnCompleteListener(task -> {
-                Toast.makeText(getBaseContext(), "done", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), getString(R.string.dataSynced), Toast.LENGTH_SHORT).show();
             });
         }
+    }
+
+    private void deleteAccount(final Activity activity)
+    {
+        //initialize alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        //set title
+        builder.setTitle(getString(R.string.deleteMSGtitle));
+        //set message
+        builder.setMessage(getString(R.string.deleteMSG));
+        //positive yes button
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FirebaseAuth.getInstance().getCurrentUser().delete();
+                session.logoutUser();
+                finish();
+            }
+        });
+        //negative no button
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //dismiss dialog
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
 }
