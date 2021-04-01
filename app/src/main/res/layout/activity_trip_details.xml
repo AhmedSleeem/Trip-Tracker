@@ -59,6 +59,8 @@
             android:layout_marginRight="55dp"
             android:text="@string/okbtn"
             android:textAllCaps="false"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/shownotesBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tripspeedTxt" />
 
@@ -261,10 +263,12 @@
             android:layout_marginLeft="55dp"
             android:text="@string/shownotes"
             android:textAllCaps="false"
+            android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="@+id/okBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/okBtn" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

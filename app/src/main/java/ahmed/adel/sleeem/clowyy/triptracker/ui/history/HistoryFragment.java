@@ -2,6 +2,7 @@ package ahmed.adel.sleeem.clowyy.triptracker.ui.history;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.R;
+import ahmed.adel.sleeem.clowyy.triptracker.TripDetailsActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.OnRecyclerViewItemClickLister;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
@@ -90,7 +92,9 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
 
     @Override
     public void onDetailsIconClicked(int position) {
-        Toast.makeText(getContext(), position + "", Toast.LENGTH_SHORT).show();
+        Intent details = new Intent(getContext(), TripDetailsActivity.class);
+        details.putExtra("TripID", tripList.get(position).getTripId());
+        startActivity(details);
     }
 
 
