@@ -4,6 +4,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -14,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
@@ -47,6 +54,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.DatePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.TimePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
+import ahmed.adel.sleeem.clowyy.triptracker.service.MyWorker;
 
 public class TripActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
@@ -108,7 +116,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             if (calDate.length() > 0 && timeTxt.length() > 0 && txtStartPoint.getText().length() > 0 && txtEndPoint.getText().length() > 0
                     && txtTripName.getText().length() > 0) {
 
-                Toast.makeText(getBaseContext(), "clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "done : your trip is added succefully", Toast.LENGTH_LONG).show();
                 StringBuilder oneWaysNote = new StringBuilder("");
                 StringBuilder roundNote = new StringBuilder("");
 
@@ -116,69 +124,155 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
 
                 Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
-                        rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        rbRoundTrip.isChecked(), swtchRepeat.isActivated() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
                         calDate, timeTxt, "", false);
                 tripDao.insertTrip(trip);
 
-                Intent intent = new Intent(this, MyService.class);
-                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
-                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
-
+//                Intent intent = new Intent(this, MyService.class);
+//                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+//                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                //alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
+/*
                 long rrr = 0;
+                String Type= "";
+                Log.i("TAGUU", "onCreate: TYPE "+repeatingType);
                 switch (repeatingType) {
-                    case "day":
+                    case "day1":
+                        Type="day";
                         rrr = AlarmManager.INTERVAL_DAY;
                         break;
-                    case "week":
+                    case "week1":
                         rrr = AlarmManager.INTERVAL_DAY * 7;
+                        Type="week";
                         break;
-                    case "hour":
+                    case "hour1":
                         rrr = AlarmManager.INTERVAL_HOUR;
+                        Type="hour";
                         break;
-                    case "month":
+                    case "month1":
                         rrr = AlarmManager.INTERVAL_DAY * 30;
+                        Type="month";
                         break;
                     default:
                         rrr = 0;
                 }
-                if (rrr == 0) {
-                    alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
-                } else
-                    alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), rrr, pintent);
+                /*
+ */
+//                SystemClock.elapsedRealtime() + mCalendar.getTimeInMillis();
+                Data inputData = new Data.Builder()
+                        .putString("data", trip.getTripDate())
+                        .build();
 
 
+
+                    Calendar calendarmsd = Calendar.getInstance();
+                    long nowMillis = calendarmsd.getTimeInMillis();
+                    long diff = calendar.getTimeInMillis() - nowMillis;
+
+
+               /* Log.i("TAGUU", "onCreate: pp "+rrr);
+                if(!swtchRepeat.isActivated()) {
+                    Log.i("TAGUU", "onCreate: pp33 "+rrr);*/
+
+
+                    calendarmsd = Calendar.getInstance();
+                    nowMillis = calendarmsd.getTimeInMillis();
+                    diff = calendar.getTimeInMillis() - nowMillis;
+
+                WorkRequest uploadWorkRequest =
+                            new OneTimeWorkRequest.Builder(MyWorker.class)
+                                    .setInputData(inputData)
+                                    .setInitialDelay(diff, TimeUnit.SECONDS)
+                                    .build();
+                    WorkManager.getInstance(getApplication()).enqueue(uploadWorkRequest);
+
+
+             /*
+                }
+                else{
+
+                    TimeUnit timeUnit = TimeUnit.DAYS;
+                    if (Type.equals("hour"))timeUnit=TimeUnit.HOURS;
+                    else if (Type.equals("month"))timeUnit=TimeUnit.DAYS;
+
+                    PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(MyWorker.class, Integer.parseInt(txtRepeatingNumber.getText().toString()),
+                            timeUnit).setInputData(inputData)
+                            .setInitialDelay(diff, TimeUnit.SECONDS)
+                            .build();
+                    WorkManager.getInstance(getApplication()).enqueue(periodicWork);
+
+                }
+
+              */
+
+
+
+/*
                 if (tripRounded != null) {
                     tripDao.insertTrip(tripRounded);
+
+                    inputData = new Data.Builder()
+                            .putString("data", tripRounded.getTripDate())
+                            .build();
+
                     long rrr2 = 0;
-                    switch (repeatingTypeRound) {
-                        case "day":
+                    switch (repeatingType) {
+                        case "day1":
+                            Type="day";
                             rrr2 = AlarmManager.INTERVAL_DAY;
                             break;
-                        case "week":
+                        case "week1":
                             rrr2 = AlarmManager.INTERVAL_DAY * 7;
+                            Type="week";
                             break;
-                        case "hour":
+                        case "hour1":
                             rrr2 = AlarmManager.INTERVAL_HOUR;
+                            Type="hour";
                             break;
-                        case "month":
+                        case "month1":
                             rrr2 = AlarmManager.INTERVAL_DAY * 30;
+                            Type="month";
                             break;
                         default:
                             rrr2 = 0;
                     }
-                    if (rrr2 == 0) {
-                        alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
-                    } else
-                        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), rrr2, pintent);
+
+*/
+
+//                if(!swtchRepeat.isChecked()) {
+//                    calendarmsd = Calendar.getInstance();
+//                    nowMillis = calendarmsd.getTimeInMillis();
+//                    diff = calendar.getTimeInMillis() - nowMillis;
+//
+//                    uploadWorkRequest =
+//                            new OneTimeWorkRequest.Builder(MyWorker.class)
+//                                    .setInputData(inputData)
+//                                    .setInitialDelay(diff, TimeUnit.SECONDS)
+//                                    .build();
+//                    WorkManager.getInstance(getApplication()).enqueue(uploadWorkRequest);
+//                }
+//                  else{
+//
+//                        TimeUnit timeUnit = TimeUnit.DAYS;
+//                        if (Type.equals("hour"))timeUnit=TimeUnit.HOURS;
+//                        else if (Type.equals("month"))timeUnit=TimeUnit.DAYS;
+//
+//                        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(MyWorker.class, Integer.parseInt(txtRepeatingNumber.getText().toString()),
+//                                timeUnit).setInputData(inputData)
+//                                .setInitialDelay(diff, TimeUnit.SECONDS)
+//                                .build();
+//                        WorkManager.getInstance(getApplication()).enqueue(periodicWork);
+//
+//                    }
 
 
-                }
+                //}
 
 
                 finish();
 
-            } else
+            }
+            else
                 Toast.makeText(getBaseContext(), "please complete all fields", Toast.LENGTH_LONG).show();
 
 
@@ -294,7 +388,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         repeatingSpinnerRound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                repeatingTypeRound = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase();
+
+                repeatingTypeRound = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase()+"1";
                 // Toast.makeText(TripActivity.this, repeatingType, Toast.LENGTH_SHORT).show();
             }
 
@@ -378,7 +473,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         repeatingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                repeatingType = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase();
+                repeatingType = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase()+"1";
             }
 
             @Override

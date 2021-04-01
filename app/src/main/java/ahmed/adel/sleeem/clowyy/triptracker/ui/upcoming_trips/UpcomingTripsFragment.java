@@ -16,6 +16,7 @@ import java.util.List;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 
 public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapterItemClicked {
@@ -23,6 +24,8 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     //private UpcomingTripsViewModel upcomingTripsViewModel;
     private RecyclerView rv;
     private List<Trip> trips;
+
+    TripDao tripDao;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,9 +39,8 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 //            }
 //        });
 
-        TripsModel trip1= new TripsModel("Trip 1","alex","cairo","12/2/2022","12:30 pm","");
-        TripsModel trip2= new TripsModel("Trip 2","damietta","alex","22/3/2022","2:30 pm","");
-        TripsModel trip3= new TripsModel("Trip 3","kafr el shiekh","cairo","1/3/2022","1:30 pm","");
+
+            tripDao = TripDatabase.getInstance(getContext()).getTripDao();
 
         trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
         rv = root.findViewById(R.id.recyclerView);
@@ -50,12 +52,25 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
+
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
+    }
+
+    @Override
     public void onDetailsIconClicked(int position) {
 
     }
 
     @Override
     public void onDeleteIconClicked(int position) {
+
+
+        tripDao.deleteTrip(trips.get(position));
+
 
     }
 

@@ -27,10 +27,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripTracker">
+
+
         <service
             android:name=".service.MyService"
             android:enabled="true"
-            android:exported="true"></service>
+            ></service>
 
         <activity
             android:name=".TripsMapActivity"
