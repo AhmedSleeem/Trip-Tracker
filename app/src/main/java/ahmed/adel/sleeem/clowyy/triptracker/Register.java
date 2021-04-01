@@ -73,25 +73,14 @@ public class Register extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                String userID = task.getResult().getUser().getUid();
-                                                if (!snapshot.hasChild(userID)) {
-                                                    User user = new User(nameTxt.getText().toString(), emailTxt.getText().toString());
-                                                    FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
-                                                    new SessionManager(getApplicationContext()).createLoginSession(user.getEmail(), user.getName(), null);
-                                                }
-                                            }
+                                        String userID = task.getResult().getUser().getUid();
+                                        User user = new User(nameTxt.getText().toString(), emailTxt.getText().toString());
+                                        //new SessionManager(getApplicationContext()).createLoginSession(user.getEmail(), user.getName(), null);
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
-
-                                            }
-                                        });
+                                        FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
 
                                         Toast.makeText(Register.this, "Authentication Succeeded ", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        startActivity(new Intent(getApplicationContext(), Login.class));
                                         finish();
                                     } else {
                                         Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();

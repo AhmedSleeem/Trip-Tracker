@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
 import org.w3c.dom.Text;
@@ -54,14 +55,20 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
 
     @Override
     public void onBindViewHolder(@NonNull UpcomingTripsAdapter.ViewHandler holder, int position) {
-
-        holder.tripTitle.setText(trips.get(position).getTripTitle());
-        holder.start.setText(trips.get(position).getTripSource());
-        holder.end.setText(trips.get(position).getTripDestination());
-        holder.date.setText(trips.get(position).getTripDate());
-        holder.time.setText(trips.get(position).getTripTime());
-        //holder.tripImage.setImageBitmap(trips.get(position).getImage());
         Trip trip = trips.get(position);
+
+        holder.tripTitle.setText(trip.getTripTitle());
+        holder.start.setText(trip.getTripSource());
+        holder.end.setText(trip.getTripDestination());
+        holder.date.setText(trip.getTripDate());
+        holder.time.setText(trip.getTripTime());
+        holder.distance.setText(trip.getTripDistance());
+        holder.duration.setText(trip.getTripDuration());
+        holder.avgSpeed.setText(trip.getTripAvgSpeed());
+
+        if(trip.getTripImage() != null && !trip.getTripImage().equals("")) {
+            Glide.with(context).load(trip.getTripImage()).into(holder.tripImage);
+        }
 
         if (trip.isTripType()){
             holder.tripTypeBtn.setBackgroundResource(R.drawable.ic_rounded);
@@ -87,8 +94,6 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
 
         public ViewHandler(@NonNull View itemView) {
             super(itemView);
-
-
 
             tripImage = itemView.findViewById(R.id.tripImage);
             tripTitle = itemView.findViewById(R.id.tripTitle);

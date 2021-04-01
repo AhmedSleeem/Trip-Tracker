@@ -86,12 +86,6 @@ public class MainActivity extends AppCompatActivity {
         getUserTrips(userID);
 
 
-
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
         session.checkLogin();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -195,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         //set title
         builder.setTitle("Logout");
         //set message
-        builder.setMessage("Are you sure you want to logout ?");
+        builder.setMessage(getString(R.string.logoutMSG));
         //positive yes button
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override

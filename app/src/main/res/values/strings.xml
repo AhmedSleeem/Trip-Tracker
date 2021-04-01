@@ -63,4 +63,6 @@
     <string name="hint_username">Please Enter Your UserName Here</string>
     <string name="Add">Add</string>
 
+    <string name="logoutMSG">Are you sure you want to logout ?</string>
+
 </resources>

@@ -135,7 +135,11 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
         return point;
     }
 
-    public TripExtraInfo getTripExtraInfo(LatLng source, LatLng destination) {
+    public TripExtraInfo getTripExtraInfo(String sourceStr, String destinationStr) {
+
+        LatLng source = getLocationFromAddress(sourceStr);
+        LatLng destination = getLocationFromAddress(destinationStr);
+
         String response = "";
         InputStream inputStream = null;
         HttpsURLConnection urlConnection = null;
@@ -190,10 +194,10 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
         return null;
     }
 
-    public Bitmap getLocationImage(String location) {
+    public String getLocationImageURL(String location) {
         // https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Kafr%20El-Shaikh,%20Qism%20Kafr%20El-Shaikh,%20Kafr%20Al%20Sheikh&inputtype=textquery&fields=photos&key=AIzaSyDVh2YvCYg-Mcjn-pfEIxeth4Ey9il9vFA
         String response = "";
-        Bitmap imageResult = null;
+        //Bitmap imageResult = null;
 
         InputStream inputStream = null;
         HttpsURLConnection urlConnection = null;
@@ -229,6 +233,7 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
 
                 strUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + photoReference + "&key=" + API_KEY;
 
+                /*
                 URL myImageURL = new URL(strUrl);
                 HttpsURLConnection httpsURLConnection = (HttpsURLConnection) myImageURL.openConnection();
                 httpsURLConnection.connect();
@@ -240,15 +245,21 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
                 } else {
                     return null;
                 }
+                */
+
+                return strUrl;
             } else {
                 Toast.makeText(context, "Unable to get photo", Toast.LENGTH_LONG).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            strUrl = null;
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            strUrl = null;
         } catch (IOException e) {
             e.printStackTrace();
+            strUrl = null;
         } finally {
             try {
                 inputStream.close();
@@ -258,7 +269,7 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
             urlConnection.disconnect();
         }
 
-        return imageResult;
+        return strUrl;
     }
 
     public Bitmap getLocationPhoto(String location) {
