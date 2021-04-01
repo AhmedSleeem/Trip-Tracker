@@ -12,7 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,8 +44,39 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips(userID);
 
+        if(trips.size()==0){
+            getUserTrips(userID);
+        }
+
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
+    }
+
+    private void getUserTrips(String userID){
+        List<Trip> userTrips = new ArrayList<>();
+        DatabaseReference userTripsRef = FirebaseDatabase.getInstance().getReference("trips").child(userID);
+        userTripsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+                    userTrips.add(trip);
+                    tripDao.insertTrip(trip);
+                }
+
+                if(userTrips != null && userTrips.size() > 0) {
+                    trips = userTrips;
+                    rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,UpcomingTripsFragment.this));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -69,6 +106,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     @Override
     public void onDetailsIconClicked(int position) {
         Intent details = new Intent(getContext(), TripDetailsActivity.class);
+        details.putExtra("TripID", trips.get(position).getTripId());
         startActivity(details);
     }
 

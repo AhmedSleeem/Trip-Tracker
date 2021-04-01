@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".TripDetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="30dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-35dp">
 
@@ -53,14 +54,13 @@
             android:id="@+id/okBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="55dp"
             android:layout_marginRight="55dp"
             android:text="@string/okbtn"
             android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="@+id/shownotesBtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/shownotesBtn"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/tripspeedTxt" />
 
         <TextView
             android:id="@+id/tripdateTxt"
@@ -191,14 +191,13 @@
 
         <ImageView
             android:id="@+id/imagetrip"
-            android:layout_width="377dp"
-            android:layout_height="171dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView17"
@@ -260,15 +259,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="55dp"
             android:layout_marginLeft="55dp"
-            android:layout_marginBottom="45dp"
             android:text="@string/shownotes"
             android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/okBtn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tripspeedTxt"
-            app:layout_constraintVertical_bias="0.869" />
+            app:layout_constraintTop_toTopOf="@+id/okBtn" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

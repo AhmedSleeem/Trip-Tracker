@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
@@ -21,7 +20,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,7 +48,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
@@ -126,7 +123,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 StringBuilder oneWaysNote = new StringBuilder("");
                 StringBuilder roundNote = new StringBuilder("");
 
-                for (String note : tripNotes) oneWaysNote.append("0" + note + ",");
+                for (String note : tripNotes) oneWaysNote.append("0" + note + "Ω");
 
                 new Thread(new Runnable() {
                     @Override
@@ -156,9 +153,10 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         tripDao.insertTrip(trip);
 
                         Data inputData = new Data.Builder()
-                                .putString("data", trip.getTripDate())
-                                .build();
-
+                                .putString("Title", trip.getTripTitle())
+                                .putString("Source", trip.getTripSource())
+                                .putString("Destination", trip.getTripDestination())
+                                .putString("Date", trip.getTripDate()).build();
 
 
                         Calendar calendarmsd = Calendar.getInstance();
@@ -352,7 +350,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     }
 
     private void showNotesDialog(List<String> notes) {
-        ListView lvNotes = notesDialog.findViewById(R.id.lvNotes);
+        ListView lvNotes = notesDialog.findViewById(R.id.lvShowNotes);
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notes);
 
         lvNotes.setAdapter(stringArrayAdapter);
@@ -371,7 +369,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             }
         });
 
-        notesDialog.findViewById(R.id.btnNotesDone).setOnClickListener(v -> {
+        notesDialog.findViewById(R.id.btnShowNotesOK).setOnClickListener(v -> {
             if (txtNote.getText().toString().length() > 1) {
                 notes.add(txtNote.getText().toString());
                 txtNote.setText("");

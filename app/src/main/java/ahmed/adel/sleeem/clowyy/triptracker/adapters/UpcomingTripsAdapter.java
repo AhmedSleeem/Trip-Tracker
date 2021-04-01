@@ -84,9 +84,6 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
         MaterialButton deleteBtn,editBtn,viewBtn,tripTypeBtn;
         Button startBtn;
 
-
-
-
         public ViewHandler(@NonNull View itemView) {
             super(itemView);
 

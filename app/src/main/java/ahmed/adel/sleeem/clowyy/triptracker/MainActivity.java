@@ -81,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
 
         //check shared preferences and user login status
 
+        //Toast.makeText(this, "Ω", Toast.LENGTH_SHORT).show();
         // Session class instance
         session = new SessionManager(getApplicationContext());
         //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-        String userID = //FirebaseAuth.getInstance().getCurrentUser().getUid();
-                "uYUjhir14BaF4VZTRU5VskSRSon2";
+        //String userID = //FirebaseAuth.getInstance().getCurrentUser().getUid();"uYUjhir14BaF4VZTRU5VskSRSon2";
 
-        getUserTrips(userID);
+      //  getUserTrips(userID);
 
 
         session.checkLogin();
@@ -232,26 +232,7 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
-    private void getUserTrips(String userID){
-        List<Trip> userTrips = new ArrayList<>();
-        DatabaseReference userTripsRef = FirebaseDatabase.getInstance().getReference("trips").child(userID);
-        userTripsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    userTrips.add(dataSnapshot.getValue(Trip.class));
-                }
-              //  userTripsRef.addListenerForSingleValueEvent(null);
-                // Change UI
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
