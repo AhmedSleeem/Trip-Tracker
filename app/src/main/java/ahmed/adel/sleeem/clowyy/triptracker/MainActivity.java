@@ -66,9 +66,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    // Session Manager Class
     SessionManager session;
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
