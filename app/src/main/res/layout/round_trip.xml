@@ -22,7 +22,6 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="50dp"
             android:text="@string/LBL_REPEAT"
-            android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -72,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:text="@string/LBL_START"
             android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:text="@string/LBL_END"
             android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
@@ -200,19 +199,23 @@
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="@+id/txtBackEndPoint"
-            app:layout_constraintStart_toStartOf="@+id/txtBackEndPoint"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtRepeatingNumberRound">
 
             <Button
                 android:id="@+id/dateBtnRound"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/ic_date" />
 
             <Button
                 android:id="@+id/timerBtnRound"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/ic_timer" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

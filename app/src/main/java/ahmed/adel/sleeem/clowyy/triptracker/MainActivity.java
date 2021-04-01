@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -67,9 +68,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    // Session Manager Class
     SessionManager session;
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -89,22 +88,7 @@ public class MainActivity extends AppCompatActivity {
         getUserTrips(userID);
 
 
-
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
         session.checkLogin();
-
-
-
-
-
-
-
-
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -264,6 +248,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(this);
+        switch (requestCode) {
+            case GoogleMapsManager.LOCATION_REQUEST_CODE: {
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    googleMapsManager.locationPermission = true;
+                }
+            }break;
+        }
     }
 
     private void saveImage(Bitmap bitmap, String fileName){

@@ -47,6 +47,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Login.class));
+                finish();
             }
         });
 
@@ -63,7 +64,49 @@ public class Register extends AppCompatActivity {
 
     }
 
-    private void registerAuthentication(String name,String email, String password) {
+    private void registerAuthentication(String email, String password) {
+        if(!email.isEmpty())
+        {
+            if(!password.isEmpty()) {
+                if(password.length()>=6) {
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        String userID = task.getResult().getUser().getUid();
+                                        User user = new User(nameTxt.getText().toString(), emailTxt.getText().toString());
+                                        //new SessionManager(getApplicationContext()).createLoginSession(user.getEmail(), user.getName(), null);
+
+                                        FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
+
+                                        Toast.makeText(Register.this, "Authentication Succeeded ", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getApplicationContext(), Login.class));
+                                        finish();
+                                    } else {
+                                        Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+                else{
+                    passwordTxt.setError("Less than 6 characters!");
+                }
+            }
+            else
+            {
+                passwordTxt.setError("Please enter password!");
+            }
+        }
+        else
+        {
+            emailTxt.setError("Please enter email!");
+        }
+
+
+    }
+
+    private void registerAuthentication2(String name,String email, String password) {
         if(!name.isEmpty()) {
             if (!email.isEmpty()) {
                 if (!password.isEmpty()) {

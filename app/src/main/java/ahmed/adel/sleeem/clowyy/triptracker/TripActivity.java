@@ -49,6 +49,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.DatePickerFragment;
 import ahmed.adel.sleeem.clowyy.triptracker.fragments.TimePickerFragment;
+import ahmed.adel.sleeem.clowyy.triptracker.helpers.TripExtraInfo;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class TripActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -117,11 +118,24 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
                 for (String note : tripNotes) oneWaysNote.append("0" + note + ",");
 
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
-                        rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                        calDate, timeTxt, "", false);
-                tripDao.insertTrip(trip);
+                        GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(getApplicationContext());
+
+                        String imgURL = googleMapsManager.getLocationImageURL(txtEndPoint.getText().toString());
+                        TripExtraInfo tripExtraInfo = googleMapsManager.getTripExtraInfo(txtStartPoint.getText().toString(), txtEndPoint.getText().toString());
+
+
+                        Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
+                                rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                calDate, timeTxt, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(), tripExtraInfo.getAvgSpeed());
+
+                        tripDao.insertTrip(trip);
+                        finish();
+                    }
+                }).start();
 
                 Intent intent = new Intent(this, MyService.class);
                 PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
@@ -177,9 +191,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
 
                 }
-
-
-                finish();
 
             } else
                 Toast.makeText(getBaseContext(), getString(R.string.completeFieldsMSG), Toast.LENGTH_LONG).show();
@@ -354,7 +365,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
                 tripRounded = new Trip(txtBackStartPoint.getText().toString(), txtBackTripName.getText().toString(), txtBackEndPoint.getText().toString(),
                         false, swtchRepeatingRound.isChecked() ? repeatingTypeRound : "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                        calDaterounded, timeTxtrounded, "", false);
+                        calDaterounded, timeTxtrounded, "", false, "", "", "");
                 type=3;
                 roundTripDialog.dismiss();
             }

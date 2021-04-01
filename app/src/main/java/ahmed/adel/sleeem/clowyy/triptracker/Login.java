@@ -38,6 +38,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Arrays;
+
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 
 
@@ -81,6 +83,8 @@ public class Login extends AppCompatActivity {
         googleBtn = findViewById(R.id.googleBtn);
         facebookBtn = findViewById(R.id.btnFacebook);
         twitterBtn = findViewById(R.id.btnTwitter);
+
+        facebookBtn.setReadPermissions(Arrays.asList("email"));
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,10 +194,12 @@ public class Login extends AppCompatActivity {
 
                                             User user = snapshot.child(userID).getValue(User.class);
 
-                                            String name = user.getName();
-                                            String email = user.getEmail();
+                                            if(user != null) {
+                                                String name = user.getName();
+                                                String email = user.getEmail();
 
-                                            session.createLoginSession(email, name,null);
+                                                session.createLoginSession(email, name, null);
+                                            }
                                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                             finish();
                                         }
