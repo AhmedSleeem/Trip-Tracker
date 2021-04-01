@@ -28,6 +28,44 @@ public class Trip {
     @ColumnInfo
     String tripDestination;
 
+    @ColumnInfo
+    String tripDistance;
+
+    public Trip(int tripId, String tripSource, String tripTitle, String tripDestination, String tripDistance, String tripDuration, boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker, String tripDate, String tripTime, String tripImage, boolean tripStatus) {
+        this.tripId = tripId;
+        this.tripSource = tripSource;
+        this.tripTitle = tripTitle;
+        this.tripDestination = tripDestination;
+        this.tripDistance = tripDistance;
+        this.tripDuration = tripDuration;
+        this.tripType = tripType;
+        this.tripRepeatingType = tripRepeatingType;
+        this.tripNotes = tripNotes;
+        this.tripMaker = tripMaker;
+        this.tripDate = tripDate;
+        this.tripTime = tripTime;
+        this.tripImage = tripImage;
+        this.tripStatus = tripStatus;
+    }
+
+    public String getTripDistance() {
+        return tripDistance;
+    }
+
+    public void setTripDistance(String tripDistance) {
+        this.tripDistance = tripDistance;
+    }
+
+    public String getTripDuration() {
+        return tripDuration;
+    }
+
+    public void setTripDuration(String tripDuration) {
+        this.tripDuration = tripDuration;
+    }
+
+    @ColumnInfo
+    String tripDuration;
 
 
     @ColumnInfo
