@@ -17,4 +17,10 @@
         android:label="@string/menu_history"
         tools:layout="@layout/fragment_history" />
 
+    <fragment
+        android:id="@+id/nav_maps"
+        android:name="ahmed.adel.sleeem.clowyy.triptracker.ui.maps.MapsFragment"
+        android:label="@string/menu_maps"
+        tools:layout="@layout/fragment_maps" />
+
 </navigation>

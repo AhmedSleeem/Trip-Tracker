@@ -53,63 +53,63 @@ public class Register extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String name = nameTxt.getText().toString();
                 String email = emailTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
 
-                registerAuthentication(email,password);
+                registerAuthentication(name,email,password);
             }
         });
 
     }
 
-    private void registerAuthentication(String email, String password) {
-        if(!email.isEmpty())
-        {
-            if(!password.isEmpty()) {
-                if(password.length()>=6) {
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                String userID = task.getResult().getUser().getUid();
-                                                if (!snapshot.hasChild(userID)) {
-                                                    User user = new User(nameTxt.getText().toString(), emailTxt.getText().toString());
-                                                    FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
-                                                    new SessionManager(getApplicationContext()).createLoginSession(user.getEmail(), user.getName(), null);
+    private void registerAuthentication(String name,String email, String password) {
+        if(!name.isEmpty()) {
+            if (!email.isEmpty()) {
+                if (!password.isEmpty()) {
+                    if (password.length() >= 6) {
+                        mAuth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    String userID = task.getResult().getUser().getUid();
+                                                    if (!snapshot.hasChild(userID)) {
+                                                        User user = new User(nameTxt.getText().toString(), emailTxt.getText().toString());
+                                                        FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
+                                                        new SessionManager(getApplicationContext()).createLoginSession(user.getEmail(), user.getName(), null);
+                                                    }
                                                 }
-                                            }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
 
-                                            }
-                                        });
+                                                }
+                                            });
 
-                                        Toast.makeText(Register.this, "Authentication Succeeded ", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                        finish();
-                                    } else {
-                                        Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(Register.this, getString(R.string.authenticationSucceded), Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                            finish();
+                                        } else {
+                                            Toast.makeText(Register.this, getString(R.string.authenticationFailed), Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    } else {
+                        passwordTxt.setError(getString(R.string.passwordErrorConditions));
+                    }
+                } else {
+                    passwordTxt.setError(getString(R.string.enterpasswordMSG));
                 }
-                else{
-                    passwordTxt.setError("Less than 6 characters!");
-                }
-            }
-            else
-            {
-                passwordTxt.setError("Please enter password!");
+            } else {
+                emailTxt.setError(getString(R.string.enteremailMSG));
             }
         }
-        else
-        {
-            emailTxt.setError("Please enter email!");
+        else{
+            nameTxt.setError(getString(R.string.enterusernameMSG));
         }
 
     }

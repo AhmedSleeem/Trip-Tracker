@@ -45,9 +45,6 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 //            }
 //        });
 
-        TripsModel trip1= new TripsModel("Trip 1","alex","cairo","12/2/2022","12:30 pm","");
-        TripsModel trip2= new TripsModel("Trip 2","damietta","alex","22/3/2022","2:30 pm","");
-        TripsModel trip3= new TripsModel("Trip 3","kafr el shiekh","cairo","1/3/2022","1:30 pm","");
 
         rv = root.findViewById(R.id.recyclerView);
 

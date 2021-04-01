@@ -118,7 +118,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException exception) {
-                Toast.makeText(Login.this, "Failed to signIn", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this, getString(R.string.signinfailed), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -144,7 +144,7 @@ public class Login extends AppCompatActivity {
                                         FirebaseDatabase.getInstance().getReference("users").child(userID).setValue(user);
                                     }
 
-                                    Toast.makeText(Login.this, "Authentication succeeded with " + username, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, getString(R.string.authenticationSucceded), Toast.LENGTH_SHORT).show();
 
                                     Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
@@ -181,7 +181,7 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(Login.this, "Login succeeded.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, getString(R.string.loginSucceded), Toast.LENGTH_SHORT).show();
 
                                     FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
@@ -205,15 +205,15 @@ public class Login extends AppCompatActivity {
                                     });
 
                                 } else {
-                                    Toast.makeText(Login.this, "Wrong email or password !", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, getString(R.string.wrongData), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             } else {
-                passwordTxt.setError("Please enter password!");
+                passwordTxt.setError(getString(R.string.enterpasswordMSG));
             }
         } else {
-            emailTxt.setError("Please enter email!");
+            emailTxt.setError(getString(R.string.enteremailMSG));
         }
     }
 
@@ -224,7 +224,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(Login.this, "Login succeeded.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, getString(R.string.loginSucceded), Toast.LENGTH_SHORT).show();
 
                             String userID = task.getResult().getUser().getUid();
                             String name = task.getResult().getUser().getDisplayName();
@@ -239,7 +239,7 @@ public class Login extends AppCompatActivity {
                             finish();
 
                         } else {
-                            Toast.makeText(Login.this, "Failed to signIn", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, getString(R.string.signinfailed), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -251,7 +251,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(Login.this, "Login succeeded.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, getString(R.string.loginSucceded), Toast.LENGTH_SHORT).show();
 
                     String userID = task.getResult().getUser().getUid();
                     String name = task.getResult().getUser().getDisplayName();
@@ -266,7 +266,7 @@ public class Login extends AppCompatActivity {
                     finish();
 
                 } else {
-                    Toast.makeText(Login.this, "Failed to signIn", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, getString(R.string.signinfailed), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -284,7 +284,7 @@ public class Login extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.signinfailed), Toast.LENGTH_SHORT).show();
             }
         }
 

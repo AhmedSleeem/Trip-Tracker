@@ -36,6 +36,9 @@
     <string name="menu_history">History</string>
     <string name="menu_sync">Sync</string>
     <string name="menu_logout">Logout</string>
+    <string name="menu_maps">Maps</string>
+    <string name="menu_language">عربي</string>
+    <string name="menu_deleteAccount">Delete Account</string>
     <string name="GoToMaps">Go To Maps</string>
     <string name="tripTitle">trip title</string>
     <string name="startTrip">Start</string>
@@ -60,7 +63,30 @@
         <item>Month</item>
     </string-array>
 
-    <string name="hint_username">Please Enter Your UserName Here</string>
+    <string name="hint_username">Please Enter Your Username Here</string>
     <string name="Add">Add</string>
+    <string name="deleteMSGtitle">Delete</string>
+    <string name="deleteMSG">Are you sure you want to Delete ?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="mapsErrorMSG">Unable to get location</string>
+    <string name="imageErrorMSG">Unable to get photo</string>
+    <string name="source">Source</string>
+    <string name="destination">Destination</string>
+    <string name="signinfailed">Failed to signIn</string>
+    <string name="authenticationSucceded">Authentication succeeded</string>
+    <string name="loginSucceded">Login succeeded.</string>
+    <string name="wrongData">Wrong email or password !</string>
+    <string name="enterpasswordMSG">Please enter password!</string>
+    <string name="enteremailMSG">Please enter email!</string>
+    <string name="logoutMSGtitle">Logout</string>
+    <string name="logoutMSG">Are you sure you want to logout ?</string>
+    <string name="dataSynced">"Data is synced</string>
+    <string name="authenticationFailed">Authentication failed.</string>
+    <string name="passwordErrorConditions">Less than 6 characters!</string>
+    <string name="enterusernameMSG">Please enter username!</string>
+    <string name="completeFieldsMSG">Please complete all fields</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

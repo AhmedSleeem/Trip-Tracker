@@ -97,7 +97,7 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
 
     public void findRoutes(LatLng Start, LatLng End) {
         if (Start == null || End == null) {
-            Toast.makeText(context, "Unable to get location", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.mapsErrorMSG), Toast.LENGTH_LONG).show();
         } else {
             Routing routing = new Routing.Builder()
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
@@ -241,7 +241,7 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
                     return null;
                 }
             } else {
-                Toast.makeText(context, "Unable to get photo", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.imageErrorMSG), Toast.LENGTH_LONG).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -396,12 +396,12 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
         MarkerOptions startMarker = new MarkerOptions();
         startMarker.position(polylineStartLatLng);
         startMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-        startMarker.title("Source");
+        startMarker.title(context.getString(R.string.source));
         googleMap.addMarker(startMarker);
 
         MarkerOptions endMarker = new MarkerOptions();
         endMarker.position(polylineEndLatLng);
-        endMarker.title("Destination");
+        endMarker.title(context.getString(R.string.destination));
         googleMap.addMarker(endMarker);
     }
 
