@@ -344,8 +344,9 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
     }
 
     public void launchGoogleMaps(String destination){
-        LatLng location = getLocationFromAddress(destination);
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
+        //LatLng location = getLocationFromAddress(destination);
+        //Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         context.startActivity(mapIntent);
