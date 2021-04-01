@@ -23,6 +23,8 @@ public class TripExtraInfo {
     }
 
     public String getAvgSpeed(){
+        if(distance.equals("N/A"))
+            return "N/A";
 
         double dis = Double.parseDouble(distance.replace(",", "").split(" ")[0]);
         double dur = 1;

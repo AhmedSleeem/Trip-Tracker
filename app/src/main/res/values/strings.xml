@@ -88,7 +88,4 @@
     <string name="completeFieldsMSG">Please complete all fields</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="logoutMSG">Are you sure you want to logout ?</string>
-
 </resources>
