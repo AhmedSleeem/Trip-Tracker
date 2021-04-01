@@ -20,12 +20,15 @@ import ahmed.adel.sleeem.clowyy.triptracker.TripActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.TripDetailsActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 
 public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapterItemClicked {
 
     private RecyclerView rv;
     private List<Trip> trips;
+
+    TripDao tripDao;
 
     @Override
     public void onStart() {
@@ -38,10 +41,24 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        //upcomingTripsViewModel = new ViewModelProvider(this).get(UpcomingTripsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_upcomingtrips, container, false);
+//        final TextView textView = root.findViewById(R.id.text_upcomingtrips);
+//        upcomingTripsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
 
 
+            tripDao = TripDatabase.getInstance(getContext()).getTripDao();
+
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
         rv = root.findViewById(R.id.recyclerView);
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
+
 
         return root;
     }
@@ -54,6 +71,10 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
     @Override
     public void onDeleteIconClicked(int position) {
+
+
+        tripDao.deleteTrip(trips.get(position));
+
 
     }
 

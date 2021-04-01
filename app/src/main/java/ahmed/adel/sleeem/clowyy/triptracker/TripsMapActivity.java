@@ -1,6 +1,7 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import java.util.List;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripCell;
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.TripPoints;
+import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class TripsMapActivity extends AppCompatActivity  {
 
@@ -38,6 +40,12 @@ public class TripsMapActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trips_map);
+
+        Intent intent = new Intent(getBaseContext(), MyService.class);
+
+        stopService(intent);
+
+
 
         googleMapsManager = GoogleMapsManager.getInstance(this);
 
