@@ -45,8 +45,8 @@
     <string name="Snooze">Snooze</string>
     <string name="tripDestination">tripDestination</string>
     <string name="tripSource">source</string>
-    <string name="tripDate">tripDate</string>
-    <string name="tripTime">tripTime</string>
+    <string name="tripDate">Date</string>
+    <string name="tripTime">Time</string>
     <string name="start">Start</string>
     <string name="username">UserName</string>
 
@@ -88,7 +88,11 @@
     <string name="completeFieldsMSG">Please complete all fields</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="duration">Duration</string>
+    <string name="distance">Distance</string>
+    <string name="avgSpeed">Avg Speed</string>
+    <string name="shownotes">Show Notes</string>
+    <string name="okbtn">Ok</string>
 
-    <string name="logoutMSG">Are you sure you want to logout ?</string>
 
 </resources>

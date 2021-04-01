@@ -68,13 +68,6 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
             holder.tripTypeBtn.setBackgroundResource(R.drawable.ic_rounded);
         }
 
-        holder.startBtn.setOnClickListener(v -> {
-            GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(context);
-            googleMapsManager.requestPermission();
-            if(googleMapsManager.locationPermission){
-                GoogleMapsManager.getInstance(context).launchGoogleMaps(trip.getTripDestination());
-            }
-        });
     }
 
     @Override

@@ -127,6 +127,10 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         String imgURL = googleMapsManager.getLocationImageURL(txtEndPoint.getText().toString());
                         TripExtraInfo tripExtraInfo = googleMapsManager.getTripExtraInfo(txtStartPoint.getText().toString(), txtEndPoint.getText().toString());
 
+                        if(tripExtraInfo == null){
+                            tripExtraInfo = new TripExtraInfo("N/A", "N/A");
+                        }
+
 
                         Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
                                 rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
@@ -369,7 +373,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 type=3;
                 roundTripDialog.dismiss();
             }
-
+            else{
+                Toast.makeText(getBaseContext(), getString(R.string.completeFieldsMSG), Toast.LENGTH_LONG).show();
+            }
 
         });
 
