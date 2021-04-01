@@ -22,6 +22,22 @@ public interface TripDao {
     List<Trip> selectAllTrips();
 
 
+    @Query("select * from TRIPS  where tripMaker = :user")
+    List<Trip> selectAllTrips(String user);
+
+    @Query("select * from TRIPS  where tripId = :tripIdentifier")
+    List<Trip> selectTripById(int tripIdentifier);
+
+
+    @Query("select * from TRIPS  where tripStatus = :status")
+    List<Trip> selectGoingTrips(boolean status);
+
+
+
+
+
+
+
     @Update
     void updateTrip(Trip trip);
 

@@ -124,7 +124,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 StringBuilder oneWaysNote = new StringBuilder("");
                 StringBuilder roundNote = new StringBuilder("");
 
-                for (String note : tripNotes) oneWaysNote.append("0" + note + ",");
+                for (String note : tripNotes) oneWaysNote.append("0" + note + "Ω");
 
                 new Thread(new Runnable() {
                     @Override

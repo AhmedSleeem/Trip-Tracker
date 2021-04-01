@@ -83,6 +83,9 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         Intent details = new Intent(getContext(), TripActivity.class);
         startActivity(details);
 
+        tripDao.insertTrip((Trip[]) trips.toArray());
+
+
     }
 
     @Override

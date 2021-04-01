@@ -202,6 +202,11 @@ public class MainActivity extends AppCompatActivity {
     public void logout(final Activity activity) {
 
 
+
+
+
+
+
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         //set title
@@ -322,6 +327,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    List<String> excludeNotes(String note){
+        String[] strings = note.split(",");
+        List<String>result = new ArrayList<>();
+        for(int indx=0;indx<strings.length-1;++indx){
+
+
+            result.add(strings[indx].substring(1));
+        }
+
+        return result;
     }
 
 }
