@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +35,8 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     @Override
     public void onStart() {
         super.onStart();
-        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips();
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips(userID);
 
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));

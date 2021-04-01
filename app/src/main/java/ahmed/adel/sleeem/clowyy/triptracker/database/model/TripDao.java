@@ -12,6 +12,7 @@ import java.util.List;
 @Dao
 public interface TripDao {
 
+
     @Insert
     void insertTrip(Trip ... trip);
 
@@ -21,6 +22,9 @@ public interface TripDao {
     @Query("select * from TRIPS ")
     List<Trip> selectAllTrips();
 
+
+    @Query("select * from TRIPS  where tripMaker = :user")
+    List<Trip> selectAllTrips(String user);
 
     @Update
     void updateTrip(Trip trip);
