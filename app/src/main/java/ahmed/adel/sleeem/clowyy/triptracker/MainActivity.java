@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //initialize trip activity intent
                 Intent trip  = new Intent(MainActivity.this,TripActivity.class);
+                trip.putExtra("isEdit", false);
                 startActivity(trip);
             }
         });

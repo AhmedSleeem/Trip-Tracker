@@ -98,5 +98,8 @@
     <string name="addNote">Add</string>
     <string name="show_route">Show Route</string>
 
+    <string name="editnotesBtn">Edit Notes</string>
+    <string name="editbtn">Edit</string>
+
 
 </resources>

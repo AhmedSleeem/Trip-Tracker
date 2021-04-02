@@ -138,8 +138,10 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
     @Override
     public void onEditIconClicked(int position) {
-        Intent details = new Intent(getContext(), TripActivity.class);
-        startActivity(details);
+        Intent edit = new Intent(getContext(), TripActivity.class);
+        edit.putExtra("isEdit", true);
+        edit.putExtra("tripID", trips.get(position).getTripId());
+        startActivity(edit);
 
     }
 

@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -62,7 +63,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     EditText txtTripName, txtStartPoint, txtEndPoint, txtRepeatingNumber;
     RadioButton rbOneWay, rbRoundTrip;
 
-    Button timeBtn, dateBtn;
+    Button timeBtn, dateBtn,addNotesBtn;
+    TextView tripType;
 
     Dialog roundTripDialog, notesDialog;
 
@@ -89,13 +91,15 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     private String calDaterounded = "";
     private String timeTxtrounded = "";
     private int type;
+    private boolean isEdit = false;
+    String tripID = null;
+    Trip trip;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
-
         initView();
 
         roundTripDialog = new Dialog(this);
@@ -113,6 +117,39 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
 
         calendar = Calendar.getInstance();
+
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
+
+        if(isEdit){
+            tripID = getIntent().getStringExtra("tripID");
+            trip = tripDao.selectTripById(tripID);
+            txtTripName.setText(trip.getTripTitle());
+            txtStartPoint.setText(trip.getTripSource());
+            txtEndPoint.setText(trip.getTripDestination());
+            tripType.setVisibility(View.GONE);
+            rbOneWay.setVisibility(View.GONE);
+            rbRoundTrip.setVisibility(View.GONE);
+            btnAddTrip.setText(getString(R.string.editbtn));
+            addNotesBtn.setText(getString(R.string.editnotesBtn));
+            addNotesBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_editnote,0,0,0);
+            if(trip.getTripRepeatingType().equals(""))
+            {
+                swtchRepeat.setChecked(false);
+            }
+            else{
+                swtchRepeat.setChecked(true);
+                repeatingSpinner.setVisibility(View.VISIBLE);
+            }
+
+            tripNotes = excludeNotes(trip.getTripNotes());
+            if(tripNotes== null){
+                tripNotes = new ArrayList<>();
+            }
+            timeTxt = trip.getTripTime();
+            calDate = trip.getTripDate();
+
+
+        }
 
         findViewById(R.id.btnTripAdding).setOnClickListener(v -> {
 
@@ -344,8 +381,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         });
 
 
-        findViewById(R.id.btnAddNotes).setOnClickListener(v -> {
-            showNotesDialog(tripNotes);
+        addNotesBtn.setOnClickListener(v -> {
+                showNotesDialog(tripNotes);
         });
     }
 
@@ -518,6 +555,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         txtEndPoint = findViewById(R.id.txtBackEndPoint);
         txtRepeatingNumber = findViewById(R.id.txtRepeatingNumber);
         swtchRepeat = findViewById(R.id.swtchRepeating);
+        tripType = findViewById(R.id.tripTypeTxt);
+        addNotesBtn = findViewById(R.id.btnAddNotes);
 
         repeatingSpinner = findViewById(R.id.repeatingSpinner);
         repeatingAdapter = ArrayAdapter.createFromResource(this, R.array.repeating_array, android.R.layout.simple_spinner_item);
@@ -600,6 +639,19 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             Status status = Autocomplete.getStatusFromIntent(data);
             Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    List<String> excludeNotes(String note){
+        if(note.equals("")){
+            return null;
+        }
+        String[] strings = note.split("Ω");
+        List<String>result = new ArrayList<>();
+        for(int indx=0;indx<strings.length;++indx){
+            result.add(strings[indx].substring(1));
+        }
+
+        return result;
     }
 
 
