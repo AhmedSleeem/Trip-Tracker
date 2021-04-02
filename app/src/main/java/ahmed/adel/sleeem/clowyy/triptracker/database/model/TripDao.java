@@ -22,6 +22,8 @@ public interface TripDao {
     @Query("select * from TRIPS ")
     List<Trip> selectAllTrips();
 
+    @Query("select * from TRIPS  where tripMaker = :user")
+    List<Trip> selectAllTrips(String user);
 
     @Query("select * from TRIPS  where tripMaker = :user and tripStatus = :tripss")
     List<Trip> selectAllTrips(String user,boolean tripss);

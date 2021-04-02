@@ -121,7 +121,7 @@ public class MyService extends Service {
         //customView.setImageViewBitmap(R.id.photo, NotificationImageManager().getImageBitmap(intent.getStringExtra("user_thumbnail_image")))
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent hungupPendingIntent = PendingIntent.getBroadcast(this, 0, hungupIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent answerPendingIntent = PendingIntent.getActivity(this, 0, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         customView.setOnClickPendingIntent(R.id.btnAnswer, answerPendingIntent);
         customView.setOnClickPendingIntent(R.id.btnDecline, hungupPendingIntent);
 
@@ -144,6 +144,7 @@ public class MyService extends Service {
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             notification.setCustomContentView(customView);
             notification.setCustomBigContentView(customView);
+           // notification.setAutoCancel(true);
             startForeground(1124, notification.build());
         } else {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this);

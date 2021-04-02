@@ -54,7 +54,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips(userID,false);
 
-        if(trips.size()==0){
+        if(TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips(userID).size()==0){
             getUserTrips(userID);
         }
 

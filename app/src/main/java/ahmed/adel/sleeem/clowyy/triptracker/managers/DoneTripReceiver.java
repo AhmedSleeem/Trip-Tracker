@@ -19,7 +19,7 @@ public class DoneTripReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        //context.stopService(intent);
         String destination = intent.getStringExtra("destination");
         String tripId = intent.getStringExtra("TripId");
 
@@ -39,6 +39,7 @@ public class DoneTripReceiver extends BroadcastReceiver {
         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
+        //mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(mapIntent);
 
