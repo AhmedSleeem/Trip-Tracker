@@ -29,7 +29,6 @@ public class TripsMapActivity extends AppCompatActivity  {
     private static final String TAG = "TripsMapActivity";
 
     GoogleMapsManager googleMapsManager;
-    private ImageView myLocationImageView;
 
     private List<TripCell> tripCellList;
 
@@ -45,8 +44,6 @@ public class TripsMapActivity extends AppCompatActivity  {
 
         stopService(intent);
 
-
-
         googleMapsManager = GoogleMapsManager.getInstance(this);
 
         googleMapsManager.requestPermission();
@@ -54,18 +51,10 @@ public class TripsMapActivity extends AppCompatActivity  {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(googleMapsManager);
-        View mapView = mapFragment.getView();
-
-        myLocationImageView = findViewById(R.id.myLocationImage);
 
         googleMapsManager.tripPointsList = new ArrayList<>();
         tripCellList = googleMapsManager.tripPointsList;
 
-//
-//        Trip(String tripSource, String tripTitle, String tripDestination,
-//        boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker,
-//                String tripDate, String tripTime, String tripImage, boolean tripStatus)
-//
         Trip trip1 = new Trip( "Kafr El-Shaikh, Qism Kafr El-Shaikh, Kafr Al Sheikh","new trip", "Alexandria", false, "A", "No Notes", "13", "", "","",false, "", "", "");
         Trip trip2 = new Trip( "Alexandria","new ", "Cairo", false, "D", "No Notes", "13", "", "","",false, "", "", "");
         Trip trip3 = new Trip( "Cairo","", "Marsa Matruh, Mersa Matruh", false, "D", "No Notes", "13", "", "","",false, "", "", "");
@@ -83,40 +72,6 @@ public class TripsMapActivity extends AppCompatActivity  {
 
         lastTripsDialog = new Dialog(this);
         lastTripsDialog.setContentView(R.layout.last_trips_dialog);
-
-        findViewById(R.id.btnGoToMaps).setOnClickListener(v->{
-            // https://maps.googleapis.com/maps/api/directions/json?origin=31.110659299999995,30.938779900000004&destination=31.2000924,29.9187387&key=AIzaSyDVh2YvCYg-Mcjn-pfEIxeth4Ey9il9vFA
-
-            /*
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    TripExtraInfo tripExtraInfo = getTripExtraInfo(tripPointsList.get(3).start, tripPointsList.get(3).end);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(getApplicationContext(), "Distance: "+ tripExtraInfo.getDistance() + ", Duration: " + tripExtraInfo.getDuration(), Toast.LENGTH_LONG).show();
-                            // 542    7,12
-                        }
-                    });
-                }
-            }).start();
-            */
-
-
-
-            new Thread((new Runnable() {
-                @Override
-                public void run() {
-                    Bitmap locationImage = googleMapsManager.getLocationPhoto("Marsa Matruh, Mersa Matruh");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myLocationImageView.setImageBitmap(locationImage);
-                        }
-                    });
-                }
-            })).start();
-        });
 
         findViewById(R.id.fbtnLastTrips).setOnClickListener(v->{
             RecyclerView rvLastTrips = lastTripsDialog.findViewById(R.id.rvLastTrips);

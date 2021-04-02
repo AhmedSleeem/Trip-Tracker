@@ -309,8 +309,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private void deleteAccount(final Activity activity)
