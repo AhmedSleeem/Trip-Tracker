@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -122,7 +123,12 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                tripDao.deleteTrip(trips.get(position));
+                String tripID = trips.get(position).getTripId();
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                trips.remove(position);
+                tripDao.deleteTripId(tripID);
+                FirebaseDatabase.getInstance().getReference("trips").child(userID).child(tripID).removeValue();
+                rv.getAdapter().notifyDataSetChanged();
             }
         });
         //negative no button
@@ -139,8 +145,9 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     @Override
     public void onEditIconClicked(int position) {
         Intent details = new Intent(getContext(), TripActivity.class);
+        details.putExtra("isEdit", true);
+        details.putExtra("tripID", trips.get(position).getTripId());
         startActivity(details);
-
     }
 
     @Override

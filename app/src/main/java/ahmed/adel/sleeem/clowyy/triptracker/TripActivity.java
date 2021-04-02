@@ -73,6 +73,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     String repeatingType = "", repeatingTypeRound = "";
 
     private TripDao tripDao;
+    ListView lvNotes;
 
 
     Trip tripRounded;
@@ -90,11 +91,23 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     private String timeTxtrounded = "";
     private int type;
 
+    private boolean isEdit = false;
+    String tripID = null;
+    Trip trip;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
+
+        tripDao = TripDatabase.getInstance(getBaseContext()).getTripDao();
+
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
+        if(isEdit){
+            tripID = getIntent().getStringExtra("tripID");
+            trip = tripDao.selectTripById(tripID);
+        }
 
         initView();
 
@@ -105,8 +118,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         notesDialog.setContentView(R.layout.notes_dialog);
         roundTripDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner_view));
         notesDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner_view));
-
-        tripDao = TripDatabase.getInstance(getBaseContext()).getTripDao();
 
         tripNotes = new ArrayList<>();
         roundTripNotes = new ArrayList<>();
@@ -350,14 +361,31 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     }
 
     private void showNotesDialog(List<String> notes) {
-        ListView lvNotes = notesDialog.findViewById(R.id.lvShowNotes);
+        lvNotes = notesDialog.findViewById(R.id.lvShowNotes);
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notes);
 
         lvNotes.setAdapter(stringArrayAdapter);
 
-        lvNotes.setOnItemLongClickListener((parent, view, position, id) -> {
-            showDeleteDialog();
-            return true;
+        lvNotes.setOnItemClickListener((parent, view, position, id) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(TripActivity.this);
+            builder.setTitle(getString(R.string.deleteMSGtitle));
+            builder.setMessage(getString(R.string.deleteMSG));
+
+            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    notes.remove(position);
+                    stringArrayAdapter.notifyDataSetChanged();
+                }
+            });
+
+            builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
         });
 
         EditText txtNote = notesDialog.findViewById(R.id.txtNote);
@@ -381,7 +409,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
     }
 
-    private void showDeleteDialog(){
+    private void showDeleteDialog(List<String> notesList, int position){
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         //set title
@@ -392,7 +420,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //action
+                notesList.remove(position);
+                lvNotes.getAdapter().notify();
             }
         });
         //negative no button

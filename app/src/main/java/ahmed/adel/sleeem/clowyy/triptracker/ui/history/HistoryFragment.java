@@ -54,14 +54,9 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
         tripDao = tripDatabase.getTripDao();
 
         tripList = tripDao.selectAllTrips();
-//
-//        syncDataWithFirebaseDatabase(tripList);
-//
-
 
         historyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         historyRecyclerView.setAdapter(new HistoryAdapter(getContext(), tripList, this));
-
 
         return view;
     }
@@ -84,10 +79,7 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
 
     @Override
     public void onDeleteIconClicked(int position) {
-        Toast.makeText(getContext(), position + "", Toast.LENGTH_SHORT).show();
-
         deleteAlert(this, position);
-
     }
 
     @Override
@@ -99,8 +91,6 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
 
 
     public void deleteAlert(final HistoryFragment fragment, int position) {
-
-
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //set title
@@ -111,18 +101,12 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //call method logout in session class
-                //session.logoutUser();
-                if (position < tripList.size()) {
-
-                    tripDao.deleteTrip(tripList.get(position));
-                    tripList.remove(position);
-
-                    historyRecyclerView.setAdapter(new HistoryAdapter(getContext(), tripList, fragment));
-
-
-                }
-
+                String tripID = tripList.get(position).getTripId();
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                tripList.remove(position);
+                tripDao.deleteTripId(tripID);
+                FirebaseDatabase.getInstance().getReference("trips").child(userID).child(tripID).removeValue();
+                historyRecyclerView.getAdapter().notifyDataSetChanged();
             }
         });
         //negative no button

@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
-    card_view:cardElevation="25dp"
-    card_view:cardCornerRadius="10dp"
-    card_view:shapeAppearance="@color/purple_200"
-    android:layout_columnWeight="1"
     android:layout_rowWeight="1"
+    android:layout_columnWeight="1"
+    android:layout_margin="6dp"
     android:backgroundTint="@color/white"
     android:theme="@style/Theme.MaterialComponents.Light"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    card_view:cardCornerRadius="10dp"
+    card_view:cardElevation="25dp"
+    card_view:shapeAppearance="@color/purple_200">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,8 +51,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="Triptitle"
-                    android:textColor="@color/teal_200"
                     android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textColor="@color/teal_200"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toStartOf="@+id/tripType"
                     card_view:layout_constraintStart_toStartOf="parent"
@@ -66,6 +65,7 @@
                     android:layout_height="30dp"
 
                     android:background="@drawable/ic_oneway"
+                    app:backgroundTint="@color/purple_200"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintTop_toTopOf="parent"
@@ -77,11 +77,12 @@
                 android:id="@+id/startTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="fill_vertical"
                 android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
-                android:text="source"
                 android:drawableLeft="@drawable/ic_source"
+                android:gravity="center_vertical"
 
+                android:text="source"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="@color/purple_500" />
 
@@ -89,11 +90,12 @@
                 android:id="@+id/endTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="destination"
                 android:drawableLeft="@drawable/ic_destination"
 
+                android:text="destination"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="@color/purple_200" />
 
@@ -108,8 +110,9 @@
                     android:id="@+id/dateTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="date"
                     android:drawableLeft="@drawable/ic_date"
+                    android:gravity="center_vertical"
+                    android:text="date"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary"
                     card_view:layout_constraintBottom_toBottomOf="parent"
@@ -120,8 +123,9 @@
                     android:id="@+id/timeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="time"
                     android:drawableLeft="@drawable/ic_time"
+                    android:gravity="center_vertical"
+                    android:text="time"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary"
                     card_view:layout_constraintBottom_toBottomOf="parent"
@@ -141,8 +145,10 @@
                     android:id="@+id/distanceTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="distance"
                     android:drawableLeft="@drawable/ic_distance"
+                    android:drawablePadding="2dp"
+                    android:gravity="center_vertical"
+                    android:text="distance"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary"
                     card_view:layout_constraintEnd_toStartOf="@+id/durationTxt"
@@ -154,9 +160,10 @@
                     android:id="@+id/durationTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="duration"
                     android:drawableLeft="@drawable/ic_duration"
+                    android:drawablePadding="2dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="duration"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary"
                     card_view:layout_constraintEnd_toEndOf="parent"
@@ -168,11 +175,12 @@
                     android:id="@+id/averageSpeedTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:gravity="right"
-                    android:text="avg_speed"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:drawableLeft="@drawable/ic_speed"
+                    android:drawablePadding="2dp"
+                    android:gravity="right|center_vertical"
+                    android:text="avg_speed"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary"
                     card_view:layout_constraintEnd_toEndOf="parent"
@@ -201,8 +209,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/ic_delete"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp" />
+                app:backgroundTint="@color/quantum_googred500" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editIconBtn"
@@ -210,12 +217,13 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="17dp"
 
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="17dp"
+                android:layout_marginEnd="17dp"
+                android:layout_marginRight="17dp"
                 android:background="@drawable/ic_edit"
+                app:backgroundTint="@color/purple_200"
                 tools:ignore="RtlCompat" />
 
             <com.google.android.material.button.MaterialButton
@@ -223,23 +231,24 @@
                 android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginRight="22dp"
                 android:background="@drawable/ic_details"
+                app:backgroundTint="@color/purple_200"
                 tools:ignore="RtlCompat" />
 
             <Button
                 android:id="@+id/startBtn"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/purple_200"
-                android:textColor="@color/white"
-                android:textAllCaps="false"
-                android:textSize="17dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="13dp"
                 android:layout_marginRight="13dp"
-                android:text="@string/start" />
+                android:backgroundTint="@color/purple_200"
+                android:text="@string/start"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
         </LinearLayout>
 
     </LinearLayout>

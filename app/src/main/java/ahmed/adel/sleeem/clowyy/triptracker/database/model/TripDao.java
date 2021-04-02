@@ -35,6 +35,6 @@ public interface TripDao {
     @Query("delete from trips where tripId = :id ")
     void deleteTripId(String id);
 
-
-
+    @Query("delete from trips where tripMaker = :user ")
+    void deleteUserTrips(String user);
 }

@@ -9,6 +9,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -57,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
@@ -175,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationView.getMenu().findItem(R.id.nav_language).setOnMenuItemClickListener(menuItem -> {
-            //add change lang function
+            setLocale(this, "ar");
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -186,6 +189,19 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public void setLocale(Activity activity, String languageCode) {
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = activity.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+        Intent refresh = new Intent(activity, MainActivity.class);
+        finish();
+        startActivity(refresh);
     }
 
 
@@ -204,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout(final Activity activity) {
-
 
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -323,10 +338,11 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                FirebaseDatabase.getInstance().getReference("trips").child(uID).removeValue();
-                FirebaseDatabase.getInstance().getReference("users").child(uID).removeValue();
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                FirebaseDatabase.getInstance().getReference("trips").child(userID).removeValue();
+                FirebaseDatabase.getInstance().getReference("users").child(userID).removeValue();
                 FirebaseAuth.getInstance().getCurrentUser().delete();
+                TripDatabase.getInstance(getApplicationContext()).getTripDao().deleteUserTrips(userID);
                 session.logoutUser();
                 finish();
             }

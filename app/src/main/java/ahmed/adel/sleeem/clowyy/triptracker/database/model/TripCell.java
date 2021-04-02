@@ -11,4 +11,10 @@ public class TripCell {
         this.trip = trip;
         this.tripPoints = tripPoints;
     }
+
+    public TripCell(Trip trip, TripPoints tripPoints, boolean isSelected) {
+        this.trip = trip;
+        this.tripPoints = tripPoints;
+        this.isSelected = isSelected;
+    }
 }
