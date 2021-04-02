@@ -26,6 +26,7 @@
             android:title="@string/menu_sync" />
         <item
             android:id="@+id/nav_language"
+            android:icon="@drawable/ic_language"
             android:title="@string/menu_language" />
     </group>
 

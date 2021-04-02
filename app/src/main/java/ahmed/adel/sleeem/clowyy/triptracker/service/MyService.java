@@ -18,8 +18,11 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 
+import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.TripsMapActivity;
@@ -83,7 +86,10 @@ public class MyService extends Service {
         String destination = intent.getStringExtra("Destination");
         String date = intent.getStringExtra("Date");
 
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
+        LatLng location = GoogleMapsManager.getInstance(getApplicationContext()).getLocationFromAddress(destination);
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
+
+       // Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
 

@@ -81,4 +81,11 @@ dependencies {
     // Circle Image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    //Add Library
+    implementation 'com.github.txusballesteros:bubbles-for-android:develop-SNAPSHOT'
+    implementation 'com.nex3z:notification-badge:1.0.4'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
+
 }

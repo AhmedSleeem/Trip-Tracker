@@ -93,5 +93,10 @@
     <string name="shownotes">Show Notes</string>
     <string name="okbtn">Ok</string>
 
+    <string name="add">Add Bubble</string>
+    <string name="save">Save</string>
+    <string name="addNote">Add</string>
+    <string name="show_route">Show Route</string>
+
 
 </resources>

@@ -1,14 +1,20 @@
 package ahmed.adel.sleeem.clowyy.triptracker.database.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NonNls;
+
+import java.util.UUID;
+
 @Entity(tableName = "trips")
 public class Trip {
 
-    @PrimaryKey(autoGenerate = true)
-    int tripId;
+    @NonNull
+    @PrimaryKey
+    String tripId;
 
     @ColumnInfo
     String tripSource;
@@ -111,6 +117,7 @@ public class Trip {
     public Trip(String tripSource, String tripTitle, String tripDestination,
                 boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker,
                 String tripDate, String tripTime, String tripImage, boolean tripStatus, String tripDistance, String tripDuration, String tripAvgSpeed) {
+        this.tripId = UUID.randomUUID().toString();
         this.tripSource = tripSource;
         this.tripTitle = tripTitle;
         this.tripDestination = tripDestination;
@@ -130,11 +137,11 @@ public class Trip {
     public Trip() {
     }
 
-    public int getTripId() {
+    public String getTripId() {
         return tripId;
     }
 
-    public void setTripId(int tripId) {
+    public void setTripId(String tripId) {
         this.tripId = tripId;
     }
 

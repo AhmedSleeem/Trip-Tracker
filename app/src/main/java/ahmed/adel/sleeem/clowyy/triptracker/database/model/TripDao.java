@@ -27,13 +27,13 @@ public interface TripDao {
     List<Trip> selectAllTrips(String user);
 
     @Query("select * from TRIPS  where tripId = :tripIdentifier")
-    Trip selectTripById(int tripIdentifier);
+    Trip selectTripById(String tripIdentifier);
 
     @Update
     void updateTrip(Trip trip);
 
     @Query("delete from trips where tripId = :id ")
-    void deleteTripId(int id);
+    void deleteTripId(String id);
 
 
 

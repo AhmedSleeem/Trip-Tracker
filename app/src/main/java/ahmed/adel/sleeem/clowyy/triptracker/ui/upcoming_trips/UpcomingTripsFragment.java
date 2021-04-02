@@ -70,7 +70,6 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
                 if(userTrips != null && userTrips.size() > 0) {
                     trips = userTrips;
                     rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,UpcomingTripsFragment.this));
-
                 }
             }
 
@@ -79,7 +78,6 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
             }
         });
-
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
