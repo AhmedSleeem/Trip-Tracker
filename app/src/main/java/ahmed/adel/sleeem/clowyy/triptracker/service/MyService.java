@@ -85,29 +85,30 @@ public class MyService extends Service {
         String title = intent.getStringExtra("Title");
         String source = intent.getStringExtra("Source");
         String destination = intent.getStringExtra("Destination");
-        String date = intent.getStringExtra("Date");
+        String tripId = intent.getStringExtra("Date");
 
-        LatLng location = GoogleMapsManager.getInstance(getApplicationContext()).getLocationFromAddress(destination);
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
-
-       // Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
+//        LatLng location = GoogleMapsManager.getInstance(getApplicationContext()).getLocationFromAddress(destination);
+//        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
+//
+//       // Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
+//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
 
 
 
         hungupIntent.putExtra("destination",destination);
-        hungupIntent.putExtra("date",date);
+        hungupIntent.putExtra("date",tripId);
         hungupIntent.putExtra("source",source);
         hungupIntent.putExtra("Title",title);
 
 
 
 
-        Intent answerIntent = new Intent(getApplication(), DoneTripReceiver.class);
+        Intent answerIntent = new Intent(getApplicationContext(), DoneTripReceiver.class);
 
         answerIntent.putExtra("destination",destination);
-        answerIntent.putExtra("date",date);
+        answerIntent.putExtra("TripId",tripId);
+
 
 
 

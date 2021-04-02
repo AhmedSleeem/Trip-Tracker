@@ -26,13 +26,13 @@ public class MyWorker extends Worker {
         String title = getInputData().getString("Title");
         String source = getInputData().getString("Source");
         String destination = getInputData().getString("Destination");
-        String date = getInputData().getString("Date");
+        String tripId = getInputData().getString("Date");
 
         Intent intent1 = new Intent(context,MyService.class);
         intent1.putExtra("Title", title);
         intent1.putExtra("Source", source);
         intent1.putExtra("Destination", destination);
-        intent1.putExtra("Date", date);
+        intent1.putExtra("Date", tripId);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent1);

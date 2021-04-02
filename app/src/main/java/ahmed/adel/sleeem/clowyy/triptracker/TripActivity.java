@@ -63,7 +63,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     EditText txtTripName, txtStartPoint, txtEndPoint, txtRepeatingNumber;
     RadioButton rbOneWay, rbRoundTrip;
 
-    Button timeBtn, dateBtn,addNotesBtn;
+    Button timeBtn, dateBtn, addNotesBtn;
     TextView tripType;
 
     Dialog roundTripDialog, notesDialog;
@@ -120,7 +120,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         isEdit = getIntent().getBooleanExtra("isEdit", false);
 
-        if(isEdit){
+        if (isEdit) {
             tripID = getIntent().getStringExtra("tripID");
             trip = tripDao.selectTripById(tripID);
             txtTripName.setText(trip.getTripTitle());
@@ -131,18 +131,16 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             rbRoundTrip.setVisibility(View.GONE);
             btnAddTrip.setText(getString(R.string.editbtn));
             addNotesBtn.setText(getString(R.string.editnotesBtn));
-            addNotesBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_editnote,0,0,0);
-            if(trip.getTripRepeatingType().equals(""))
-            {
+            addNotesBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_editnote, 0, 0, 0);
+            if (trip.getTripRepeatingType().equals("")) {
                 swtchRepeat.setChecked(false);
-            }
-            else{
+            } else {
                 swtchRepeat.setChecked(true);
                 repeatingSpinner.setVisibility(View.VISIBLE);
             }
 
             tripNotes = excludeNotes(trip.getTripNotes());
-            if(tripNotes== null){
+            if (tripNotes == null) {
                 tripNotes = new ArrayList<>();
             }
             timeTxt = trip.getTripTime();
@@ -156,7 +154,13 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             if (calDate.length() > 0 && timeTxt.length() > 0 && txtStartPoint.getText().length() > 0 && txtEndPoint.getText().length() > 0
                     && txtTripName.getText().length() > 0) {
 
-               // Toast.makeText(getBaseContext(), "clicked", Toast.LENGTH_SHORT).show();
+
+                if (isEdit) {
+                    Intent intent = new Intent(getApplicationContext(), MyService.class);
+                    stopService(intent);
+                }
+
+                // Toast.makeText(getBaseContext(), "clicked", Toast.LENGTH_SHORT).show();
                 StringBuilder oneWaysNote = new StringBuilder("");
                 StringBuilder roundNote = new StringBuilder("");
 
@@ -171,7 +175,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         String imgURL = googleMapsManager.getLocationImageURL(txtEndPoint.getText().toString());
                         TripExtraInfo tripExtraInfo = googleMapsManager.getTripExtraInfo(txtStartPoint.getText().toString(), txtEndPoint.getText().toString());
 
-                        if(tripExtraInfo == null){
+                        if (tripExtraInfo == null) {
                             tripExtraInfo = new TripExtraInfo("N/A", "N/A");
                         }
 
@@ -181,19 +185,24 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 //                        calDate, timeTxt, "", false);
 //                tripDao.insertTrip(trip);
 
-                        Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
+                        trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
                                 rbRoundTrip.isChecked(), swtchRepeat.isChecked() ? repeatingType : "", oneWaysNote.toString(),
                                 FirebaseAuth.getInstance().getCurrentUser().getUid(),
                                 calDate, timeTxt, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(),
                                 tripExtraInfo.getAvgSpeed());
 
-                        tripDao.insertTrip(trip);
+
+                        if (isEdit) {
+                            tripDao.updateTrip(trip);
+                        } else {
+                            tripDao.insertTrip(trip);
+                        }
 
                         Data inputData = new Data.Builder()
                                 .putString("Title", trip.getTripTitle())
                                 .putString("Source", trip.getTripSource())
                                 .putString("Destination", trip.getTripDestination())
-                                .putString("Date", trip.getTripDate()).build();
+                                .putString("Date", trip.getTripId()).build();
 
 
                         Calendar calendarmsd = Calendar.getInstance();
@@ -337,8 +346,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
                 finish();
 
-            }
-          else
+            } else
                 Toast.makeText(getBaseContext(), getString(R.string.completeFieldsMSG), Toast.LENGTH_LONG).show();
 
 
@@ -357,7 +365,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         });
 
         rbRoundTrip.setOnClickListener(v -> {
-            type=5;
+            type = 5;
             showTripDialog();
         });
 
@@ -382,7 +390,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
 
         addNotesBtn.setOnClickListener(v -> {
-                showNotesDialog(tripNotes);
+            showNotesDialog(tripNotes);
         });
     }
 
@@ -418,7 +426,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
     }
 
-    private void showDeleteDialog(){
+    private void showDeleteDialog() {
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         //set title
@@ -480,7 +488,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                repeatingTypeRound = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase()+"1";
+                repeatingTypeRound = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase() + "1";
                 // Toast.makeText(TripActivity.this, repeatingType, Toast.LENGTH_SHORT).show();
             }
 
@@ -513,7 +521,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 //                tripRounded = new Trip(txtBackStartPoint.getText().toString(), txtBackTripName.getText().toString(), txtBackEndPoint.getText().toString(),
 //                        false, swtchRepeatingRound.isChecked() ? repeatingTypeRound : "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
 //                        calDaterounded, timeTxtrounded, "", false);
-                type=3;
+                type = 3;
                 roundTripDialog.dismiss();
             }
 
@@ -566,7 +574,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         repeatingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                repeatingType = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase()+"1";
+                repeatingType = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase() + "1";
             }
 
             @Override
@@ -623,8 +631,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         String date = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
 
 
-
-
         if (type != 5) calDate = date;
         else calDaterounded = date;
     }
@@ -644,13 +650,13 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         }
     }
 
-    List<String> excludeNotes(String note){
-        if(note.equals("")){
+    List<String> excludeNotes(String note) {
+        if (note.equals("")) {
             return null;
         }
         String[] strings = note.split("Ω");
-        List<String>result = new ArrayList<>();
-        for(int indx=0;indx<strings.length;++indx){
+        List<String> result = new ArrayList<>();
+        for (int indx = 0; indx < strings.length; ++indx) {
             result.add(strings[indx].substring(1));
         }
 
