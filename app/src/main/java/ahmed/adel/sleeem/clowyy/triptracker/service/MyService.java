@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -25,7 +24,6 @@ import java.io.IOException;
 import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
-import ahmed.adel.sleeem.clowyy.triptracker.TripsMapActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DoneTripReceiver;
 
@@ -114,15 +112,16 @@ public class MyService extends Service {
 
         // answerIntent.putExtra("Destination", destination);
 
-        if (intent.hasExtra("caller_text")) {
+        //if (intent.hasExtra("caller_text")) {
             answerIntent.putExtra("caller_text", intent.getStringExtra("caller_text"));
-            customView.setTextViewText(R.id.callType, intent.getStringExtra("caller_text"));
-        } else
+            customView.setTextViewText(R.id.txtDestination, destination);
             customView.setTextViewText(R.id.name, title);
+        //} else
+
         //customView.setImageViewBitmap(R.id.photo, NotificationImageManager().getImageBitmap(intent.getStringExtra("user_thumbnail_image")))
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent hungupPendingIntent = PendingIntent.getBroadcast(this, 0, hungupIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent answerPendingIntent = PendingIntent.getActivity(this, 0, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         customView.setOnClickPendingIntent(R.id.btnAnswer, answerPendingIntent);
         customView.setOnClickPendingIntent(R.id.btnDecline, hungupPendingIntent);
 
@@ -145,7 +144,7 @@ public class MyService extends Service {
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             notification.setCustomContentView(customView);
             notification.setCustomBigContentView(customView);
-            notification.addAction(1233,"Start",answerPendingIntent);
+           // notification.setAutoCancel(true);
             startForeground(1124, notification.build());
         } else {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this);

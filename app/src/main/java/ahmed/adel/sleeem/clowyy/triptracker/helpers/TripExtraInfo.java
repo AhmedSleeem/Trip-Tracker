@@ -49,6 +49,6 @@ public class TripExtraInfo {
 
         dur /= 60;
 
-        return String.format("%.2f", (dis/dur)) + " km/h";
+        return (int)(dis/dur) + " km/h";
     }
 }

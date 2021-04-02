@@ -80,8 +80,9 @@
                 android:layout_gravity="fill_vertical"
                 android:layout_marginTop="5dp"
                 android:drawableLeft="@drawable/ic_source"
-                android:gravity="center_vertical"
+                android:drawablePadding="2dp"
 
+                android:gravity="center_vertical"
                 android:text="source"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="@color/purple_500" />
@@ -95,6 +96,7 @@
                 android:layout_marginBottom="5dp"
                 android:drawableLeft="@drawable/ic_destination"
 
+                android:drawablePadding="2dp"
                 android:text="destination"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="@color/purple_200" />
@@ -111,6 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_date"
+                    android:drawablePadding="2dp"
                     android:gravity="center_vertical"
                     android:text="date"
                     android:textAppearance="?attr/textAppearanceBody2"
@@ -124,6 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_time"
+                    android:drawablePadding="2dp"
                     android:gravity="center_vertical"
                     android:text="time"
                     android:textAppearance="?attr/textAppearanceBody2"
