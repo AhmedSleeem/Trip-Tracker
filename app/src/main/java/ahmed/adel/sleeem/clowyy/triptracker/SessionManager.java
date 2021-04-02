@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.HashMap;
 
 public class SessionManager {
@@ -110,6 +113,9 @@ public class SessionManager {
         // Clearing all data from Shared Preferences
         editor.clear();
         editor.commit();
+
+        FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
 
         // After logout redirect user to Login Activity
         Intent i = new Intent(_context, Login.class);

@@ -63,7 +63,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     EditText txtTripName, txtStartPoint, txtEndPoint, txtRepeatingNumber;
     RadioButton rbOneWay, rbRoundTrip;
 
-    Button timeBtn, dateBtn, addNotesBtn;
+    Button timeBtn, dateBtn,addNotesBtn;
     TextView tripType;
 
     Dialog roundTripDialog, notesDialog;
@@ -75,6 +75,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     String repeatingType = "", repeatingTypeRound = "";
 
     private TripDao tripDao;
+    ListView lvNotes;
 
 
     Trip tripRounded;
@@ -100,6 +101,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
+
         initView();
 
         roundTripDialog = new Dialog(this);
@@ -395,14 +397,31 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     }
 
     private void showNotesDialog(List<String> notes) {
-        ListView lvNotes = notesDialog.findViewById(R.id.lvShowNotes);
+        lvNotes = notesDialog.findViewById(R.id.lvShowNotes);
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notes);
 
         lvNotes.setAdapter(stringArrayAdapter);
 
-        lvNotes.setOnItemLongClickListener((parent, view, position, id) -> {
-            showDeleteDialog();
-            return true;
+        lvNotes.setOnItemClickListener((parent, view, position, id) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(TripActivity.this);
+            builder.setTitle(getString(R.string.deleteMSGtitle));
+            builder.setMessage(getString(R.string.deleteMSG));
+
+            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    notes.remove(position);
+                    stringArrayAdapter.notifyDataSetChanged();
+                }
+            });
+
+            builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
         });
 
         EditText txtNote = notesDialog.findViewById(R.id.txtNote);
@@ -426,7 +445,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
     }
 
-    private void showDeleteDialog() {
+    private void showDeleteDialog(List<String> notesList, int position){
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         //set title
@@ -437,7 +456,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //action
+                notesList.remove(position);
+                lvNotes.getAdapter().notify();
             }
         });
         //negative no button
@@ -662,6 +682,4 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         return result;
     }
-
-
 }

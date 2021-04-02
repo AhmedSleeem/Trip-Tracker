@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -131,19 +132,12 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-
+                String tripID = trips.get(position).getTripId();
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 trips.remove(position);
-                    Log.i("handler", "onClick: "+trips.size());
-                    Trip trip = trips.get(position);
-                    tripDao.deleteTrip(trip);
-
-                    //rv.setAdapter(new HistoryAdapter(getContext(),trips, (OnRecyclerViewItemClickLister) UpcomingTripsFragment.this));
-
-
-
-
-
+                tripDao.deleteTripId(tripID);
+                FirebaseDatabase.getInstance().getReference("trips").child(userID).child(tripID).removeValue();
+                rv.getAdapter().notifyDataSetChanged();
             }
         });
         //negative no button
@@ -163,10 +157,6 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         edit.putExtra("isEdit", true);
         edit.putExtra("tripID", trips.get(position).getTripId());
         startActivity(edit);
-
-        tripDao.insertTrip((Trip[]) trips.toArray());
-
-
     }
 
     @Override

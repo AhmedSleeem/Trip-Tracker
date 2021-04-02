@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -98,7 +99,10 @@ public class TripDetailsActivity extends AppCompatActivity {
         });
 
         btnShowRoute.setOnClickListener(v->{
-
+            Intent intent = new Intent(this, TripsMapActivity.class);
+            intent.putExtra("Source", trip.getTripSource());
+            intent.putExtra("Destination", trip.getTripDestination());
+            startActivity(intent);
         });
     }
 

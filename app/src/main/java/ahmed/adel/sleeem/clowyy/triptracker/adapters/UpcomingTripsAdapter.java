@@ -109,8 +109,6 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
 
             deleteBtn.setOnClickListener(v->{
                 onUpcomingAdapterItemClicked.onDeleteIconClicked(getAdapterPosition());
-                trips.remove(getAdapterPosition());
-                notifyDataSetChanged();
             });
 
             viewBtn.setOnClickListener(v->{

@@ -114,6 +114,11 @@ public class Trip {
         this.tripImage = tripImage;
     }
 
+    public Trip(String tripSource, String tripDestination){
+        this.tripSource = tripSource;
+        this.tripDestination = tripDestination;
+    }
+
     public Trip(String tripSource, String tripTitle, String tripDestination,
                 boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker,
                 String tripDate, String tripTime, String tripImage, boolean tripStatus, String tripDistance, String tripDuration, String tripAvgSpeed) {

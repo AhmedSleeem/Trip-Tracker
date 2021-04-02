@@ -32,80 +32,29 @@ public class TripsMapActivity extends AppCompatActivity  {
 
     private List<TripCell> tripCellList;
 
-    Dialog lastTripsDialog;
-    private RecyclerView.Adapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trips_map);
 
-        Intent intent = new Intent(getBaseContext(), MyService.class);
+        String source = getIntent().getStringExtra("Source");
+        String destination = getIntent().getStringExtra("Destination");
 
-        stopService(intent);
-
-        googleMapsManager = GoogleMapsManager.getInstance(this);
+        googleMapsManager = GoogleMapsManager.getInstance(getApplicationContext());
 
         googleMapsManager.requestPermission();
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(googleMapsManager);
 
         googleMapsManager.tripPointsList = new ArrayList<>();
         tripCellList = googleMapsManager.tripPointsList;
 
-        Trip trip1 = new Trip( "Kafr El-Shaikh, Qism Kafr El-Shaikh, Kafr Al Sheikh","new trip", "Alexandria", false, "A", "No Notes", "13", "", "","",false, "", "", "");
-        Trip trip2 = new Trip( "Alexandria","new ", "Cairo", false, "D", "No Notes", "13", "", "","",false, "", "", "");
-        Trip trip3 = new Trip( "Cairo","", "Marsa Matruh, Mersa Matruh", false, "D", "No Notes", "13", "", "","",false, "", "", "");
-        Trip trip4 = new Trip( "Kafr El-Shaikh, Qism Kafr El-Shaikh, Kafr Al Sheikh","", "Military Area, Sidi Barrani", false, "A", "No Notes", "13", "", "","",false, "", "", "");
+        Trip trip = new Trip(source, destination);
 
-        TripPoints tripPoints1 = googleMapsManager.getTripPoints(trip1.getTripSource(), trip1.getTripDestination());
-        TripPoints tripPoints2 = googleMapsManager.getTripPoints(trip2.getTripSource(), trip2.getTripDestination());
-        TripPoints tripPoints3 = googleMapsManager.getTripPoints(trip3.getTripSource(), trip3.getTripDestination());
-        TripPoints tripPoints4 = googleMapsManager.getTripPoints(trip4.getTripSource(), trip4.getTripDestination());
+        TripPoints tripPoints = googleMapsManager.getTripPoints(trip.getTripSource(), trip.getTripDestination());
 
-        tripCellList.add(new TripCell(trip1, tripPoints1));
-        tripCellList.add(new TripCell(trip2, tripPoints2));
-        tripCellList.add(new TripCell(trip3, tripPoints3));
-        tripCellList.add(new TripCell(trip4, tripPoints4));
-
-        lastTripsDialog = new Dialog(this);
-        lastTripsDialog.setContentView(R.layout.last_trips_dialog);
-
-        findViewById(R.id.fbtnLastTrips).setOnClickListener(v->{
-            RecyclerView rvLastTrips = lastTripsDialog.findViewById(R.id.rvLastTrips);
-            rvLastTrips.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(lastTripsDialog.getContext());
-            linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-            rvLastTrips.setLayoutManager(linearLayoutManager);
-
-            adapter = new LastTripsAdapter(lastTripsDialog.getContext(), tripCellList);
-            rvLastTrips.setAdapter(adapter);
-
-            CheckBox cbSelectAll = lastTripsDialog.findViewById(R.id.cbSelectAll);
-            cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-                for (TripCell trip: tripCellList) {
-                    trip.isSelected = isChecked;
-                }
-
-                adapter.notifyDataSetChanged();
-            });
-
-            googleMapsManager.pauseCameraAnimation();
-
-            lastTripsDialog.setOnCancelListener(dialog -> {
-                googleMapsManager.resumeCameraAnimation();
-            });
-
-            lastTripsDialog.findViewById(R.id.btnShow).setOnClickListener(view->{
-                lastTripsDialog.dismiss();
-                googleMapsManager.startNavigate();
-            });
-
-            lastTripsDialog.show();
-        });
+        tripCellList.add(new TripCell(trip, tripPoints, true));
     }
 
     @Override
