@@ -21,14 +21,14 @@ public class DoneTripReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         String destination = intent.getStringExtra("destination");
-        String date = intent.getStringExtra("date");
+        String tripId = intent.getStringExtra("TripId");
 
         Log.i("Done receiver", "onReceive: "+destination);
 
 
         TripDao tripDao = TripDatabase.getInstance(context).getTripDao();
 
-        Trip trip = tripDao.selectTripByDate(date);
+        Trip trip = tripDao.selectTripById(tripId);
 
         trip.setTripStatus(true);
 
