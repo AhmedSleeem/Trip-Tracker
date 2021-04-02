@@ -19,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.LastTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripCell;
+import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.TripPoints;
 
 public class MapsFragment extends Fragment {
@@ -43,6 +46,8 @@ public class MapsFragment extends Fragment {
     Context context;
 
     private RecyclerView.Adapter adapter;
+
+    private List<Trip> tripList;
 
     @Override
     public void onStart() {
@@ -70,6 +75,18 @@ public class MapsFragment extends Fragment {
         googleMapsManager.tripPointsList = new ArrayList<>();
         tripCellList = googleMapsManager.tripPointsList;
 
+        tripList = TripDatabase.getInstance(context).getTripDao().selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid(),true);
+
+        if(tripList == null || tripList.size() == 0){
+            Toast.makeText(context, "No History Tips", Toast.LENGTH_SHORT).show();
+        }
+
+        for(Trip trip: tripList){
+            TripPoints tripPoints = googleMapsManager.getTripPoints(trip.getTripSource(), trip.getTripDestination());
+            tripCellList.add(new TripCell(trip, tripPoints));
+        }
+
+        /*
         Trip trip1 = new Trip( "Kafr El-Shaikh, Qism Kafr El-Shaikh, Kafr Al Sheikh","new trip", "Alexandria", false, "A", "No Notes", "13", "", "","",false, "", "", "");
         Trip trip2 = new Trip( "Alexandria","new ", "Cairo", false, "D", "No Notes", "13", "", "","",false, "", "", "");
         Trip trip3 = new Trip( "Cairo","", "Marsa Matruh, Mersa Matruh", false, "D", "No Notes", "13", "", "","",false, "", "", "");
@@ -90,6 +107,8 @@ public class MapsFragment extends Fragment {
         tripCellList.add(new TripCell(trip4, tripPoints4));
         tripCellList.add(new TripCell(trip5, tripPoints5));
         tripCellList.add(new TripCell(trip6, tripPoints6));
+
+        */
 
         lastTripsDialog = new Dialog(context);
         lastTripsDialog.setContentView(R.layout.last_trips_dialog);

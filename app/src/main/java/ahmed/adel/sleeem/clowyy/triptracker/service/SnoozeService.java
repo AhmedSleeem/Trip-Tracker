@@ -10,23 +10,16 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.IOException;
 
-import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
-import ahmed.adel.sleeem.clowyy.triptracker.TripsMapActivity;
-import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DoneTripReceiver;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.SnoozeCanclerBroadCast;
 
@@ -78,7 +71,7 @@ public class SnoozeService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        RemoteViews customView = new RemoteViews(getPackageName(), R.layout.dialog_notifier);
+        RemoteViews customView = new RemoteViews(getPackageName(), R.layout.dialog_notifier_snooze);
 
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
         Intent hungupIntent = new Intent(getApplicationContext(), SnoozeCanclerBroadCast.class);
@@ -108,11 +101,12 @@ public class SnoozeService extends Service {
 
         // answerIntent.putExtra("Destination", destination);
 
-        if (intent.hasExtra("caller_text")) {
+       // if (intent.hasExtra("caller_text")) {
             answerIntent.putExtra("caller_text", intent.getStringExtra("caller_text"));
-            customView.setTextViewText(R.id.callType, intent.getStringExtra("caller_text"));
-        } else
+            customView.setTextViewText(R.id.txtDestination, destination);
             customView.setTextViewText(R.id.name, title);
+      //  }
+
         //customView.setImageViewBitmap(R.id.photo, NotificationImageManager().getImageBitmap(intent.getStringExtra("user_thumbnail_image")))
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent hungupPendingIntent = PendingIntent.getBroadcast(this, 0, hungupIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -126,7 +120,7 @@ public class SnoozeService extends Service {
             // notificationChannel.setSound(Uri.parse("https://www.sm3na.com/audio/cf1dd6ba6b0f"), null);
             notificationManager.createNotificationChannel(notificationChannel);
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this, "IncomingCall");
-            notification.setContentTitle("title.equals(\"\")?\"no title\":title");
+            notification.setContentTitle(title);
             notification.setTicker("Call_STATUS");
             notification.setContentText(destination.equals("")?"no no ":destination);
             notification.setSmallIcon(R.drawable.ic_timer);
