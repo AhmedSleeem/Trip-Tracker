@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TripTracker</string>
+    <string name="app_name">سفاري</string>
     <string name="LBL_TRIP_NAME">"عنوان الرحلة "</string>
     <string name="LBL_START" translatable="false">نقطة التحرك</string>
     <string name="LBL_END" translatable="false">المقصد</string>
@@ -14,7 +14,6 @@
     <string name="RBTN_ROUND_TRIP" translatable="false">ذهاب وعودة</string>
     <string name="CANCEL" translatable="false">إلغاء</string>
     <string name="DONE" translatable="false">تم</string>
-    <string name="login" translatable="false">تسجيل الدخول</string>
     <string name="newuser" translatable="false">مستخدم جديد</string>
     <string name="register" translatable="false">سجل الأن</string>
     <string name="Email" translatable="false">البريد الإلكتروني</string>
@@ -43,4 +42,39 @@
     <string name="tripDate" translatable="false">تاريخ الرحلة</string>
     <string name="tripTime" translatable="false">وقت الرحلة</string>
     <string name="content_description_media" translatable="false">وصف الصورة</string>
+    <string name="menu_deleteAccount">حذف الحساب</string>
+    <string name="start">ابدأ</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="hint_email">رجاء ادخل البريد الإلكتروني</string>
+    <string name="hint_password">رجاء ادخل كلمة المرور</string>
+    <string name="LBL_REPEAT">إعادة</string>
+    <string name="hint_username">"رجاء ادخل اسم المستخدم "</string>
+    <string name="Add">إضافة</string>
+    <string name="deleteMSGtitle">حذف</string>
+    <string name="deleteMSG">هل أنت متاكد من أنك تريد الحذف؟</string>
+    <string name="yes">"نعم "</string>
+    <string name="no">لا</string>
+    <string name="mapsErrorMSG">"غير قادر على ايجاد الموقع "</string>
+    <string name="imageErrorMSG">غير قادر على ايجاد الصورة</string>
+    <string name="source">المصدر</string>
+    <string name="destination">الموؤل</string>
+    <string name="signinfailed">لم ينجح تسجيل الدخول</string>
+    <string name="authenticationSucceded">تم التحقق</string>
+    <string name="loginSucceded">تم تسجيل الدخول بنجاح</string>
+    <string name="wrongData">كلمة مرور خاظئة</string>
+    <string name="enterpasswordMSG">رجاء ادخل كلمة المرور</string>
+    <string name="enteremailMSG">رجاء ادخل البريد الإلكتروني</string>
+    <string name="logoutMSGtitle">"تسجيل الخروج "</string>
+    <string name="logoutMSG">هل انت متأكد انك تريد تسجيل الخروج؟</string>
+    <string name="dataSynced">تم مزامنة البيانات بنجاح</string>
+    <string name="authenticationFailed">فشل التحقق</string>
+    <string name="passwordErrorConditions">يجيب ان تكون كلمة المرور أطول من 6  احرف</string>
+    <string name="enterusernameMSG">ادخل اسم المستخدم</string>
+    <string name="completeFieldsMSG">تأكد من ان كل الحقول ممتلئة</string>
+    <string name="hello_blank_fragment">"مرحبا "</string>
+    <string name="duration">المدة</string>
+    <string name="distance">المسافة</string>
+    <string name="avgSpeed">السرعة المقدرة</string>
+    <string name="shownotes">إظهار الملاحظات</string>
+    <string name="okbtn">تم</string>
 </resources>

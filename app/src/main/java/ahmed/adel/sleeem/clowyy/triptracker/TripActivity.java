@@ -167,7 +167,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         WorkRequest uploadWorkRequest =
                                 new OneTimeWorkRequest.Builder(MyWorker.class)
                                         .setInputData(inputData)
-                                        .setInitialDelay(diff, TimeUnit.SECONDS)
+                                        .setInitialDelay(diff, TimeUnit.MILLISECONDS)
                                         .build();
                         WorkManager.getInstance(getApplication()).enqueue(uploadWorkRequest);
 
@@ -178,10 +178,10 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 }).start();
 
                 finish();
-                Intent intent = new Intent(this, MyService.class);
-                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
-                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
+//                Intent intent = new Intent(this, MyService.class);
+//                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+//                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//                alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pintent);
 
 //                Intent intent = new Intent(this, MyService.class);
 //                PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
@@ -582,6 +582,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String date = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+
+
+
 
         if (type != 5) calDate = date;
         else calDaterounded = date;

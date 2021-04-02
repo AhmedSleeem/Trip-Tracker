@@ -166,7 +166,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationView.getMenu().findItem(R.id.nav_sync).setOnMenuItemClickListener(menuItem -> {
-            List<Trip> tripsList = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            List<Trip> tripsList = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid(),true);
+            List<Trip> list = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid(), false);
+            if (list!=null)tripsList.addAll(list);
+
             syncDataWithFirebaseDatabase(tripsList);
 
             drawer.closeDrawer(GravityCompat.START);
@@ -194,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+
 
     @Override
     public boolean onSupportNavigateUp() {

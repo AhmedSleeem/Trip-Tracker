@@ -114,7 +114,7 @@ public class GoogleMapsManager implements OnMapReadyCallback, RoutingListener {
         return new TripPoints(getLocationFromAddress(source), getLocationFromAddress(destination));
     }
 
-    private LatLng getLocationFromAddress(String strAddress) {
+    public LatLng getLocationFromAddress(String strAddress) {
 
         Geocoder coder = new Geocoder(context);
         List<Address> address;
