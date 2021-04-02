@@ -65,6 +65,8 @@ public class Trip {
         this.tripDuration = tripDuration;
     }
 
+
+
     @ColumnInfo
     String tripDuration;
 
@@ -119,10 +121,10 @@ public class Trip {
         this.tripDestination = tripDestination;
     }
 
-    public Trip(String tripSource, String tripTitle, String tripDestination,
+    public Trip(String id ,  String tripSource, String tripTitle, String tripDestination,
                 boolean tripType, String tripRepeatingType, String tripNotes, String tripMaker,
                 String tripDate, String tripTime, String tripImage, boolean tripStatus, String tripDistance, String tripDuration, String tripAvgSpeed) {
-        this.tripId = UUID.randomUUID().toString();
+        this.tripId = id;
         this.tripSource = tripSource;
         this.tripTitle = tripTitle;
         this.tripDestination = tripDestination;
