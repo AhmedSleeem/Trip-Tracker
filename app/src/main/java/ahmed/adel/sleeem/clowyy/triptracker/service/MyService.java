@@ -145,6 +145,7 @@ public class MyService extends Service {
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             notification.setCustomContentView(customView);
             notification.setCustomBigContentView(customView);
+            notification.addAction(1233,"Start",answerPendingIntent);
             startForeground(1124, notification.build());
         } else {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this);

@@ -165,7 +165,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         Trip trip = trips.get(position);
 
         trip.setTripStatus(true);
-        tripDao.updateTrip(trip);
+        tripDao.updateTrip(trip.getTripId());
 
         GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(getContext());
         googleMapsManager.requestPermission();
