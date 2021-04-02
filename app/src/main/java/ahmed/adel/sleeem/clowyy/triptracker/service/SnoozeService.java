@@ -28,9 +28,10 @@ import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.TripsMapActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DoneTripReceiver;
+import ahmed.adel.sleeem.clowyy.triptracker.managers.SnoozeCanclerBroadCast;
 
-public class MyService extends Service {
-    public MyService() {
+public class SnoozeService extends Service {
+    public SnoozeService() {
     }
 
 
@@ -40,7 +41,7 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.y_sabah_el_ro3b);
+        AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.amahmed);
         try {
             player.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
             player.prepare();
@@ -80,26 +81,20 @@ public class MyService extends Service {
         RemoteViews customView = new RemoteViews(getPackageName(), R.layout.dialog_notifier);
 
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-        Intent hungupIntent = new Intent(getApplicationContext(), DialogAlert.class);
+        Intent hungupIntent = new Intent(getApplicationContext(), SnoozeCanclerBroadCast.class);
 
         String title = intent.getStringExtra("Title");
         String source = intent.getStringExtra("Source");
         String destination = intent.getStringExtra("Destination");
         String date = intent.getStringExtra("Date");
 
-        LatLng location = GoogleMapsManager.getInstance(getApplicationContext()).getLocationFromAddress(destination);
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
-
-       // Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
 
 
 
         hungupIntent.putExtra("destination",destination);
         hungupIntent.putExtra("date",date);
-        hungupIntent.putExtra("source",source);
         hungupIntent.putExtra("Title",title);
+        hungupIntent.putExtra("Source",source);
 
 
 
@@ -131,7 +126,7 @@ public class MyService extends Service {
             // notificationChannel.setSound(Uri.parse("https://www.sm3na.com/audio/cf1dd6ba6b0f"), null);
             notificationManager.createNotificationChannel(notificationChannel);
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this, "IncomingCall");
-            notification.setContentTitle(title.equals("")?"no title":title);
+            notification.setContentTitle("title.equals(\"\")?\"no title\":title");
             notification.setTicker("Call_STATUS");
             notification.setContentText(destination.equals("")?"no no ":destination);
             notification.setSmallIcon(R.drawable.ic_timer);

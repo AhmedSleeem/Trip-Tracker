@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -30,6 +34,8 @@ import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.TripActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.TripDetailsActivity;
+import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
+import ahmed.adel.sleeem.clowyy.triptracker.adapters.OnRecyclerViewItemClickLister;
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
@@ -46,7 +52,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     public void onStart() {
         super.onStart();
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips(userID);
+        trips = TripDatabase.getInstance(getContext()).getTripDao().selectAllTrips(userID,false);
 
         if(trips.size()==0){
             getUserTrips(userID);
@@ -55,6 +61,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
     }
+
 
     private void getUserTrips(String userID){
         List<Trip> userTrips = new ArrayList<>();
@@ -80,6 +87,8 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
             }
         });
     }
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -144,19 +153,29 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
     @Override
     public void onEditIconClicked(int position) {
-        Intent details = new Intent(getContext(), TripActivity.class);
-        details.putExtra("isEdit", true);
-        details.putExtra("tripID", trips.get(position).getTripId());
-        startActivity(details);
+        Intent edit = new Intent(getContext(), TripActivity.class);
+        edit.putExtra("isEdit", true);
+        edit.putExtra("tripID", trips.get(position).getTripId());
+        startActivity(edit);
     }
 
     @Override
     public void onStartButtonClicked(int position) {
+
+        Trip trip = trips.get(position);
+
+        trip.setTripStatus(true);
+        tripDao.updateTrip(trip);
+
         GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(getContext());
         googleMapsManager.requestPermission();
         if(googleMapsManager.locationPermission){
             GoogleMapsManager.getInstance(getContext()).launchGoogleMaps(trips.get(position).getTripDestination());
         }
+        //tripDao.deleteTrip(trips.get(position));
+
+        trips = tripDao.selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid(),false);
+        rv.setAdapter(new HistoryAdapter(getContext(),trips, (OnRecyclerViewItemClickLister) UpcomingTripsFragment.this));
 
     }
 

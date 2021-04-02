@@ -23,11 +23,18 @@ public interface TripDao {
     List<Trip> selectAllTrips();
 
 
-    @Query("select * from TRIPS  where tripMaker = :user")
-    List<Trip> selectAllTrips(String user);
+    @Query("select * from TRIPS  where tripMaker = :user and tripStatus = :tripss")
+    List<Trip> selectAllTrips(String user,boolean tripss);
 
     @Query("select * from TRIPS  where tripId = :tripIdentifier")
     Trip selectTripById(String tripIdentifier);
+
+    @Query("select * from TRIPS  where tripDate = :tripdate")
+    Trip selectTripByDate(String tripdate);
+
+
+    @Query("select * from TRIPS  where tripStatus = :status")
+    List<Trip> selectGoingTrips(boolean status);
 
     @Update
     void updateTrip(Trip trip);
@@ -37,4 +44,7 @@ public interface TripDao {
 
     @Query("delete from trips where tripMaker = :user ")
     void deleteUserTrips(String user);
+
+
+
 }

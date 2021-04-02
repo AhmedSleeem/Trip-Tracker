@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="ahmed.adel.sleeem.clowyy.triptracker">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -26,12 +27,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripTracker">
-        <activity android:name=".TripDetailsActivity"></activity>
+        <receiver
+            android:name=".managers.SnoozeCanclerBroadCast"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
+        <service
+            android:name=".service.SnoozeService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".managers.DoneTripReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".TripDetailsActivity" />
 
         <service
             android:name=".service.MyService"
-            android:enabled="true"
-            ></service>
+            android:enabled="true" />
 
         <activity
             android:name=".TripsMapActivity"
@@ -76,7 +91,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"

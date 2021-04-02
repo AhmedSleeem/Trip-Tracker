@@ -10,22 +10,55 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
+import java.util.Calendar;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
+import ahmed.adel.sleeem.clowyy.triptracker.service.MyWorker;
+import ahmed.adel.sleeem.clowyy.triptracker.service.SnoozeWorker;
 
 public class DialogAlert extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
+
         Intent intent1 = new Intent(context, MyService.class);
         context.stopService(intent1);
+
+        String destination = intent.getStringExtra("destination");
+        String date = intent.getStringExtra("date");
+        String title = intent.getStringExtra("Title");
+
+        Data inputData = new Data.Builder()
+                .putString("destination", destination)
+                .putString("source", destination)
+                .putString("title", destination)
+                .putString("Date", date).build();
+
+//        Calendar calendarmsd = Calendar.getInstance();
+//        long nowMillis = calendarmsd.getTimeInMillis();
+//        long diff = nowMillis+ 2*60*1000;
+
+        Toast.makeText(context, "DialogAlert ", Toast.LENGTH_LONG).show();
+
+        WorkRequest uploadWorkRequest =
+                new OneTimeWorkRequest.Builder(SnoozeWorker.class)
+                        .setInputData(inputData)
+                        .setInitialDelay(2, TimeUnit.MINUTES)
+                        .build();
+        WorkManager.getInstance(context).enqueue(uploadWorkRequest);
 
 
 

@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //initialize trip activity intent
                 Intent trip  = new Intent(MainActivity.this,TripActivity.class);
+                trip.putExtra("isEdit", false);
                 startActivity(trip);
             }
         });
@@ -170,7 +171,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationView.getMenu().findItem(R.id.nav_sync).setOnMenuItemClickListener(menuItem -> {
-            List<Trip> tripsList = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            List<Trip> tripsList = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid(),true);
+            List<Trip> list = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid(), false);
+            if (list!=null)tripsList.addAll(list);
+
             syncDataWithFirebaseDatabase(tripsList);
 
             drawer.closeDrawer(GravityCompat.START);
@@ -212,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -220,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout(final Activity activity) {
+
 
         //initialize alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -356,6 +363,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    List<String> excludeNotes(String note){
+        String[] strings = note.split(",");
+        List<String>result = new ArrayList<>();
+        for(int indx=0;indx<strings.length-1;++indx){
+
+
+            result.add(strings[indx].substring(1));
+        }
+
+        return result;
     }
 
 }

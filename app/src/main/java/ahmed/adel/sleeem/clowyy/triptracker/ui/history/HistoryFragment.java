@@ -53,12 +53,21 @@ public class HistoryFragment extends Fragment implements OnRecyclerViewItemClick
         tripDatabase = TripDatabase.getInstance(getContext());
         tripDao = tripDatabase.getTripDao();
 
-        tripList = tripDao.selectAllTrips();
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        tripList = tripDao.selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid(),true);
+//
+//        syncDataWithFirebaseDatabase(tripList);
+//
+
 
         historyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         historyRecyclerView.setAdapter(new HistoryAdapter(getContext(), tripList, this));
-
-        return view;
     }
 
     void syncDataWithFirebaseDatabase(final List<Trip> tripList) {
