@@ -137,7 +137,7 @@ public class SnoozeService extends Service {
         } else {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
 
-            notification.setContentTitle(title.equals("")?"no title":title);
+            notification.setContentTitle(title==null?"no title":title);
             notification.setTicker("Call_STATUS");
             notification.setContentText(destination.equals("")?"no no ":destination);
             notification.setSmallIcon(R.drawable.ic_delete);

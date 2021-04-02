@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -96,6 +97,11 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     String tripID = null;
     Trip trip;
 
+    private static OnTripAddedNotifier onTripAddedNotifier;
+    public static void setOnProgressChangedListener(OnTripAddedNotifier _listener) {
+        onTripAddedNotifier = _listener;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +144,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 swtchRepeat.setChecked(false);
             } else {
                 swtchRepeat.setChecked(true);
-                repeatingSpinner.setVisibility(View.VISIBLE);
             }
 
             tripNotes = excludeNotes(trip.getTripNotes());
@@ -219,9 +224,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                                         .build();
                         WorkManager.getInstance(getApplication()).enqueue(uploadWorkRequest);
 
-
-                        //finish();
-
+                        runOnUiThread(() -> {
+                            onTripAddedNotifier.notifyDataChanged(trip);
+                        });
                     }
                 }).start();
 
@@ -346,7 +351,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 //}
 
 
-                finish();
+                //finish();
 
             } else
                 Toast.makeText(getBaseContext(), getString(R.string.completeFieldsMSG), Toast.LENGTH_LONG).show();
@@ -606,11 +611,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         swtchRepeat.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if (isChecked) {
-                //type = 5;
                 txtRepeatingNumber.setVisibility(View.VISIBLE);
                 repeatingSpinner.setVisibility(View.VISIBLE);
             } else {
-                //type = 3;
                 txtRepeatingNumber.setVisibility(View.INVISIBLE);
                 repeatingSpinner.setVisibility(View.INVISIBLE);
             }

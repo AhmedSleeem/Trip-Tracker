@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
+import ahmed.adel.sleeem.clowyy.triptracker.MainActivity2;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DoneTripReceiver;
@@ -102,7 +103,8 @@ public class MyService extends Service {
 
 
 
-        Intent answerIntent = new Intent(getApplicationContext(), DoneTripReceiver.class);
+        //Intent answerIntent = new Intent(getApplicationContext(), DoneTripReceiver.class);
+        Intent answerIntent = new Intent(getApplicationContext(), MainActivity2.class);
 
         answerIntent.putExtra("destination",destination);
         answerIntent.putExtra("TripId",tripId);
@@ -121,7 +123,8 @@ public class MyService extends Service {
         //customView.setImageViewBitmap(R.id.photo, NotificationImageManager().getImageBitmap(intent.getStringExtra("user_thumbnail_image")))
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent hungupPendingIntent = PendingIntent.getBroadcast(this, 0, hungupIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent answerPendingIntent = PendingIntent.getActivity(this, 0, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         customView.setOnClickPendingIntent(R.id.btnAnswer, answerPendingIntent);
         customView.setOnClickPendingIntent(R.id.btnDecline, hungupPendingIntent);
 
