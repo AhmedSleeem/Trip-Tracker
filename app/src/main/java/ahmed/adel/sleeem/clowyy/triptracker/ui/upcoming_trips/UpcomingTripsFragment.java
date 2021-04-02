@@ -77,7 +77,6 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
                 if(userTrips != null && userTrips.size() > 0) {
                     trips = userTrips;
                     rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,UpcomingTripsFragment.this));
-
                 }
             }
 
@@ -86,7 +85,6 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
             }
         });
-
     }
 
 
@@ -161,8 +159,10 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
     @Override
     public void onEditIconClicked(int position) {
-        Intent details = new Intent(getContext(), TripActivity.class);
-        startActivity(details);
+        Intent edit = new Intent(getContext(), TripActivity.class);
+        edit.putExtra("isEdit", true);
+        edit.putExtra("tripID", trips.get(position).getTripId());
+        startActivity(edit);
 
         tripDao.insertTrip((Trip[]) trips.toArray());
 

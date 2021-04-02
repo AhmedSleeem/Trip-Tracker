@@ -1,8 +1,10 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +30,9 @@ public class TripDetailsActivity extends AppCompatActivity {
     TextView name,start,end,date,time,distance,duration,speed;
 
     Dialog showNotesDialog;
-    Button btnShowNotes, btnOK;
+    Button btnShowNotes, btnOK, btnShowRoute;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +41,9 @@ public class TripDetailsActivity extends AppCompatActivity {
         showNotesDialog = new Dialog(this);
         showNotesDialog.setContentView(R.layout.show_notes_dialog);
 
-        int tripID = getIntent().getIntExtra("TripID", -1);
+        String tripID = getIntent().getStringExtra("TripID");
 
-        if(tripID == -1){
+        if(tripID == null && tripID.equals("")){
             finish();
         }
 
@@ -57,6 +60,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         speed = findViewById(R.id.tripspeedTxt);
         btnOK = findViewById(R.id.okBtn);
         btnShowNotes = findViewById(R.id.shownotesBtn);
+        btnShowRoute = findViewById(R.id.btnShowRoute);
 
         Glide.with(getApplicationContext()).load(trip.getTripImage()).into(tripImage);
         name.setText(trip.getTripTitle());
@@ -72,32 +76,36 @@ public class TripDetailsActivity extends AppCompatActivity {
 
 
 
-        if (notes.size() < 1) {
-            btnShowNotes.setVisibility(View.INVISIBLE);
+        if (notes == null) {
+            btnShowNotes.setVisibility(View.GONE);
+        }
 
-            //MarginLayoutParams params = (MarginLayoutParams) vector8.getLayoutParams();
-           // params.width = 200; params.leftMargin = 100; params.topMargin = 200;
-
-         //   RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-         //   params.setMargins(0, 30, 0 , 0);
-         //   btnOK.setLayoutParams(params);
+        if(trip.getTripDistance().equals("N/A")){
+            btnShowRoute.setVisibility(View.GONE);
         }
 
         btnShowNotes.setOnClickListener(v->{
                 listViewNotes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notes));
+                showNotesDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner_view));
                 showNotesDialog.show();
                 showNotesDialog.findViewById(R.id.btnShowNotesOK).setOnClickListener(view -> {
                     showNotesDialog.dismiss();
                 });
         });
 
-
         btnOK.setOnClickListener(v->{
             finish();
+        });
+
+        btnShowRoute.setOnClickListener(v->{
+
         });
     }
 
     List<String> excludeNotes(String note){
+        if(note.equals("")){
+            return null;
+        }
         String[] strings = note.split("Ω");
         List<String>result = new ArrayList<>();
         for(int indx=0;indx<strings.length;++indx){

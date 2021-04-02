@@ -60,12 +60,14 @@ import java.util.List;
 import java.util.UUID;
 
 import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
+import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
+import ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips.UpcomingTripsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
         //check shared preferences and user login status
 
-        //Toast.makeText(this, "Ω", Toast.LENGTH_SHORT).show();
         // Session class instance
         session = new SessionManager(getApplicationContext());
         //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //initialize trip activity intent
                 Intent trip  = new Intent(MainActivity.this,TripActivity.class);
+                trip.putExtra("isEdit", false);
                 startActivity(trip);
             }
         });
@@ -281,14 +283,43 @@ public class MainActivity extends AppCompatActivity {
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        reference.child("trips").child(uid).removeValue();
+        List<String> listIds = new ArrayList<>();
 
         for (int indx = 0; indx < tripList.size(); ++indx) {
             Trip trip = tripList.get(indx);
+            /*
             reference.child("trips").child(uid).push().setValue(trip).addOnCompleteListener(task -> {
                 Toast.makeText(getBaseContext(), getString(R.string.dataSynced), Toast.LENGTH_SHORT).show();
             });
+            */
+            String tripID = String.valueOf(trip.getTripId());
+            reference.child("trips").child(uid).child(tripID).setValue(trip);
+            listIds.add(tripID);
         }
+
+        reference.child("trips").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Trip> newTrips = new ArrayList<>();
+                for(DataSnapshot trip : snapshot.getChildren()){
+                    Trip myTrip = trip.getValue(Trip.class);
+                    if(!listIds.contains(String.valueOf(myTrip.getTripId()))){
+                        newTrips.add(myTrip);
+                    }
+                }
+
+                for (Trip newTrip : newTrips){
+                    TripDatabase.getInstance(getApplicationContext()).getTripDao().insertTrip(newTrip);
+                }
+
+                Toast.makeText(getBaseContext(), getString(R.string.dataSynced), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void deleteAccount(final Activity activity)
@@ -303,6 +334,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                FirebaseDatabase.getInstance().getReference("trips").child(uID).removeValue();
+                FirebaseDatabase.getInstance().getReference("users").child(uID).removeValue();
                 FirebaseAuth.getInstance().getCurrentUser().delete();
                 session.logoutUser();
                 finish();

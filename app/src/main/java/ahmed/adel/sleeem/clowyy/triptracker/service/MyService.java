@@ -87,6 +87,12 @@ public class MyService extends Service {
         String destination = intent.getStringExtra("Destination");
         String date = intent.getStringExtra("Date");
 
+        LatLng location = GoogleMapsManager.getInstance(getApplicationContext()).getLocationFromAddress(destination);
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
+
+       // Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
 
 
 
