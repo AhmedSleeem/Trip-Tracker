@@ -104,6 +104,7 @@
     <string name="AppName">Trip Tracker</string>
     <string name="AddTime">Trip Time</string>
     <string name="AddDate">Trip Date</string>
+    <string name="AddNewNote">Add New Note Here</string>
 
 
 </resources>
