@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="ahmed.adel.sleeem.clowyy.triptracker">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -25,7 +26,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripTracker">
-        <activity android:name=".MainActivity2"></activity>
+        <service
+            android:name=".service.BubbleService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".MainActivity2" />
 
         <receiver
             android:name=".managers.SnoozeCanclerBroadCast"
@@ -87,11 +93,10 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-
         <activity
             android:name=".AddNotesDialog"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.Dialog.MinWidth"/>
+            android:theme="@style/Theme.AppCompat.Dialog.MinWidth" />
         <activity
             android:name=".NotesDialog"
             android:launchMode="singleInstance"

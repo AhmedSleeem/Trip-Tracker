@@ -1,7 +1,10 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.PeriodicWorkRequest;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +27,7 @@ import com.txusballesteros.bubbles.OnInitializedCallback;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
+import ahmed.adel.sleeem.clowyy.triptracker.service.BubbleService;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -37,34 +41,49 @@ public class MainActivity2 extends AppCompatActivity {
     private int MY_PERMISSION = 1000;
     String tripID;
 
+   // @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent1 = new Intent(getApplicationContext(), MyService.class);
-        stopService(intent1);
+
+
 
         tripID = getIntent().getStringExtra("TripId");
+        int notificationId = getIntent().getIntExtra("notificationId",0);
+
+
+            String ns = Context.NOTIFICATION_SERVICE;
+            NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
+            nMgr.cancel(notificationId);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(MainActivity2.this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, 0);
         } else {
-            Intent intent = new Intent(MainActivity2.this, Service.class);
+            Intent intent = new Intent(MainActivity2.this, BubbleService.class);
+            intent.putExtra("TripId",tripID);
+            intent.putExtra("notificationId",notificationId);
+
             startService(intent);
         }
 
-        initBubble();
+        //initBubble();
 
-        addNewBubble();
+       // addNewBubble();
 
         startMap(getIntent(), getApplicationContext());
+
+//        Intent intent1 = new Intent(getApplicationContext(), MyService.class);
+//        stopService(intent1);
+
         finish();
     }
 
     private void initBubble() {
-        bubblesManager = new BubblesManager.Builder(this)
+        bubblesManager = new BubblesManager.Builder(getApplicationContext())
                 .setInitializationCallback(new OnInitializedCallback() {
                     @Override
                     public void onInitialized() {

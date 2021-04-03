@@ -34,18 +34,25 @@ public class DialogAlert extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
 
-        Intent intent1 = new Intent(context, MyService.class);
-        context.stopService(intent1);
+//        Intent intent1 = new Intent(context, MyService.class);
+//        context.stopService(intent1);
 
         String destination = intent.getStringExtra("destination");
         String date = intent.getStringExtra("date");
         String title = intent.getStringExtra("Title");
+        int notificationId = intent.getIntExtra("notificationId",0);
+
+        String ns = Context.NOTIFICATION_SERVICE;
+        NotificationManager nMgr = (NotificationManager)context.getSystemService(ns);
+        nMgr.cancel(notificationId);
 
         Data inputData = new Data.Builder()
                 .putString("destination", destination)
                 .putString("source", destination)
                 .putString("title", destination)
+                .putInt("notificationId",notificationId)
                 .putString("Date", date).build();
+
 
 //        Calendar calendarmsd = Calendar.getInstance();
 //        long nowMillis = calendarmsd.getTimeInMillis();

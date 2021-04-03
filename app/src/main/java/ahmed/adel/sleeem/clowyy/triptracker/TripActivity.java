@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
@@ -45,11 +46,14 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -213,13 +217,17 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         if (isEdit) {
                             tripDao.updateTrip(trip);
                         } else {
+
+                            trip.setNotificationId(createID());
                             tripDao.insertTrip(trip);
+
                         }
 
                         Data inputData = new Data.Builder()
                                 .putString("Title", trip.getTripTitle())
                                 .putString("Source", trip.getTripSource())
                                 .putString("Destination", trip.getTripDestination())
+                                .putInt("notificationId", trip.getNotificationId())
                                 .putString("Date", trip.getTripId()).build();
 
 
@@ -227,13 +235,22 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         long nowMillis = calendarmsd.getTimeInMillis();
                         long diff = calendar.getTimeInMillis() - nowMillis;
 
-
+/*
                         WorkRequest uploadWorkRequest =
                                 new OneTimeWorkRequest.Builder(MyWorker.class)
                                         .setInputData(inputData)
                                         .setInitialDelay(diff, TimeUnit.MILLISECONDS)
                                         .build();
                         WorkManager.getInstance(getApplication()).enqueue(uploadWorkRequest);
+*/
+
+
+                        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(MyWorker.class,
+                                /*Integer.parseInt(txtRepeatingNumber.getText().toString())*/2,
+                                TimeUnit.MINUTES).setInputData(inputData)
+                                .setInitialDelay(diff, TimeUnit.MILLISECONDS)
+                                .build();
+                        WorkManager.getInstance(getApplication()).enqueue(periodicWork);
 
                         if(tripRounded!=null){
 
@@ -243,6 +260,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                                     .putString("Title", trip.getTripTitle())
                                     .putString("Source", trip.getTripSource())
                                     .putString("Destination", trip.getTripDestination())
+                                    .putInt("notificationId", trip.getNotificationId())
                                     .putString("Date", trip.getTripId()).build();
 
 
@@ -380,8 +398,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 //                        TimeUnit timeUnit = TimeUnit.DAYS;
 //                        if (Type.equals("hour"))timeUnit=TimeUnit.HOURS;
 //                        else if (Type.equals("month"))timeUnit=TimeUnit.DAYS;
-//
-//                        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(MyWorker.class, Integer.parseInt(txtRepeatingNumber.getText().toString()),
+////
+//                        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(MyWorker.class,
+//                                Integer.parseInt(txtRepeatingNumber.getText().toString()),
 //                                timeUnit).setInputData(inputData)
 //                                .setInitialDelay(diff, TimeUnit.SECONDS)
 //                                .build();
@@ -581,7 +600,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             if (calDaterounded.length() > 0 && timeTxtrounded.length() > 0 && txtBackTripName.getText().length() > 0 && txtBackStartPoint.getText().length() > 0
                     && txtBackEndPoint.getText().length() > 0) {
 
-                Toast.makeText(getBaseContext(), "done clicked inside if", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getBaseContext(), "done clicked inside if", Toast.LENGTH_SHORT).show();
                 StringBuilder roundNote = new StringBuilder("");
                 for (String note : roundTripNotes) roundNote.append("0" + note + ",");
 
@@ -600,6 +619,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                             false, swtchRepeatingRound.isChecked() ? repeatingTypeRound : "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
                             calDaterounded, timeTxtrounded, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(),
                             tripExtraInfo.getAvgSpeed());
+                    tripRounded.setNotificationId(createID());
                     type = 3;
                 }).start();
 
@@ -760,5 +780,10 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         }
 
         return result;
+    }
+    public int createID(){
+        Date now = new Date();
+        int id = Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
+        return id;
     }
 }

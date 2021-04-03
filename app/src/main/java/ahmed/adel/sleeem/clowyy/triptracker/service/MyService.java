@@ -20,6 +20,9 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
@@ -85,6 +88,8 @@ public class MyService extends Service {
         String source = intent.getStringExtra("Source");
         String destination = intent.getStringExtra("Destination");
         String tripId = intent.getStringExtra("Date");
+        int notificationId = intent.getIntExtra("notificationId",createID());
+
 
 //        LatLng location = GoogleMapsManager.getInstance(getApplicationContext()).getLocationFromAddress(destination);
 //        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
@@ -99,6 +104,7 @@ public class MyService extends Service {
         hungupIntent.putExtra("date",tripId);
         hungupIntent.putExtra("source",source);
         hungupIntent.putExtra("Title",title);
+        hungupIntent.putExtra("notificationId",notificationId);
 
 
 
@@ -108,6 +114,7 @@ public class MyService extends Service {
 
         answerIntent.putExtra("destination",destination);
         answerIntent.putExtra("TripId",tripId);
+        answerIntent.putExtra("notificationId",notificationId);
 
 
 
@@ -148,7 +155,7 @@ public class MyService extends Service {
             notification.setCustomContentView(customView);
             notification.setCustomBigContentView(customView);
            // notification.setAutoCancel(true);
-            startForeground(1124, notification.build());
+            startForeground(notificationId, notification.build());
         } else {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
 
@@ -166,13 +173,18 @@ public class MyService extends Service {
             NotificationCompat.Action hangupAction = new NotificationCompat.Action.Builder(android.R.drawable.sym_action_chat, "HANG UP", hungupPendingIntent).build();
             notification.addAction(hangupAction);
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-            startForeground(1124, notification.build());
+            startForeground(notificationId, notification.build());
         }
 
 
         return super.onStartCommand(intent, flags, startId);
     }
 
+    public int createID(){
+        Date now = new Date();
+        int id = Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
+        return id;
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
