@@ -58,7 +58,7 @@ public class DialogAlert extends BroadcastReceiver {
 //        long nowMillis = calendarmsd.getTimeInMillis();
 //        long diff = nowMillis+ 2*60*1000;
 
-        Toast.makeText(context, "DialogAlert ", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "DialogAlert ", Toast.LENGTH_LONG).show();
 
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(SnoozeWorker.class)
