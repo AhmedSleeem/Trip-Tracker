@@ -63,7 +63,13 @@ public class TripDetailsActivity extends AppCompatActivity {
         btnShowNotes = findViewById(R.id.shownotesBtn);
         btnShowRoute = findViewById(R.id.btnShowRoute);
 
-        Glide.with(getApplicationContext()).load(trip.getTripImage()).into(tripImage);
+        if(trip.getTripImage() != null && !trip.getTripImage().equals("")) {
+            Glide.with(getApplicationContext()).load(trip.getTripImage()).into(tripImage);
+        }
+        else{
+            tripImage.setImageResource(R.drawable.defaultimage);
+        }
+
         name.setText(trip.getTripTitle());
         start.setText(trip.getTripSource());
         end.setText(trip.getTripDestination());

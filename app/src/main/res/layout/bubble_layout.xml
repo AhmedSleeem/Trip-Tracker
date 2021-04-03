@@ -12,32 +12,28 @@ android:clipToPadding="false">
     app:fab_expandDirection="down"
     android:layout_width="70dp"
     android:layout_height="70dp"
-    app:civ_border_width="2dp"
-    android:backgroundTint="@color/purple_200">
+    app:civ_border_width="2dp">
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/closeNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fab_size="mini"
-        android:src="@drawable/ic_close"
-        android:backgroundTint="@color/bubbleColor"/>
+        android:src="@drawable/ic_close"/>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/addNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fab_size="mini"
-        android:src="@drawable/ic_addnotes"
-        android:backgroundTint="@color/bubbleColor"/>
+        android:src="@drawable/ic_addnotes"/>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/showNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fab_size="mini"
-        android:src="@drawable/ic_notes"
-        android:backgroundTint="@color/bubbleColor"/>
+        android:src="@drawable/ic_notes"/>
 
 </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
