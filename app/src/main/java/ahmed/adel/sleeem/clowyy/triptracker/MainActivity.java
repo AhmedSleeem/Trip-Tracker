@@ -72,8 +72,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 import ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips.UpcomingTripsFragment;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity  {
     private AppBarConfiguration mAppBarConfiguration;
     SessionManager session;
 
@@ -106,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent trip  = new Intent(MainActivity.this,TripActivity.class);
                 trip.putExtra("isEdit", false);
                 startActivity(trip);
+
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -193,6 +193,10 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
+    }
+
+    public void notifyData(Trip trip){
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -345,10 +349,11 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                FirebaseAuth.getInstance().getCurrentUser().delete();
+
                 String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 FirebaseDatabase.getInstance().getReference("trips").child(userID).removeValue();
                 FirebaseDatabase.getInstance().getReference("users").child(userID).removeValue();
-                FirebaseAuth.getInstance().getCurrentUser().delete();
                 TripDatabase.getInstance(getApplicationContext()).getTripDao().deleteUserTrips(userID);
                 session.logoutUser();
                 finish();
@@ -363,18 +368,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
-    }
-
-    List<String> excludeNotes(String note){
-        String[] strings = note.split(",");
-        List<String>result = new ArrayList<>();
-        for(int indx=0;indx<strings.length-1;++indx){
-
-
-            result.add(strings[indx].substring(1));
-        }
-
-        return result;
     }
 
 }

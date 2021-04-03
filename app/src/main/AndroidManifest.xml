@@ -88,6 +88,15 @@
             <!-- </intent-filter> -->
         </activity>
 
+        <activity
+            android:name=".AddNotesDialog"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.AppCompat.Dialog.MinWidth"/>
+        <activity
+            android:name=".NotesDialog"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.AppCompat.Dialog.MinWidth" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

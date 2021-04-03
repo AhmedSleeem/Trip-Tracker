@@ -17,6 +17,7 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
+import ahmed.adel.sleeem.clowyy.triptracker.OnTripAddedNotifier;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips.OnUpcomingAdapterItemClicked;
@@ -76,9 +77,6 @@ public class UpcomingTripsAdapter extends RecyclerView.Adapter<UpcomingTripsAdap
     }
 
     public class ViewHandler extends RecyclerView.ViewHolder {
-
-
-
         ImageView tripImage;
         TextView tripTitle,start,end,date,time,distance,duration,avgSpeed;
         MaterialButton deleteBtn,editBtn,viewBtn,tripTypeBtn;

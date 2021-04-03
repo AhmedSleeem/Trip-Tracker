@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import ahmed.adel.sleeem.clowyy.triptracker.helpers.NoteState;
+
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHandler> {
 
     private final Context context;
-    private List<String> notes ;
+    private List<NoteState> notes ;
 
-    public NotesAdapter(Context context , List<String> myNotes) {
+    public NotesAdapter(Context context , List<NoteState> myNotes) {
         this.context = context;
         notes = myNotes;
     }
@@ -34,7 +36,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHandler>
     @Override
     public void onBindViewHolder(@NonNull NotesAdapter.ViewHandler holder, int position) {
 
-        holder.notesCheckbox.setText(notes.get(position));
+        holder.notesCheckbox.setText(notes.get(position).getNote());
+        holder.notesCheckbox.setChecked(notes.get(position).isChecked());
+
+        holder.notesCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            notes.get(position).setChecked(isChecked);
+        });
 
     }
 
@@ -53,7 +60,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHandler>
             super(itemView);
             layout = itemView;
             notesCheckbox = itemView.findViewById(R.id.checkBox);
-
         }
     }
 }

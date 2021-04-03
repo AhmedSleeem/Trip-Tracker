@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -100,6 +101,11 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     Trip trip;
     private Calendar calendar2;
 
+    private static OnTripAddedNotifier onTripAddedNotifier;
+    public static void setOnProgressChangedListener(OnTripAddedNotifier _listener) {
+        onTripAddedNotifier = _listener;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +134,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         calendar = Calendar.getInstance();
 
-        isEdit = getIntent().getBooleanExtra("isEdit",false);
-
-
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
 
         if (isEdit) {
             tripID = getIntent().getStringExtra("tripID");
@@ -148,7 +152,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 swtchRepeat.setChecked(false);
             } else {
                 swtchRepeat.setChecked(true);
-                repeatingSpinner.setVisibility(View.VISIBLE);
             }
 
             tripNotes = excludeNotes(trip.getTripNotes());
@@ -192,6 +195,10 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         }
 
 
+//                Trip trip = new Trip(txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
+//                        rbRoundTrip.isChecked(), swtchRepeat.isActivated() ? repeatingType : "", oneWaysNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+//                        calDate, timeTxt, "", false);
+//                tripDao.insertTrip(trip);
 
 
                         trip = new Trip(UUID.randomUUID().toString(),txtStartPoint.getText().toString(), txtTripName.getText().toString(), txtEndPoint.getText().toString(),
@@ -204,10 +211,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
 
                         if (isEdit) {
-                            Log.i("Edit Trip", "run: "+isEdit);
                             tripDao.updateTrip(trip);
                         } else {
-                            Log.i("insert Trip", "run: "+isEdit);
                             tripDao.insertTrip(trip);
                         }
 
@@ -256,11 +261,14 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
                         }
 
-
-
-
                         //finish();
 
+                        runOnUiThread(() -> {
+                            onTripAddedNotifier.notifyDataChanged(trip);
+                            if(tripRounded != null) {
+                                onTripAddedNotifier.notifyDataChanged(tripRounded);
+                            }
+                        });
                     }
                 }).start();
 
@@ -385,7 +393,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                 //}
 
 
-                finish();
+                //finish();
 
             } else
                 Toast.makeText(getBaseContext(), getString(R.string.completeFieldsMSG), Toast.LENGTH_LONG).show();
@@ -523,7 +531,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         swtchRepeatingRound = roundTripDialog.findViewById(R.id.swtchRepeatingRound);
         repeatingSpinnerRound = roundTripDialog.findViewById(R.id.repeatingSpinnerRound);
 
-        txtBackTripName.setText(txtEndPoint.getText().toString());
+        txtBackTripName.setText("Back from ");
         txtBackStartPoint.setText(txtEndPoint.getText().toString());
         txtBackEndPoint.setText(txtStartPoint.getText().toString());
         Button dateBtnrounded = roundTripDialog.findViewById(R.id.dateBtnRound);
@@ -593,8 +601,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                             calDaterounded, timeTxtrounded, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(),
                             tripExtraInfo.getAvgSpeed());
                     type = 3;
-                    roundTripDialog.dismiss();
                 }).start();
+
+                roundTripDialog.dismiss();
             }
 
 

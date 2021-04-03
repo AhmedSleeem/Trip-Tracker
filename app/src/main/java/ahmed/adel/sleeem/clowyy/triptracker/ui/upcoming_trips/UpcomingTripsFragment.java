@@ -1,17 +1,11 @@
 package ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -27,10 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
+import ahmed.adel.sleeem.clowyy.triptracker.OnTripAddedNotifier;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.TripActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.TripDetailsActivity;
@@ -41,7 +35,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
 
-public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapterItemClicked {
+public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapterItemClicked, OnTripAddedNotifier {
 
     private RecyclerView rv;
     private List<Trip> trips;
@@ -60,6 +54,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new UpcomingTripsAdapter(getActivity(),trips,this));
+        TripActivity.setOnProgressChangedListener(this);
     }
 
 
@@ -165,7 +160,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         Trip trip = trips.get(position);
 
         trip.setTripStatus(true);
-        tripDao.updateTrip(trip.getTripId());
+        tripDao.updateTrip(trip);
 
         GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(getContext());
         googleMapsManager.requestPermission();
@@ -179,4 +174,9 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
 
     }
 
+    @Override
+    public void notifyDataChanged(Trip trip) {
+        trips.add(trip);
+        rv.getAdapter().notifyDataSetChanged();
+    }
 }
