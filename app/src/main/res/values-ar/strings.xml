@@ -68,7 +68,7 @@
     <string name="logoutMSG">هل انت متأكد انك تريد تسجيل الخروج؟</string>
     <string name="dataSynced">تم مزامنة البيانات بنجاح</string>
     <string name="authenticationFailed">فشل التحقق</string>
-    <string name="passwordErrorConditions">يجيب ان تكون كلمة المرور أطول من 6  احرف</string>
+    <string name="passwordErrorConditions">يجيب أن تكون كلمة المرور أطول من 6  أحرف</string>
     <string name="enterusernameMSG">ادخل اسم المستخدم</string>
     <string name="completeFieldsMSG">تأكد من ان كل الحقول ممتلئة</string>
     <string name="hello_blank_fragment">"مرحبا "</string>
