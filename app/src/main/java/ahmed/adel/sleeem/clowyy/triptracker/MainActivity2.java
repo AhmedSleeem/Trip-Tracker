@@ -24,6 +24,7 @@ import com.txusballesteros.bubbles.OnInitializedCallback;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
+import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -40,6 +41,9 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent1 = new Intent(getApplicationContext(), MyService.class);
+        stopService(intent1);
 
         tripID = getIntent().getStringExtra("TripId");
 
@@ -112,7 +116,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
         bubbleView.setShouldStickToWall(true);
-        bubblesManager.addBubble(bubbleView, 60, 20);
+        bubblesManager.addBubble(bubbleView, 0, 450);
     }
 
     @Override

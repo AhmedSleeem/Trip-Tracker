@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#660F57</color>
+    <color name="purple_220">#E6DDF1</color>
+    <color name="purple_500">#5B7290</color>
+    <color name="purple_700">#663366</color>
+    <color name="teal_200">#5B7290</color>
+    <color name="teal_700">#003366</color>
+    <color name="black">#003366</color>
+    <color name="white">#E7EBF0</color>
+    <color name="twitterBlue">#1DA1F2</color>
+    <color name="red">#F44336</color>
+    <color name="bubbleColor">#5B7290</color>
+    <color name="notificationTitle">#5B7290</color>
+    <color name="hintColor">#663366</color>
+
+</resources>
