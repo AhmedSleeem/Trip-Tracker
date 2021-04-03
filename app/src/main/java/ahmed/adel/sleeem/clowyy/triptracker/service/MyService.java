@@ -25,6 +25,7 @@ import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity2;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
+import ahmed.adel.sleeem.clowyy.triptracker.SplashScreenActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DoneTripReceiver;
 
@@ -78,7 +79,7 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         RemoteViews customView = new RemoteViews(getPackageName(), R.layout.dialog_notifier);
 
-        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), SplashScreenActivity.class);
         Intent hungupIntent = new Intent(getApplicationContext(), DialogAlert.class);
 
         String title = intent.getStringExtra("Title");
