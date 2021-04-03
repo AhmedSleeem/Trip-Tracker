@@ -34,13 +34,14 @@ public class MainActivity2 extends AppCompatActivity {
     FloatingActionButton showBtn,addBtn,closeBtn;
 
     private int MY_PERMISSION = 1000;
+    String tripID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startMap(getIntent(), getApplicationContext());
+        tripID = getIntent().getStringExtra("TripId");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(MainActivity2.this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
@@ -53,6 +54,8 @@ public class MainActivity2 extends AppCompatActivity {
         initBubble();
 
         addNewBubble();
+
+        startMap(getIntent(), getApplicationContext());
         finish();
     }
 
@@ -82,6 +85,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent notes= new Intent(MainActivity2.this,NotesDialog.class);
+                notes.putExtra("tripID", tripID);
                 notes.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notes);
                 floatingActionsMenu.collapse();
@@ -92,6 +96,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent addnotes= new Intent(MainActivity2.this,AddNotesDialog.class);
+                addnotes.putExtra("tripID", tripID);
                 addnotes.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(addnotes);
                 floatingActionsMenu.collapse();

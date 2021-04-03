@@ -370,16 +370,4 @@ public class MainActivity extends AppCompatActivity  {
         builder.show();
     }
 
-    List<String> excludeNotes(String note){
-        String[] strings = note.split(",");
-        List<String>result = new ArrayList<>();
-        for(int indx=0;indx<strings.length-1;++indx){
-
-
-            result.add(strings[indx].substring(1));
-        }
-
-        return result;
-    }
-
 }

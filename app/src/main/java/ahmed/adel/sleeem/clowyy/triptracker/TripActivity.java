@@ -261,13 +261,13 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
                         }
 
-
-
-
                         //finish();
 
                         runOnUiThread(() -> {
                             onTripAddedNotifier.notifyDataChanged(trip);
+                            if(tripRounded != null) {
+                                onTripAddedNotifier.notifyDataChanged(tripRounded);
+                            }
                         });
                     }
                 }).start();
@@ -531,7 +531,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         swtchRepeatingRound = roundTripDialog.findViewById(R.id.swtchRepeatingRound);
         repeatingSpinnerRound = roundTripDialog.findViewById(R.id.repeatingSpinnerRound);
 
-        txtBackTripName.setText(txtEndPoint.getText().toString());
+        txtBackTripName.setText("Back from ");
         txtBackStartPoint.setText(txtEndPoint.getText().toString());
         txtBackEndPoint.setText(txtStartPoint.getText().toString());
         Button dateBtnrounded = roundTripDialog.findViewById(R.id.dateBtnRound);
@@ -601,8 +601,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                             calDaterounded, timeTxtrounded, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(),
                             tripExtraInfo.getAvgSpeed());
                     type = 3;
-                    roundTripDialog.dismiss();
                 }).start();
+
+                roundTripDialog.dismiss();
             }
 
 
