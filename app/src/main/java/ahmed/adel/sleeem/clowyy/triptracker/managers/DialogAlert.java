@@ -51,12 +51,15 @@ public class DialogAlert extends BroadcastReceiver {
 //        long nowMillis = calendarmsd.getTimeInMillis();
 //        long diff = nowMillis+ 2*60*1000;
 
-        Toast.makeText(context, "DialogAlert ", Toast.LENGTH_LONG).show();
+        int duration = 2;
+        String timeStr = " min";
+
+        Toast.makeText(context, "Snoozed for " + duration + timeStr, Toast.LENGTH_LONG).show();
 
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(SnoozeWorker.class)
                         .setInputData(inputData)
-                        .setInitialDelay(2, TimeUnit.MINUTES)
+                        .setInitialDelay(duration, TimeUnit.MINUTES)
                         .build();
         WorkManager.getInstance(context).enqueue(uploadWorkRequest);
 

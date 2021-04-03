@@ -25,10 +25,6 @@ private Context context;
 private List<Trip>tripList;
 private OnRecyclerViewItemClickLister onItemClickListener;
 
-
-
-
-
     public HistoryAdapter(Context context, List<Trip> tripList,OnRecyclerViewItemClickLister onItemClickListener) {
         this.context = context;
         this.tripList = tripList;

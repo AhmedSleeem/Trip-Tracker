@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#5B7290</color>
+    <color name="lblColor">#0D4388</color>
     <color name="purple_220">#E6DDF1</color>
     <color name="purple_500">#663366</color>
     <color name="purple_700">#660F57</color>

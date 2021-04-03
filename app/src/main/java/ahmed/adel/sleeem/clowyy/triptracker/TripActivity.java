@@ -132,6 +132,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         isEdit = getIntent().getBooleanExtra("isEdit", false);
 
+        onEditPosition = -1;
         if (isEdit) {
             tripID = getIntent().getStringExtra("tripID");
             onEditPosition = getIntent().getIntExtra("position", -1);
@@ -146,6 +147,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             btnAddTrip.setText(getString(R.string.editbtn));
             addNotesBtn.setText(getString(R.string.editnotesBtn));
             addNotesBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_editnote, 0, 0, 0);
+            lblDate.setText(trip.getTripDate());
+            lblTime.setText(trip.getTripTime());
             if (trip.getTripRepeatingType().equals("")) {
                 swtchRepeat.setChecked(false);
             } else {
@@ -159,7 +162,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             timeTxt = trip.getTripTime();
             calDate = trip.getTripDate();
         }
-        onEditPosition = -1;
+
         findViewById(R.id.btnTripAdding).setOnClickListener(v -> {
 
             if (calDate.length() > 0 && timeTxt.length() > 0 && txtStartPoint.getText().length() > 0 && txtEndPoint.getText().length() > 0
@@ -256,8 +259,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                             WorkManager.getInstance(getApplication()).enqueue(uploadWorkRequest2);
 
                         }
-
-                        //finish();
 
                         runOnUiThread(() -> {
                             onTripAddedNotifier.notifyDataChanged(trip, onEditPosition);
