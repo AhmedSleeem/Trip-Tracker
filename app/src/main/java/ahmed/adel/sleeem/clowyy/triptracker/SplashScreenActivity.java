@@ -34,7 +34,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         logoImage=findViewById(R.id.userImage);
 
         sloganTxt = findViewById(R.id.appName);
-        logoImage.setAnimation(AnimationUtils.loadAnimation(getBaseContext(),R.anim.side_anim));
+        //logoImage.setAnimation(AnimationUtils.loadAnimation(getBaseContext(),R.anim.side_anim));
         sloganTxt.setAnimation(AnimationUtils.loadAnimation(getBaseContext(),R.anim.bottom_anim));
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
