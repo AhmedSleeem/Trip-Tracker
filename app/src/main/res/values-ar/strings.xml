@@ -85,4 +85,10 @@
     <string name="show_route">إظهار المسار</string>
     <string name="editnotesBtn">تعديل الملاحظات</string>
     <string name="editbtn">تعديل</string>
+    <string name="menu_language">English</string>
+    <string name="menu_maps">رحلاتى</string>
+    <string name="AppName">سفــــارى</string>
+    <string name="BackFrom">العودة من </string>
+    <string name="AddTime">وقت الرحلة</string>
+    <string name="AddDate">تاريخ الرحلة</string>
 </resources>

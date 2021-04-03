@@ -81,9 +81,10 @@ public class MapsFragment extends Fragment {
             Toast.makeText(context, "No History Tips", Toast.LENGTH_SHORT).show();
         }
 
-        for(Trip trip: tripList){
+        for(Trip trip: tripList) {
             TripPoints tripPoints = googleMapsManager.getTripPoints(trip.getTripSource(), trip.getTripDestination());
-            tripCellList.add(new TripCell(trip, tripPoints));
+            if (!trip.getTripDistance().equals("N/A"))
+                tripCellList.add(new TripCell(trip, tripPoints));
         }
 
         /*
