@@ -82,7 +82,7 @@ public class MainActivity2 extends AppCompatActivity {
     private void addNewBubble() {
         bubbleView = (BubbleLayout) LayoutInflater.from(getApplicationContext()).inflate(R.layout.bubble_layout,null);
 
-        mBadge = (NotificationBadge)bubbleView.findViewById(R.id.count);
+        mBadge = bubbleView.findViewById(R.id.count);
 
         Trip trip = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectTripById(tripID);
 

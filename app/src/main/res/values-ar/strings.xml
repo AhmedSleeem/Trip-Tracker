@@ -89,7 +89,7 @@
     <string name="BackFrom">العودة من </string>
     <string name="AddTime">وقت الرحلة</string>
     <string name="AddDate">تاريخ الرحلة</string>
-    <string name="addnotehint">اضف ملاحظة جديدة</string>
+    <string name="AddNewNote">أضف ملاحظتك هنا</string>
 
     <string-array name="repeating_array">
         <item>ساعة</item>

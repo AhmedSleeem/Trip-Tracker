@@ -29,6 +29,8 @@ public class NotesDialog extends AppCompatActivity {
 
         Trip trip = TripDatabase.getInstance(this).getTripDao().selectTripById(tripID);
 
+        this.setTitle(trip.getTripTitle());
+
         List<String> excludeNotes = excludeNotes(trip.getTripNotes());
         notes = new ArrayList<>();
 
