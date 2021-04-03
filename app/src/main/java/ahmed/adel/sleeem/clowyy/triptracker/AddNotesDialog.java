@@ -35,6 +35,7 @@ public class AddNotesDialog extends AppCompatActivity {
 
             trip.setTripNotes(notes.toString());
             TripDatabase.getInstance(getApplicationContext()).getTripDao().updateTrip(trip);
+            MainActivity2.add();
             finish();
         });
 

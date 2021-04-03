@@ -489,17 +489,14 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     }
 
     private void showTripDialog() {
-        EditText txtBackTripName, txtBackStartPoint, txtBackEndPoint, txtRepeatingNumberRound;
-        Switch swtchRepeatingRound;
-        Spinner repeatingSpinnerRound;
+        EditText txtBackTripName, txtBackStartPoint, txtBackEndPoint;
+
+
 
 
         txtBackTripName = roundTripDialog.findViewById(R.id.txtBackTripName);
         txtBackStartPoint = roundTripDialog.findViewById(R.id.txtBackStartPoint);
         txtBackEndPoint = roundTripDialog.findViewById(R.id.txtBackEndPoint);
-        txtRepeatingNumberRound = roundTripDialog.findViewById(R.id.txtRepeatingNumberRound);
-        swtchRepeatingRound = roundTripDialog.findViewById(R.id.swtchRepeatingRound);
-        repeatingSpinnerRound = roundTripDialog.findViewById(R.id.repeatingSpinnerRound);
 
         lblDateRound = roundTripDialog.findViewById(R.id.lblDateRound);
         lblTimeRound = roundTripDialog.findViewById(R.id.lblTimeRound);
@@ -509,12 +506,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         txtBackEndPoint.setText(txtStartPoint.getText().toString());
         Button dateBtnrounded = roundTripDialog.findViewById(R.id.dateBtnRound);
         Button timeBtnRounded = roundTripDialog.findViewById(R.id.timerBtnRound);
-
-        txtRepeatingNumberRound.setOnFocusChangeListener((v, hasFocus) -> {
-            if (txtRepeatingNumberRound.getText().toString().equals("") || Integer.parseInt(txtRepeatingNumberRound.getText().toString()) == 0) {
-                txtRepeatingNumberRound.setText("1");
-            }
-        });
 
         timeBtnRounded.setOnClickListener(v -> {
 
@@ -527,32 +518,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             datePickerFragment.show(getSupportFragmentManager(), "date Picker");
         });
 
-
-        repeatingSpinnerRound.setAdapter(repeatingAdapter);
-
-        repeatingSpinnerRound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                repeatingTypeRound = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase() + "1";
-                // Toast.makeText(TripActivity.this, repeatingType, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        swtchRepeatingRound.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                txtRepeatingNumberRound.setVisibility(View.VISIBLE);
-                repeatingSpinnerRound.setVisibility(View.VISIBLE);
-            } else {
-                txtRepeatingNumberRound.setVisibility(View.INVISIBLE);
-                repeatingSpinnerRound.setVisibility(View.INVISIBLE);
-            }
-        });
 
         roundTripDialog.findViewById(R.id.btnDone).setOnClickListener(v -> {
             Toast.makeText(getBaseContext(), "done clicked", Toast.LENGTH_SHORT).show();
@@ -576,7 +541,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         tripExtraInfo = new TripExtraInfo("N/A", "N/A");
                     }
                     tripRounded = new Trip(UUID.randomUUID().toString(),txtBackStartPoint.getText().toString(), txtBackTripName.getText().toString(), txtBackEndPoint.getText().toString(),
-                            false, swtchRepeatingRound.isChecked() ? repeatingTypeRound : "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                            false, "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
                             calDaterounded, timeTxtrounded, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(),
                             tripExtraInfo.getAvgSpeed());
                     type = 3;
