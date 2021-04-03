@@ -204,8 +204,7 @@
             android:orientation="horizontal"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:textAlignment="viewEnd"
-            android:layoutDirection="ltr">
+            android:textAlignment="viewEnd">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteIconBtn"

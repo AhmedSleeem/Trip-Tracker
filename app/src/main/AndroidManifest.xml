@@ -87,7 +87,7 @@
         <activity
             android:name=".AddNotesDialog"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.Dialog.MinWidth"/>
+            android:theme="@style/Theme.AppCompat.Dialog.MinWidth" />
         <activity
             android:name=".NotesDialog"
             android:launchMode="singleInstance"

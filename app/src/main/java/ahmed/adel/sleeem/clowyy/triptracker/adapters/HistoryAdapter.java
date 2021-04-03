@@ -51,6 +51,10 @@ private OnRecyclerViewItemClickLister onItemClickListener;
         if(trip.getTripImage() != null && !trip.getTripImage().equals("")) {
             Glide.with(context).load(trip.getTripImage()).into(holder.destinationImage);
         }
+        else{
+            holder.destinationImage.setImageResource(R.drawable.defaultimage);
+        }
+
 
         if (trip.isTripType()){
             holder.tripType.setBackgroundResource(R.drawable.ic_rounded);

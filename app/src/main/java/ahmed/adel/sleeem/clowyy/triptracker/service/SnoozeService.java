@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
+import ahmed.adel.sleeem.clowyy.triptracker.SplashScreenActivity;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.DoneTripReceiver;
 import ahmed.adel.sleeem.clowyy.triptracker.managers.SnoozeCanclerBroadCast;
 
@@ -73,13 +74,16 @@ public class SnoozeService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         RemoteViews customView = new RemoteViews(getPackageName(), R.layout.dialog_notifier_snooze);
 
-        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), SplashScreenActivity.class);
         Intent hungupIntent = new Intent(getApplicationContext(), SnoozeCanclerBroadCast.class);
 
         String title = intent.getStringExtra("Title");
         String source = intent.getStringExtra("Source");
         String destination = intent.getStringExtra("Destination");
         String date = intent.getStringExtra("Date");
+        int notificationId = intent.getIntExtra("notificationId",0);
+
+
 
 
 
@@ -88,6 +92,7 @@ public class SnoozeService extends Service {
         hungupIntent.putExtra("date",date);
         hungupIntent.putExtra("Title",title);
         hungupIntent.putExtra("Source",source);
+        hungupIntent.putExtra("notificationId",notificationId);
 
 
 
@@ -96,6 +101,7 @@ public class SnoozeService extends Service {
 
         answerIntent.putExtra("destination",destination);
         answerIntent.putExtra("date",date);
+        answerIntent.putExtra("notificationId",notificationId);
 
 
 
@@ -133,7 +139,7 @@ public class SnoozeService extends Service {
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             notification.setCustomContentView(customView);
             notification.setCustomBigContentView(customView);
-            startForeground(1124, notification.build());
+            startForeground(notificationId, notification.build());
         } else {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
 
@@ -151,7 +157,7 @@ public class SnoozeService extends Service {
             NotificationCompat.Action hangupAction = new NotificationCompat.Action.Builder(android.R.drawable.sym_action_chat, "HANG UP", hungupPendingIntent).build();
             notification.addAction(hangupAction);
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-            startForeground(1124, notification.build());
+            startForeground(notificationId, notification.build());
         }
 
 
