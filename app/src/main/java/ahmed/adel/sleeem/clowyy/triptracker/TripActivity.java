@@ -21,8 +21,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -72,7 +72,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
     RadioButton rbOneWay, rbRoundTrip;
 
     Button timeBtn, dateBtn,addNotesBtn;
-    TextView tripType;
+    TextView tripType, lblDate, lblTime, lblDateRound, lblTimeRound;
 
     Dialog roundTripDialog, notesDialog;
 
@@ -99,7 +99,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
     private String calDaterounded = "";
     private String timeTxtrounded = "";
-    private int type;
+    private int type, onEditPosition;
     private boolean isEdit = false;
     String tripID = null;
     Trip trip;
@@ -142,6 +142,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
         if (isEdit) {
             tripID = getIntent().getStringExtra("tripID");
+            onEditPosition = getIntent().getIntExtra("position", -1);
+
             trip = tripDao.selectTripById(tripID);
             txtTripName.setText(trip.getTripTitle());
             txtStartPoint.setText(trip.getTripSource());
@@ -167,7 +169,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
 
         }
-
+        onEditPosition = -1;
         findViewById(R.id.btnTripAdding).setOnClickListener(v -> {
 
             if (calDate.length() > 0 && timeTxt.length() > 0 && txtStartPoint.getText().length() > 0 && txtEndPoint.getText().length() > 0
@@ -282,9 +284,9 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         //finish();
 
                         runOnUiThread(() -> {
-                            onTripAddedNotifier.notifyDataChanged(trip);
+                            onTripAddedNotifier.notifyDataChanged(trip, onEditPosition);
                             if(tripRounded != null) {
-                                onTripAddedNotifier.notifyDataChanged(tripRounded);
+                                onTripAddedNotifier.notifyDataChanged(tripRounded, onEditPosition);
                             }
                         });
                     }
@@ -511,46 +513,20 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
 
     }
 
-    private void showDeleteDialog(List<String> notesList, int position){
-        //initialize alert dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        //set title
-        builder.setTitle(getString(R.string.deleteMSGtitle));
-        //set message
-        builder.setMessage(getString(R.string.deleteMSG));
-        //positive yes button
-        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                notesList.remove(position);
-                lvNotes.getAdapter().notify();
-            }
-        });
-        //negative no button
-        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //dismiss dialog
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-    }
-
     private void showTripDialog() {
-        EditText txtBackTripName, txtBackStartPoint, txtBackEndPoint, txtRepeatingNumberRound;
-        Switch swtchRepeatingRound;
-        Spinner repeatingSpinnerRound;
+        EditText txtBackTripName, txtBackStartPoint, txtBackEndPoint;
+
+
 
 
         txtBackTripName = roundTripDialog.findViewById(R.id.txtBackTripName);
         txtBackStartPoint = roundTripDialog.findViewById(R.id.txtBackStartPoint);
         txtBackEndPoint = roundTripDialog.findViewById(R.id.txtBackEndPoint);
-        txtRepeatingNumberRound = roundTripDialog.findViewById(R.id.txtRepeatingNumberRound);
-        swtchRepeatingRound = roundTripDialog.findViewById(R.id.swtchRepeatingRound);
-        repeatingSpinnerRound = roundTripDialog.findViewById(R.id.repeatingSpinnerRound);
 
-        txtBackTripName.setText("Back from ");
+        lblDateRound = roundTripDialog.findViewById(R.id.lblDateRound);
+        lblTimeRound = roundTripDialog.findViewById(R.id.lblTimeRound);
+
+        txtBackTripName.setText(getString(R.string.BackFrom));
         txtBackStartPoint.setText(txtEndPoint.getText().toString());
         txtBackEndPoint.setText(txtStartPoint.getText().toString());
         Button dateBtnrounded = roundTripDialog.findViewById(R.id.dateBtnRound);
@@ -567,32 +543,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             datePickerFragment.show(getSupportFragmentManager(), "date Picker");
         });
 
-
-        repeatingSpinnerRound.setAdapter(repeatingAdapter);
-
-        repeatingSpinnerRound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                repeatingTypeRound = Arrays.asList(getResources().getStringArray(R.array.repeating_array)).get(position).toLowerCase() + "1";
-                // Toast.makeText(TripActivity.this, repeatingType, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        swtchRepeatingRound.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                txtRepeatingNumberRound.setVisibility(View.VISIBLE);
-                repeatingSpinnerRound.setVisibility(View.VISIBLE);
-            } else {
-                txtRepeatingNumberRound.setVisibility(View.INVISIBLE);
-                repeatingSpinnerRound.setVisibility(View.INVISIBLE);
-            }
-        });
 
         roundTripDialog.findViewById(R.id.btnDone).setOnClickListener(v -> {
             Toast.makeText(getBaseContext(), "done clicked", Toast.LENGTH_SHORT).show();
@@ -616,7 +566,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
                         tripExtraInfo = new TripExtraInfo("N/A", "N/A");
                     }
                     tripRounded = new Trip(UUID.randomUUID().toString(),txtBackStartPoint.getText().toString(), txtBackTripName.getText().toString(), txtBackEndPoint.getText().toString(),
-                            false, swtchRepeatingRound.isChecked() ? repeatingTypeRound : "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                            false, "", roundNote.toString(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
                             calDaterounded, timeTxtrounded, imgURL, false, tripExtraInfo.getDistance(), tripExtraInfo.getDuration(),
                             tripExtraInfo.getAvgSpeed());
                     tripRounded.setNotificationId(createID());
@@ -666,6 +616,8 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         swtchRepeat = findViewById(R.id.swtchRepeating);
         tripType = findViewById(R.id.tripTypeTxt);
         addNotesBtn = findViewById(R.id.btnAddNotes);
+        lblDate = findViewById(R.id.lblDate);
+        lblTime = findViewById(R.id.lblTime);
 
         repeatingSpinner = findViewById(R.id.repeatingSpinner);
         repeatingAdapter = ArrayAdapter.createFromResource(this, R.array.repeating_array, android.R.layout.simple_spinner_item);
@@ -685,7 +637,6 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
         });
 
         swtchRepeat.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
             if (isChecked) {
                 //type = 5;
                 txtRepeatingNumber.setVisibility(View.VISIBLE);
@@ -697,13 +648,19 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             }
         });
 
+        txtRepeatingNumber.setOnFocusChangeListener((v, hasFocus) -> {
+            if (txtRepeatingNumber.getText().toString().equals("") || Integer.parseInt(txtRepeatingNumber.getText().toString()) == 0) {
+                txtRepeatingNumber.setText("1");
+            }
+        });
+
         btnAddTrip = findViewById(R.id.btnTripAdding);
 
         rbOneWay = findViewById(R.id.rbOneWay);
         rbRoundTrip = findViewById(R.id.rbRoundTrip);
 
-        timeBtn = findViewById(R.id.timerBtn);
-        dateBtn = findViewById(R.id.dateBtn);
+        timeBtn = findViewById(R.id.timerBtnRound);
+        dateBtn = findViewById(R.id.dateBtnRound);
 
         Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
         txtStartPoint.setFocusable(false);
@@ -720,6 +677,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.SECOND, 0);
             timeTxt = String.valueOf(hourOfDay) + " : " + String.valueOf(minute);
+            lblTime.setText(timeTxt);
         }
         else{
 
@@ -728,6 +686,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             calendar2.set(Calendar.SECOND, 0);
 
             timeTxtrounded = String.valueOf(hourOfDay) + " : " + String.valueOf(minute);
+            lblTimeRound.setText(timeTxtrounded);
         }
 
     }
@@ -743,6 +702,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
              date = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
             calDate = date;
+            lblDate.setText(date);
         }
         else {
 
@@ -751,6 +711,7 @@ public class TripActivity extends AppCompatActivity implements TimePickerDialog.
             calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
            date = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
             calDaterounded = date;
+            lblDateRound.setText(date);
         }
     }
 

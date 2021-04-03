@@ -23,6 +23,8 @@ public class AddNotesDialog extends AppCompatActivity {
 
         Trip trip = TripDatabase.getInstance(this).getTripDao().selectTripById(tripID);
 
+        this.setTitle(trip.getTripTitle());
+
         StringBuilder notes = new StringBuilder(trip.getTripNotes());
 
         EditText editText = findViewById(R.id.addnoteTxt);
@@ -35,6 +37,7 @@ public class AddNotesDialog extends AppCompatActivity {
 
             trip.setTripNotes(notes.toString());
             TripDatabase.getInstance(getApplicationContext()).getTripDao().updateTrip(trip);
+            MainActivity2.add();
             finish();
         });
 

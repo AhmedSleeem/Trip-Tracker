@@ -151,6 +151,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         Intent edit = new Intent(getContext(), TripActivity.class);
         edit.putExtra("isEdit", true);
         edit.putExtra("tripID", trips.get(position).getTripId());
+        edit.putExtra("position", position);
         startActivity(edit);
     }
 
@@ -175,8 +176,13 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     }
 
     @Override
-    public void notifyDataChanged(Trip trip) {
-        trips.add(trip);
+    public void notifyDataChanged(Trip trip, int position) {
+        if(position == -1) {
+            trips.add(trip);
+        }else{
+            trips.remove(position);
+            trips.add(position, trip);
+        }
         rv.getAdapter().notifyDataSetChanged();
     }
 }

@@ -14,23 +14,24 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="32dp"
-        android:src="@drawable/trip"
+        android:src="@drawable/logo"
         android:transitionName="logo_image"
-        app:layout_constraintBottom_toTopOf="@+id/userEmail"
+        app:layout_constraintBottom_toTopOf="@+id/appName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/userEmail"
+        android:id="@+id/appName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="cursive"
         android:gravity="center_horizontal"
-        android:text="Trip Tracker"
+        android:text="@string/AppName"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="60sp"
+        android:textSize="65sp"
         android:transitionName="logo_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -48,5 +49,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/appName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

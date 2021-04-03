@@ -14,48 +14,8 @@
         android:layout_height="match_parent"
         android:background="@color/design_default_color_background">
 
-        <Switch
-            android:id="@+id/swtchRepeatingRound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
-            android:text="@string/LBL_REPEAT"
-            android:textColor="@color/teal_200"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-        <EditText
-            android:id="@+id/txtRepeatingNumberRound"
-            android:layout_width="50dp"
-            android:layout_height="45dp"
-            android:background="@drawable/custom_input"
-            android:ems="10"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="3"
-            android:text="3"
-            android:textColor="@color/purple_200"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/swtchRepeatingRound"
-            app:layout_constraintStart_toStartOf="@+id/btnAddRoundNotes"
-            app:layout_constraintTop_toTopOf="@+id/swtchRepeatingRound" />
-
-        <Spinner
-            android:id="@+id/repeatingSpinnerRound"
-            android:layout_width="0dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/txtRepeatingNumberRound"
-            app:layout_constraintEnd_toEndOf="@+id/txtBackEndPoint"
-            app:layout_constraintStart_toEndOf="@+id/txtRepeatingNumberRound"
-            app:layout_constraintTop_toTopOf="@+id/txtRepeatingNumberRound" />
-
         <TextView
-            android:id="@+id/userEmail"
+            android:id="@+id/appName"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -76,7 +36,7 @@
             android:text="@string/LBL_START"
             android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userEmail" />
+            app:layout_constraintTop_toBottomOf="@+id/appName" />
 
         <TextView
             android:id="@+id/textView3"
@@ -112,15 +72,17 @@
             android:layout_marginRight="16dp"
             android:background="@drawable/custom_input"
             android:ems="10"
+            android:textColor="@color/editText"
             android:hint="@string/HINT_TRIP_NAME"
             android:inputType="textPersonName"
             android:maxLength="150"
             android:paddingLeft="7dp"
             android:paddingRight="7dp"
-            app:layout_constraintBottom_toBottomOf="@+id/userEmail"
+            android:textColorHint="@color/hintColor"
+            app:layout_constraintBottom_toBottomOf="@+id/appName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/userEmail"
-            app:layout_constraintTop_toTopOf="@+id/userEmail" />
+            app:layout_constraintStart_toEndOf="@+id/appName"
+            app:layout_constraintTop_toTopOf="@+id/appName" />
 
         <EditText
             android:id="@+id/txtBackStartPoint"
@@ -133,10 +95,12 @@
             android:background="@drawable/custom_input"
             android:editable="false"
             android:ems="10"
+            android:textColor="@color/editText"
             android:hint="@string/HINT_START_POINT"
             android:inputType="textPersonName"
             android:paddingLeft="7dp"
             android:paddingRight="7dp"
+            android:textColorHint="@color/hintColor"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"
@@ -157,6 +121,8 @@
             android:inputType="textPersonName"
             android:paddingLeft="7dp"
             android:paddingRight="7dp"
+            android:textColor="@color/editText"
+            android:textColorHint="@color/hintColor"
             app:layout_constraintBottom_toBottomOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView3"
@@ -205,27 +171,58 @@
             android:id="@+id/linearLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="@+id/txtBackEndPoint"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtRepeatingNumberRound">
+            app:layout_constraintTop_toBottomOf="@+id/btnAddRoundNotes">
 
-            <Button
-                android:id="@+id/dateBtnRound"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/ic_date" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/timerBtnRound"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/ic_timer" />
+                <Button
+                    android:id="@+id/dateBtnRound"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/ic_date" />
+
+                <TextView
+                    android:id="@+id/lblDateRound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
+                    android:text="@string/AddDate"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/timerBtnRound"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/ic_timer" />
+
+                <TextView
+                    android:id="@+id/lblTimeRound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
+                    android:text="@string/AddTime"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

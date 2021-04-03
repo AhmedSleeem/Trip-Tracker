@@ -71,13 +71,13 @@ public class DoneTripReceiver extends BroadcastReceiver {
         mapIntent.setPackage("com.google.android.apps.maps");
         mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        context.startActivity(mapIntent);
+       // context.startActivity(mapIntent);
 
 //        context.startActivity(new Intent(context, MainActivity2.class));
 
         Intent intent1;
 
-        /*
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
             intent1 = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
             ((AppCompatActivity)context).startActivityForResult(intent1, 0);
@@ -85,11 +85,11 @@ public class DoneTripReceiver extends BroadcastReceiver {
             intent1 = new Intent(context, Service.class);
             context.startService(intent1);
         }
-        */
 
 
-       // initBubble();
-        //addNewBubble();
+
+        initBubble();
+
     }
 
     private void initBubble() {
@@ -97,6 +97,7 @@ public class DoneTripReceiver extends BroadcastReceiver {
                 .setInitializationCallback(new OnInitializedCallback() {
                     @Override
                     public void onInitialized() {
+                        addNewBubble();
                     }
                 }).build();
         bubblesManager.initialize();

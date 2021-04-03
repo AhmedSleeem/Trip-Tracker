@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="@string/tripTitle"
-                android:textColor="@color/purple_500" />
+                android:textColor="@color/notificationTitle" />
 
             <TextView
                 android:id="@+id/txtDestination"
@@ -39,10 +39,10 @@
 
         <ImageView
             android:id="@+id/photo"
-            android:layout_width="81dp"
-            android:layout_height="47dp"
+            android:layout_width="54dp"
+            android:layout_height="55dp"
             android:layout_margin="5dp"
-            android:src="@drawable/trip" />
+            android:src="@drawable/logo" />
 
     </LinearLayout>
 

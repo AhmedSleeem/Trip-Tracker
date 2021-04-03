@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +20,14 @@ import android.view.View;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.nex3z.notificationbadge.NotificationBadge;
 import com.txusballesteros.bubbles.BubbleLayout;
 import com.txusballesteros.bubbles.BubblesManager;
 import com.txusballesteros.bubbles.OnInitializedCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
@@ -33,7 +38,8 @@ import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 public class MainActivity2 extends AppCompatActivity {
 
     private BubblesManager bubblesManager;
-    private NotificationBadge mBadge;
+    private static NotificationBadge mBadge;
+    private static int count;
     BubbleLayout bubbleView;
     FloatingActionsMenu floatingActionsMenu;
     FloatingActionButton showBtn,addBtn,closeBtn;
@@ -41,11 +47,10 @@ public class MainActivity2 extends AppCompatActivity {
     private int MY_PERMISSION = 1000;
     String tripID;
 
-   // @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
 
 
 
@@ -70,14 +75,11 @@ public class MainActivity2 extends AppCompatActivity {
             startService(intent);
         }
 
-        //initBubble();
+        initBubble();
 
        // addNewBubble();
 
         startMap(getIntent(), getApplicationContext());
-
-//        Intent intent1 = new Intent(getApplicationContext(), MyService.class);
-//        stopService(intent1);
 
         finish();
     }
@@ -87,17 +89,21 @@ public class MainActivity2 extends AppCompatActivity {
                 .setInitializationCallback(new OnInitializedCallback() {
                     @Override
                     public void onInitialized() {
+                        addNewBubble();
                     }
                 }).build();
         bubblesManager.initialize();
     }
 
     private void addNewBubble() {
-        bubbleView = (BubbleLayout) LayoutInflater.from(MainActivity2.this)
-                .inflate(R.layout.bubble_layout,null);
+        bubbleView = (BubbleLayout) LayoutInflater.from(getApplicationContext()).inflate(R.layout.bubble_layout,null);
 
-        mBadge = (NotificationBadge)bubbleView.findViewById(R.id.count);
-        mBadge.setNumber(1);
+        mBadge = bubbleView.findViewById(R.id.count);
+
+        Trip trip = TripDatabase.getInstance(getApplicationContext()).getTripDao().selectTripById(tripID);
+
+        count = notesCount(trip.getTripNotes());
+        mBadge.setNumber(count);
 
         floatingActionsMenu = bubbleView.findViewById(R.id.fab);
         showBtn = bubbleView.findViewById(R.id.showNotes);
@@ -107,7 +113,7 @@ public class MainActivity2 extends AppCompatActivity {
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notes= new Intent(MainActivity2.this,NotesDialog.class);
+                Intent notes= new Intent(getApplicationContext(),NotesDialog.class);
                 notes.putExtra("tripID", tripID);
                 notes.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notes);
@@ -118,7 +124,7 @@ public class MainActivity2 extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addnotes= new Intent(MainActivity2.this,AddNotesDialog.class);
+                Intent addnotes= new Intent(getApplicationContext(),AddNotesDialog.class);
                 addnotes.putExtra("tripID", tripID);
                 addnotes.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(addnotes);
@@ -135,13 +141,17 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
         bubbleView.setShouldStickToWall(true);
-        bubblesManager.addBubble(bubbleView, 60, 20);
+        bubblesManager.addBubble(bubbleView, 0, 450);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        bubblesManager.recycle();
+       // bubblesManager.recycle();
+    }
+
+    public static void add(){
+        mBadge.setNumber(++count);
     }
 
     private void startMap(Intent intent, Context context){
@@ -165,5 +175,19 @@ public class MainActivity2 extends AppCompatActivity {
 
         context.startActivity(mapIntent);
 
+    }
+
+    int notesCount(String note) {
+        if (note.equals("")) {
+            return 0;
+        }
+
+        String[] strings = note.split("Ω");
+        List<String> result = new ArrayList<>();
+        for (int indx = 0; indx < strings.length; ++indx) {
+            result.add(strings[indx]);
+        }
+
+        return result.size();
     }
 }

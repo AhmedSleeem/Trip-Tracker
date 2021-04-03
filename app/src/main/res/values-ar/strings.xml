@@ -14,12 +14,12 @@
     <string name="RBTN_ROUND_TRIP" translatable="false">ذهاب وعودة</string>
     <string name="CANCEL" translatable="false">إلغاء</string>
     <string name="DONE" translatable="false">تم</string>
-    <string name="newuser" translatable="false">مستخدم جديد</string>
+    <string name="newuser" translatable="false">مستخدم جديد ؟</string>
     <string name="register" translatable="false">سجل الأن</string>
     <string name="Email" translatable="false">البريد الإلكتروني</string>
     <string name="password" translatable="false">كلمة المرور</string>
     <string name="registerbtn" translatable="false">سجل الأن</string>
-    <string name="alreadyhaveaccount" translatable="false">هل تمتلك حساب بالفعل</string>
+    <string name="alreadyhaveaccount" translatable="false">هل تمتلك حساب بالفعل ؟</string>
     <string name="loginTxtBtn" translatable="false">تسجيل الدخول</string>
     <string name="othermethods" translatable="false">طرق تسجيل أخرى</string>
     <string name="logout" translatable="false">تسجيل الخروج</string>
@@ -77,12 +77,24 @@
     <string name="avgSpeed">السرعة المقدرة</string>
     <string name="shownotes">إظهار الملاحظات</string>
     <string name="okbtn">تم</string>
-    <string name="menu_maps">الخريطة</string>
-    <string name="menu_language">english</string>
     <string name="add">إضافة فقاعة</string>
     <string name="save">حفظ</string>
-    <string name="addNote">إضافة</string>
+    <string name="addNote">إضافة ملاحظات</string>
     <string name="show_route">إظهار المسار</string>
     <string name="editnotesBtn">تعديل الملاحظات</string>
     <string name="editbtn">تعديل</string>
+    <string name="menu_language">English</string>
+    <string name="menu_maps">رحلاتى</string>
+    <string name="AppName">سفــــارى</string>
+    <string name="BackFrom">العودة من </string>
+    <string name="AddTime">وقت الرحلة</string>
+    <string name="AddDate">تاريخ الرحلة</string>
+    <string name="AddNewNote">أضف ملاحظتك هنا</string>
+
+    <string-array name="repeating_array">
+        <item>ساعة</item>
+        <item>يوم</item>
+        <item>أسبوع</item>
+        <item>شهر</item>
+    </string-array>
 </resources>

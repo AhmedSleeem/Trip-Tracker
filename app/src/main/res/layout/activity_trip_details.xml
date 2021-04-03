@@ -15,7 +15,7 @@
         tools:layout_editor_absoluteY="-35dp">
 
         <TextView
-            android:id="@+id/userEmail"
+            android:id="@+id/appName"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -36,7 +36,7 @@
             android:text="@string/LBL_START"
             android:textColor="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userEmail" />
+            app:layout_constraintTop_toBottomOf="@+id/appName" />
 
         <TextView
             android:id="@+id/textView3"
@@ -87,11 +87,11 @@
             android:layout_marginRight="16dp"
             android:text="TextView"
             android:textColor="@color/purple_200"
-            app:layout_constraintBottom_toBottomOf="@+id/userEmail"
+            app:layout_constraintBottom_toBottomOf="@+id/appName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/userEmail"
-            app:layout_constraintTop_toTopOf="@+id/userEmail" />
+            app:layout_constraintStart_toEndOf="@+id/appName"
+            app:layout_constraintTop_toTopOf="@+id/appName" />
 
         <TextView
             android:id="@+id/startpointTxt"
@@ -197,6 +197,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/defaultimage"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
