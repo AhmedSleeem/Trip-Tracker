@@ -112,7 +112,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
         bubbleView.setShouldStickToWall(true);
-        bubblesManager.addBubble(bubbleView, 60, 20);
+        bubblesManager.addBubble(bubbleView, 0, 450);
     }
 
     @Override
