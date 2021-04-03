@@ -35,7 +35,7 @@
     <string name="menu_history">History</string>
     <string name="menu_sync">Sync</string>
     <string name="menu_logout">Logout</string>
-    <string name="menu_maps">Maps</string>
+    <string name="menu_maps">Trips</string>
     <string name="menu_language">عربي</string>
     <string name="menu_deleteAccount">Delete Account</string>
     <string name="GoToMaps">Go To Maps</string>
@@ -92,6 +92,7 @@
     <string name="avgSpeed">Avg Speed</string>
     <string name="shownotes">Show Notes</string>
     <string name="okbtn">Ok</string>
+    <string name="BackFrom">Back from</string>
 
     <string name="add">Add Bubble</string>
     <string name="save">Save</string>
@@ -100,6 +101,9 @@
 
     <string name="editnotesBtn">Edit Notes</string>
     <string name="editbtn">Edit</string>
+    <string name="AppName">Trip Tracker</string>
+    <string name="AddTime">Trip Time</string>
+    <string name="AddDate">Trip Date</string>
 
 
 </resources>

@@ -77,4 +77,10 @@
     <string name="avgSpeed">السرعة المقدرة</string>
     <string name="shownotes">إظهار الملاحظات</string>
     <string name="okbtn">تم</string>
+    <string name="menu_language">English</string>
+    <string name="menu_maps">رحلاتى</string>
+    <string name="AppName">سفــــارى</string>
+    <string name="BackFrom">العودة من </string>
+    <string name="AddTime">وقت الرحلة</string>
+    <string name="AddDate">تاريخ الرحلة</string>
 </resources>

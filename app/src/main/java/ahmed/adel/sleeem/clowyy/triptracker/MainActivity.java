@@ -1,38 +1,31 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.bumptech.glide.Glide;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
@@ -42,9 +35,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import com.google.android.material.badge.BadgeUtils;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,23 +48,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import ahmed.adel.sleeem.clowyy.triptracker.adapters.HistoryAdapter;
-import ahmed.adel.sleeem.clowyy.triptracker.adapters.UpcomingTripsAdapter;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
-import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
-import ahmed.adel.sleeem.clowyy.triptracker.helpers.User;
-import ahmed.adel.sleeem.clowyy.triptracker.managers.DialogAlert;
-import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
-import ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips.UpcomingTripsFragment;
 
 public class MainActivity extends AppCompatActivity  {
+    public static final String MY_PREF = "TripTracker";
+    public static final String LANG_VALUE = "Lang";
     private AppBarConfiguration mAppBarConfiguration;
     SessionManager session;
 
@@ -140,7 +126,7 @@ public class MainActivity extends AppCompatActivity  {
         String username = user.get(SessionManager.KEY_NAME);
         TextView userName = headerView.findViewById(R.id.userName);
         userName.setText(username);
-        TextView userEmail = headerView.findViewById(R.id.userEmail);
+        TextView userEmail = headerView.findViewById(R.id.appName);
         userEmail.setText(email);
 
 
@@ -182,7 +168,18 @@ public class MainActivity extends AppCompatActivity  {
         });
 
         navigationView.getMenu().findItem(R.id.nav_language).setOnMenuItemClickListener(menuItem -> {
-            setLocale(this, "ar");
+            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.MY_PREF, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            if(menuItem.getTitle().equals("English")) {
+                setLocale(this,"en");
+                editor.putString(MainActivity.LANG_VALUE, "en");
+            }else{
+                setLocale(this,"ar");
+                editor.putString(MainActivity.LANG_VALUE, "ar");
+            }
+
+            editor.commit();
             drawer.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -219,8 +216,6 @@ public class MainActivity extends AppCompatActivity  {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -268,6 +263,7 @@ public class MainActivity extends AppCompatActivity  {
             case GoogleMapsManager.LOCATION_REQUEST_CODE: {
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     googleMapsManager.locationPermission = true;
+                    googleMapsManager.startNavigate();
                 }
             }break;
         }
