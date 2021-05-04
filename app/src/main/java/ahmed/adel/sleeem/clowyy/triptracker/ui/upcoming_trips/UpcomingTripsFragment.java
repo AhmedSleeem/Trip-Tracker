@@ -1,29 +1,45 @@
 package ahmed.adel.sleeem.clowyy.triptracker.ui.upcoming_trips;
 
+import android.app.Service;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.WorkManager;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nex3z.notificationbadge.NotificationBadge;
+import com.txusballesteros.bubbles.BubbleLayout;
+import com.txusballesteros.bubbles.BubblesManager;
+import com.txusballesteros.bubbles.OnInitializedCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ahmed.adel.sleeem.clowyy.triptracker.AddNotesDialog;
 import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
+import ahmed.adel.sleeem.clowyy.triptracker.MainActivity2;
+import ahmed.adel.sleeem.clowyy.triptracker.NotesDialog;
 import ahmed.adel.sleeem.clowyy.triptracker.OnTripAddedNotifier;
 import ahmed.adel.sleeem.clowyy.triptracker.R;
 import ahmed.adel.sleeem.clowyy.triptracker.TripActivity;
@@ -41,6 +57,19 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
     private List<Trip> trips;
 
     TripDao tripDao;
+
+    private BubblesManager bubblesManager;
+    private static NotificationBadge mBadge;
+    private static int count;
+    BubbleLayout bubbleView;
+    FloatingActionsMenu floatingActionsMenu;
+    FloatingActionButton showBtn,addBtn,closeBtn;
+
+    private int MY_PERMISSION = 1000;
+    String tripID;
+
+    Context context;
+
 
     @Override
     public void onStart() {
@@ -132,6 +161,7 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
                 trips.remove(position);
                 tripDao.deleteTripId(tripID);
                 FirebaseDatabase.getInstance().getReference("trips").child(userID).child(tripID).removeValue();
+                WorkManager.getInstance(getContext()).cancelAllWorkByTag(tripID);
                 rv.getAdapter().notifyDataSetChanged();
             }
         });
@@ -163,15 +193,44 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         trip.setTripStatus(true);
         tripDao.updateTrip(trip);
 
+        Intent answerIntent = new Intent(getContext().getApplicationContext(), MainActivity2.class);
+        answerIntent.putExtra("destination",trip.getTripDestination());
+        answerIntent.putExtra("TripId",trip.getTripId());
+
+        WorkManager.getInstance(context).cancelAllWorkByTag(trip.getTripId());
+
+        startActivity(answerIntent);
+
+
+        /*
+        context = getActivity().getApplicationContext();;
+
+
+        WorkManager.getInstance(context).cancelAllWorkByTag(trip.getTripId());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getActivity())) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
+            startActivityForResult(intent, 0);
+        } else {
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            Intent intent = new Intent(activity, Service.class);
+            context.startService(intent);
+        }
+
+        initBubble();
+
         GoogleMapsManager googleMapsManager = GoogleMapsManager.getInstance(getContext());
         googleMapsManager.requestPermission();
         if(googleMapsManager.locationPermission){
             GoogleMapsManager.getInstance(getContext()).launchGoogleMaps(trips.get(position).getTripDestination());
         }
-        //tripDao.deleteTrip(trips.get(position));
+
+        */
+
 
         trips = tripDao.selectAllTrips(FirebaseAuth.getInstance().getCurrentUser().getUid(),false);
         rv.setAdapter(new HistoryAdapter(getContext(),trips, (OnRecyclerViewItemClickLister) UpcomingTripsFragment.this));
+
 
     }
 
@@ -185,4 +244,5 @@ public class UpcomingTripsFragment extends Fragment implements OnUpcomingAdapter
         }
         rv.getAdapter().notifyDataSetChanged();
     }
+
 }

@@ -30,17 +30,6 @@ public class Trip {
         this.tripTitle = tripTitle;
     }
 
-    public int getNotificationId() {
-        return notificationId;
-    }
-
-    public void setNotificationId(int notificationId) {
-        this.notificationId = notificationId;
-    }
-
-    @ColumnInfo
-    public  int notificationId;
-
 
     @ColumnInfo
     String tripDestination;

@@ -1,6 +1,5 @@
 package ahmed.adel.sleeem.clowyy.triptracker.managers;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -47,11 +46,6 @@ public class DoneTripReceiver extends BroadcastReceiver {
         this.context = context;
         String destination = intent.getStringExtra("destination");
         String tripId = intent.getStringExtra("TripId");
-        int notificationId = intent.getIntExtra("notificationId",0);
-
-        String ns = Context.NOTIFICATION_SERVICE;
-        NotificationManager nMgr = (NotificationManager) context.getSystemService(ns);
-        nMgr.cancel(notificationId);
 
         Log.i("Done receiver", "onReceive: "+destination);
 
@@ -71,7 +65,7 @@ public class DoneTripReceiver extends BroadcastReceiver {
         mapIntent.setPackage("com.google.android.apps.maps");
         mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-       // context.startActivity(mapIntent);
+        // context.startActivity(mapIntent);
 
 //        context.startActivity(new Intent(context, MainActivity2.class));
 

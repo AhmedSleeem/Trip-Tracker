@@ -20,9 +20,6 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import ahmed.adel.sleeem.clowyy.triptracker.GoogleMapsManager;
 import ahmed.adel.sleeem.clowyy.triptracker.MainActivity;
@@ -43,7 +40,7 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.y_sabah_el_ro3b);
+        AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.yamsafr);
         try {
             player.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
             player.prepare();
@@ -89,8 +86,6 @@ public class MyService extends Service {
         String source = intent.getStringExtra("Source");
         String destination = intent.getStringExtra("Destination");
         String tripId = intent.getStringExtra("Date");
-        int notificationId = intent.getIntExtra("notificationId",createID());
-
 
 //        LatLng location = GoogleMapsManager.getInstance(getApplicationContext()).getLocationFromAddress(destination);
 //        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.latitude + "," + location.longitude);
@@ -105,7 +100,6 @@ public class MyService extends Service {
         hungupIntent.putExtra("date",tripId);
         hungupIntent.putExtra("source",source);
         hungupIntent.putExtra("Title",title);
-        hungupIntent.putExtra("notificationId",notificationId);
 
 
 
@@ -115,7 +109,6 @@ public class MyService extends Service {
 
         answerIntent.putExtra("destination",destination);
         answerIntent.putExtra("TripId",tripId);
-        answerIntent.putExtra("notificationId",notificationId);
 
 
 
@@ -123,9 +116,9 @@ public class MyService extends Service {
         // answerIntent.putExtra("Destination", destination);
 
         //if (intent.hasExtra("caller_text")) {
-            answerIntent.putExtra("caller_text", intent.getStringExtra("caller_text"));
-            customView.setTextViewText(R.id.txtDestination, destination);
-            customView.setTextViewText(R.id.name, title);
+        answerIntent.putExtra("caller_text", intent.getStringExtra("caller_text"));
+        customView.setTextViewText(R.id.txtDestination, destination);
+        customView.setTextViewText(R.id.name, title);
         //} else
 
         //customView.setImageViewBitmap(R.id.photo, NotificationImageManager().getImageBitmap(intent.getStringExtra("user_thumbnail_image")))
@@ -155,8 +148,8 @@ public class MyService extends Service {
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             notification.setCustomContentView(customView);
             notification.setCustomBigContentView(customView);
-           // notification.setAutoCancel(true);
-            startForeground(notificationId, notification.build());
+            // notification.setAutoCancel(true);
+            startForeground(1124, notification.build());
         } else {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
 
@@ -174,18 +167,13 @@ public class MyService extends Service {
             NotificationCompat.Action hangupAction = new NotificationCompat.Action.Builder(android.R.drawable.sym_action_chat, "HANG UP", hungupPendingIntent).build();
             notification.addAction(hangupAction);
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-            startForeground(notificationId, notification.build());
+            startForeground(1124, notification.build());
         }
 
 
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public int createID(){
-        Date now = new Date();
-        int id = Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
-        return id;
-    }
 
     @Override
     public IBinder onBind(Intent intent) {

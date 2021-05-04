@@ -34,40 +34,29 @@ public class DialogAlert extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
 
-//        Intent intent1 = new Intent(context, MyService.class);
-//        context.stopService(intent1);
+        Intent intent1 = new Intent(context, MyService.class);
+        context.stopService(intent1);
 
         String destination = intent.getStringExtra("destination");
         String date = intent.getStringExtra("date");
         String title = intent.getStringExtra("Title");
-        int notificationId = intent.getIntExtra("notificationId",0);
-
-        String ns = Context.NOTIFICATION_SERVICE;
-        NotificationManager nMgr = (NotificationManager)context.getSystemService(ns);
-        nMgr.cancel(notificationId);
 
         Data inputData = new Data.Builder()
                 .putString("destination", destination)
                 .putString("source", destination)
                 .putString("title", destination)
-                .putInt("notificationId",notificationId)
                 .putString("Date", date).build();
-
 
 //        Calendar calendarmsd = Calendar.getInstance();
 //        long nowMillis = calendarmsd.getTimeInMillis();
 //        long diff = nowMillis+ 2*60*1000;
 
-        int duration = 2;
-        String timeStr = " min";
-
-        Toast.makeText(context, "Snoozed for " + duration + timeStr, Toast.LENGTH_LONG).show();
         //Toast.makeText(context, "DialogAlert ", Toast.LENGTH_LONG).show();
 
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(SnoozeWorker.class)
                         .setInputData(inputData)
-                        .setInitialDelay(duration, TimeUnit.MINUTES)
+                        .setInitialDelay(2, TimeUnit.MINUTES)
                         .build();
         WorkManager.getInstance(context).enqueue(uploadWorkRequest);
 
@@ -118,7 +107,7 @@ public class DialogAlert extends BroadcastReceiver {
 
         //notification.setCustomHeadsUpContentView(expandedView);
 
-       // notificationManager.notify(123, notification.build());
+        // notificationManager.notify(123, notification.build());
 
 
 //

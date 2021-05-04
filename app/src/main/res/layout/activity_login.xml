@@ -71,12 +71,12 @@
             android:insetBottom="0dp"
             android:text="@string/loginTxtBtn"
             android:textAllCaps="false"
-            android:textSize="17dp"
             android:textColor="@color/white"
+            android:textSize="17dp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/googleBtn"
             app:layout_constraintHorizontal_bias="0.513"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/googleBtn" />
 
         <LinearLayout
             android:id="@+id/linearLayout"

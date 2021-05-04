@@ -28,14 +28,12 @@ public class SnoozeWorker extends Worker {
         String source = getInputData().getString("source");
         String destination = getInputData().getString("destination");
         String date = getInputData().getString("date");
-        int notificationId = getInputData().getInt("notificationId",0);
 
         Intent intent1 = new Intent(context,SnoozeService.class);
         intent1.putExtra("Title", title);
         intent1.putExtra("Source", source);
         intent1.putExtra("Destination", destination);
         intent1.putExtra("Date", date);
-        intent1.putExtra("notificationId", notificationId);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent1);

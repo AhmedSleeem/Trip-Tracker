@@ -1,10 +1,7 @@
 package ahmed.adel.sleeem.clowyy.triptracker;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.work.PeriodicWorkRequest;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +29,6 @@ import java.util.List;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.Trip;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDao;
 import ahmed.adel.sleeem.clowyy.triptracker.database.model.TripDatabase;
-import ahmed.adel.sleeem.clowyy.triptracker.service.BubbleService;
 import ahmed.adel.sleeem.clowyy.triptracker.service.MyService;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -52,32 +48,20 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main);
 
-
-
+        Intent intent1 = new Intent(getApplicationContext(), MyService.class);
+        stopService(intent1);
 
         tripID = getIntent().getStringExtra("TripId");
-        int notificationId = getIntent().getIntExtra("notificationId",0);
-
-
-            String ns = Context.NOTIFICATION_SERVICE;
-            NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
-            nMgr.cancel(notificationId);
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(MainActivity2.this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, 0);
         } else {
-            Intent intent = new Intent(MainActivity2.this, BubbleService.class);
-            intent.putExtra("TripId",tripID);
-            intent.putExtra("notificationId",notificationId);
-
+            Intent intent = new Intent(MainActivity2.this, Service.class);
             startService(intent);
         }
 
         initBubble();
-
-       // addNewBubble();
 
         startMap(getIntent(), getApplicationContext());
 
@@ -147,7 +131,7 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // bubblesManager.recycle();
+        // bubblesManager.recycle();
     }
 
     public static void add(){

@@ -35,7 +35,7 @@ public class SnoozeService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.amahmed);
+        AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.hakona);
         try {
             player.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
             player.prepare();
@@ -81,9 +81,6 @@ public class SnoozeService extends Service {
         String source = intent.getStringExtra("Source");
         String destination = intent.getStringExtra("Destination");
         String date = intent.getStringExtra("Date");
-        int notificationId = intent.getIntExtra("notificationId",0);
-
-
 
 
 
@@ -92,7 +89,6 @@ public class SnoozeService extends Service {
         hungupIntent.putExtra("date",date);
         hungupIntent.putExtra("Title",title);
         hungupIntent.putExtra("Source",source);
-        hungupIntent.putExtra("notificationId",notificationId);
 
 
 
@@ -101,17 +97,16 @@ public class SnoozeService extends Service {
 
         answerIntent.putExtra("destination",destination);
         answerIntent.putExtra("date",date);
-        answerIntent.putExtra("notificationId",notificationId);
 
 
 
         // answerIntent.putExtra("Destination", destination);
 
-       // if (intent.hasExtra("caller_text")) {
-            answerIntent.putExtra("caller_text", intent.getStringExtra("caller_text"));
-            customView.setTextViewText(R.id.txtDestination, destination);
-            customView.setTextViewText(R.id.name, title);
-      //  }
+        // if (intent.hasExtra("caller_text")) {
+        answerIntent.putExtra("caller_text", intent.getStringExtra("caller_text"));
+        customView.setTextViewText(R.id.txtDestination, destination);
+        customView.setTextViewText(R.id.name, title);
+        //  }
 
         //customView.setImageViewBitmap(R.id.photo, NotificationImageManager().getImageBitmap(intent.getStringExtra("user_thumbnail_image")))
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -139,7 +134,7 @@ public class SnoozeService extends Service {
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             notification.setCustomContentView(customView);
             notification.setCustomBigContentView(customView);
-            startForeground(notificationId, notification.build());
+            startForeground(1124, notification.build());
         } else {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
 
@@ -157,7 +152,7 @@ public class SnoozeService extends Service {
             NotificationCompat.Action hangupAction = new NotificationCompat.Action.Builder(android.R.drawable.sym_action_chat, "HANG UP", hungupPendingIntent).build();
             notification.addAction(hangupAction);
             notification.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-            startForeground(notificationId, notification.build());
+            startForeground(1124, notification.build());
         }
 
 

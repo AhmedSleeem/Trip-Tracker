@@ -42,7 +42,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.MY_PREF, MODE_PRIVATE);
-        String lang = sharedPreferences.getString(MainActivity.LANG_VALUE, "ar");
+        String lang = sharedPreferences.getString(MainActivity.LANG_VALUE, "en");
         setLocale(this, lang);
 
         if(lang.equals("ar")){
